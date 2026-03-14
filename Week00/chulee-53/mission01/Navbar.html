@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
     <meta charset="UTF-8" />
@@ -10,12 +10,14 @@
         font-family: Arial, Helvetica, sans-serif;
       }
 
+      /* Block */
+
       .navbar {
         width: 92%;
         margin: 30px auto;
         background: #fff;
         border: 4px solid #2f2f2f;
-        border-radius: 40px;
+        border-radius: 30px;
         padding: 12px 22px;
         display: flex;
         align-items: center;
@@ -23,15 +25,15 @@
         box-shadow: 0 10px 0 #2f2f2f;
       }
 
-      /* 왼쪽 로고 영역 */
+      /* logo */
 
-      .logo {
+      .navbar__logo {
         display: flex;
         align-items: center;
         gap: 12px;
       }
 
-      .logo-icon {
+      .navbar__logo-icon {
         width: 46px;
         height: 46px;
         background: #ff6a3d;
@@ -42,36 +44,49 @@
         font-size: 22px;
       }
 
-      .logo-text {
+      .navbar__logo-text {
         font-size: 24px;
         font-weight: 700;
       }
 
-      .right-group {
+      /* right group */
+
+      .navbar__right {
         display: flex;
         align-items: center;
         gap: 40px;
       }
 
-      .menu {
+      /* menu */
+
+      .navbar__menu {
         display: flex;
         gap: 30px;
       }
 
-      .menu a {
+      .navbar__menu-item {
         text-decoration: none;
         font-size: 18px;
         font-weight: 600;
         color: #777;
+        transition: all 0.15s ease;
       }
 
-      .menu a.highlight {
+      .navbar__menu-item:hover {
         color: #ff6a3d;
       }
 
-      /* 언어 토글 */
+      .navbar__menu-item--highlight {
+        color: #ff6a3d;
+      }
 
-      .lang-box {
+      .navbar__menu-item--highlight:hover {
+        transform: scale(1.1);
+      }
+
+      /* language */
+
+      .navbar__lang {
         display: flex;
         align-items: center;
         gap: 10px;
@@ -80,33 +95,34 @@
         padding: 6px 10px;
       }
 
-      .lang-title {
+      .navbar__lang-title {
         color: #777;
         font-size: 14px;
       }
 
-      .lang-btn {
+      .navbar__lang-btn {
         padding: 6px 14px;
         border-radius: 20px;
         border: 2px solid #2f2f2f;
         font-weight: 700;
         font-size: 14px;
-        background-color: #fff;
+        background: transparent;
+        cursor: pointer;
       }
 
-      .lang-btn.active {
+      .navbar__lang-btn--active {
         background: #ff6a3d;
         color: #fff;
       }
 
-      /* 화면 좁아지면 메뉴 숨김 */
+      /* responsive */
 
       @media (max-width: 700px) {
-        .menu {
+        .navbar__menu {
           display: none;
         }
 
-        .logo-text {
+        .navbar__logo-text {
           font-size: 20px;
         }
       }
@@ -115,33 +131,58 @@
 
   <body>
     <nav class="navbar">
-      <div class="logo">
-        <div class="logo-icon">🐱</div>
-        <div class="logo-text">Aido</div>
+      <div class="navbar__logo">
+        <div class="navbar__logo-icon">🐱</div>
+        <div class="navbar__logo-text">Aido</div>
       </div>
 
-      <div class="right-group">
-        <div class="menu">
-          <a href="#">고양이 친구들</a>
-          <a class="highlight" href="#">출시 알람 받기</a>
+      <div class="navbar__right">
+        <div class="navbar__menu">
+          <a class="navbar__menu-item" id="menuCats" href="#friends"
+            >고양이 친구들</a
+          >
+          <a
+            class="navbar__menu-item navbar__menu-item--highlight"
+            id="menuAlarm"
+            href="#download"
+            >앱 다운로드</a
+          >
         </div>
 
-        <div class="lang-box">
-          <span class="lang-title">언어</span>
-          <button class="lang-btn active">KO</button>
-          <button class="lang-btn">EN</button>
+        <div class="navbar__lang">
+          <span class="navbar__lang-title" id="langTitle">언어</span>
+          <button class="navbar__lang-btn navbar__lang-btn--active" id="btnKO">
+            KO
+          </button>
+          <button class="navbar__lang-btn" id="btnEN">EN</button>
         </div>
       </div>
     </nav>
-    <script id="8a6om3">
-      const buttons = document.querySelectorAll(".lang-btn");
 
-      buttons.forEach((btn) => {
-        btn.addEventListener("click", () => {
-          buttons.forEach((b) => b.classList.remove("active"));
+    <script>
+      const koBtn = document.getElementById("btnKO");
+      const enBtn = document.getElementById("btnEN");
 
-          btn.classList.add("active");
-        });
+      const menuCats = document.getElementById("menuCats");
+      const menuAlarm = document.getElementById("menuAlarm");
+      const langTitle = document.getElementById("langTitle");
+
+      koBtn.addEventListener("click", () => {
+        koBtn.classList.add("navbar__lang-btn--active");
+        enBtn.classList.remove("navbar__lang-btn--active");
+
+        menuCats.textContent = "고양이 친구들";
+        menuAlarm.textContent = "출시 알람 받기";
+        langTitle.textContent = "언어";
+      });
+
+      enBtn.addEventListener("click", () => {
+        enBtn.classList.add("navbar__lang-btn--active");
+        koBtn.classList.remove("navbar__lang-btn--active");
+
+        menuCats.textContent = "Cat Friends";
+        menuAlarm.textContent = "Download App";
+        langTitle.textContent = "LANGUAGE";
       });
     </script>
   </body>
