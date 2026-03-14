@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>BEM Layout</title>
+    <style>
+      * {
+        margin: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        min-height: 100vh;
+        font-family: Arial, sans-serif;
+      }
+
+      .layout {
+        text-align: center;
+        font-size: 28px;
+      }
+
+      .layout__top {
+        font-size: 0;
+      }
+
+      .layout__header {
+        display: inline-block;
+        width: 25%;
+        height: 80px;
+        background: #0f1a2e;
+        color: white;
+        line-height: 80px;
+        font-size: 28px;
+        vertical-align: top;
+      }
+
+      .layout__menu {
+        display: inline-block;
+        width: 75%;
+        height: 80px;
+        background: #ef3e42;
+        color: white;
+        line-height: 80px;
+        font-size: 28px;
+        vertical-align: top;
+      }
+
+      .layout__hero {
+        width: 100%;
+        height: 300px;
+        background: #5b88b9;
+        color: white;
+        line-height: 300px;
+      }
+
+      .layout__content {
+        width: 100%;
+        overflow: hidden;
+      }
+
+      .layout__main {
+        float: left;
+        width: 420px;
+        min-height: 350px;
+        background: #2e4057;
+        color: white;
+        line-height: 350px;
+      }
+
+      .layout__side {
+        float: right;
+        width: 220px;
+      }
+
+      .layout__image {
+        min-height: 175px;
+        background: #a9c3c6;
+        line-height: 175px;
+      }
+
+      .layout__extra {
+        min-height: 175px;
+        background: #54b091;
+        line-height: 175px;
+      }
+
+      .layout__banner {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        height: 120px;
+        background: #efc35c;
+        line-height: 120px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layout">
+      <div class="layout__top">
+        <header class="layout__header">HEADER</header>
+        <nav class="layout__menu">MENU</nav>
+      </div>
+
+      <section class="layout__hero">HERO</section>
+
+      <div class="layout__content">
+        <main class="layout__main">MAIN</main>
+
+        <div class="layout__side">
+          <div class="layout__image">IMAGE</div>
+          <div class="layout__extra">EXTRA</div>
+        </div>
+      </div>
+
+      <footer class="layout__banner">BANNER</footer>
+    </div>
+  </body>
+</html>
