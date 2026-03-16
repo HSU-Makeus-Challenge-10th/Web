@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animation</title>
+</head>
+
+<body>
+    <div class="box">Animation</div>
+
+    <style>
+        .box {
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            animation: moveRight 3s linear 1s infinite alternate forwards;
+        }
+
+        @keyframes moveRight {
+            0% {
+                transform: translateX(0);
+            }
+
+            70% {
+                transform: translateX(100px);
+                background-color: gray;
+            }
+
+            100% {
+                transform: translateX(300px);
+                background-color: blue;
+            }
+        }
+    </style>
+</body>
+
+</html>

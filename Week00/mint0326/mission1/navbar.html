@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BEM Navbar Practice</title>
+    <style>
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 3px solid skyblue;
+            border-radius: 5px;
+            padding: 5px 15px;
+        }
+
+        .navbar__logo {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .navbar__logo-img {
+            width: 50px;
+            height: 50px;
+        }
+
+        .navbar__logo-text {
+            font-weight: bold;
+            margin-left: 5px;
+        }
+
+        .navbar__menu {
+            display: flex;
+        }
+
+        @media (max-width: 700px) {
+            .navbar__menu {
+                display: none;
+            }
+        }
+
+        .navbar__link {
+            margin: 0 20px;
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+        }
+
+        .navbar__lang-switch {
+            white-space: nowrap;
+            display: flex;
+            gap: 5px;
+            flex-shrink: 0;
+        }
+
+        .navbar__btn {
+            padding: 10px 20px;
+            background-color: skyblue;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .navbar__btn--active {
+            background-color: blue;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="navbar__logo">
+            <img class="navbar__logo-img" src='https://cdn-icons-png.flaticon.com/256/4213/4213636.png' alt="logo">
+            <span class="navbar__logo-text">doggy</span>
+        </div>
+
+        <div class="navbar__menu">
+            <a href="#" class="navbar__link" data-ko="고양이 친구들" data-en="Cat Friends">고양이 친구들</a>
+            <a href="#" class="navbar__link" data-ko="패치 노트" data-en="Patch Notes">패치 노트</a>
+            <a href="#" class="navbar__link navbar__link--highlight" data-ko="앱 다운로드" data-en="App Download">앱 다운로드</a>
+        </div>
+
+        <div class="navbar__lang-switch">
+            <button id="btn-ko" class="navbar__btn navbar__btn--active">KO</button>
+            <button id="btn-en" class="navbar__btn">EN</button>
+        </div>
+    </nav>
+
+    <script>
+        const navLinks = document.querySelectorAll('.navbar__link');
+        const btnKo = document.getElementById('btn-ko');
+        const btnEn = document.getElementById('btn-en');
+        const activeClass = 'navbar__btn--active';
+
+        function changeLanguage(lang) {
+            navLinks.forEach(link => {
+                link.textContent = link.getAttribute(`data-${lang}`);
+            });
+
+            btnKo.classList.toggle(activeClass, lang === 'ko');
+            btnEn.classList.toggle(activeClass, lang === 'en');
+        }
+
+        btnKo.addEventListener('click', () => changeLanguage('ko'));
+        btnEn.addEventListener('click', () => changeLanguage('en'));
+    </script>
+</body>
+
+</html>
