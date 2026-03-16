@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aido Navbar - BEM 실습</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: #f5f0e8;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+      gap: 16px;
+    }
+
+    /* ================================================
+       BEM 구조:
+       Block   → .nav
+       Element → .nav__logo, .nav__brand, .nav__menu,
+                 .nav__item, .nav__link, .nav__actions,
+                 .nav__download, .nav__lang,
+                 .nav__lang-label, .nav__lang-toggle,
+                 .nav__lang-option, .nav__hamburger
+       Modifier → .nav__link--active, .nav__lang-option--active
+    ================================================ */
+
+    /* ── Block: nav ── */
+    .nav {
+      width: 100%;
+      max-width: 860px;
+      background: #ffffff;
+      border: 2.5px solid #1a1a1a;
+      border-radius: 20px;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      box-shadow: 4px 4px 0px #1a1a1a;
+    }
+
+    /* ── Element: nav__logo-wrap ── */
+    .nav__logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    /* ── Element: nav__logo ── */
+    .nav__logo {
+      width: 38px;
+      height: 38px;
+      background: #f4845f;
+      border-radius: 10px;
+      border: 2px solid #1a1a1a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    /* ── Element: nav__brand ── */
+    .nav__brand {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1a1a1a;
+      letter-spacing: -0.3px;
+    }
+
+    /* ── Element: nav__menu ── */
+    .nav__menu {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      list-style: none;
+    }
+
+    /* ── Element: nav__item ── */
+    .nav__item {}
+
+    /* ── Element: nav__link ── */
+    .nav__link {
+      display: block;
+      padding: 7px 14px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #444;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: background 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+    .nav__link:hover {
+      background: #f5f0e8;
+      color: #1a1a1a;
+    }
+
+    /* ── Element Modifier: nav__link--active ── */
+    .nav__link--active {
+      color: #f4845f;
+      font-weight: 700;
+    }
+    .nav__link--active:hover {
+      background: #fff3ee;
+      color: #f4845f;
+    }
+
+    /* ── Element: nav__actions ── */
+    .nav__actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    /* ── Element: nav__lang ── */
+    .nav__lang {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      background: #f5f0e8;
+      border: 2px solid #1a1a1a;
+      border-radius: 30px;
+      padding: 3px;
+      gap: 2px;
+    }
+
+    /* ── Element: nav__lang-label ── */
+    .nav__lang-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #888;
+      padding: 0 8px 0 6px;
+      white-space: nowrap;
+    }
+
+    /* ── Element: nav__lang-option ── */
+    .nav__lang-option {
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #888;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+      letter-spacing: 0.5px;
+    }
+    .nav__lang-option:hover {
+      color: #444;
+    }
+
+    /* ── Element Modifier: nav__lang-option--active ── */
+    .nav__lang-option--active {
+      background: #f4845f;
+      color: #fff;
+      border: 2px solid #1a1a1a;
+    }
+    .nav__lang-option--active:hover {
+      color: #fff;
+    }
+
+    /* ── Element: nav__hamburger ── */
+    .nav__hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      background: none;
+      border: none;
+    }
+    .nav__hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: #1a1a1a;
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* ── 모바일 드로어 ── */
+    .nav__drawer {
+      display: none;
+      width: 100%;
+      max-width: 860px;
+      background: #fff;
+      border: 2.5px solid #1a1a1a;
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 4px 4px 0px #1a1a1a;
+    }
+    .nav__drawer.is-open { display: block; }
+
+    .nav__drawer-menu {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .nav__drawer-menu .nav__link {
+      padding: 10px 14px;
+      font-size: 15px;
+    }
+    .nav__drawer-lang {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #eee;
+      display: flex;
+      align-items: center;
+    }
+
+    /* ── 반응형 ── */
+    @media (max-width: 680px) {
+      .nav__menu,
+      .nav__actions {
+        display: none;
+      }
+      .nav__hamburger {
+        display: flex;
+      }
+    }
+
+
+  </style>
+</head>
+<body>
+
+  <!-- =============================================
+       BLOCK: nav
+  ============================================= -->
+  <nav class="nav">
+
+    <!-- ELEMENT: nav__logo-wrap -->
+    <a class="nav__logo-wrap" href="#">
+      <!-- ELEMENT: nav__logo -->
+      <div class="nav__logo">🐱</div>
+      <!-- ELEMENT: nav__brand -->
+      <span class="nav__brand">Aido</span>
+    </a>
+
+    <!-- ELEMENT: nav__menu -->
+    <ul class="nav__menu">
+      <!-- ELEMENT: nav__item -->
+      <li class="nav__item">
+        <!-- ELEMENT: nav__link -->
+        <a class="nav__link" href="#" data-ko="고양이 친구들" data-en="Cat Friends">고양이 친구들</a>
+      </li>
+      <li class="nav__item">
+        <a class="nav__link" href="#" data-ko="패치 노트" data-en="Patch Notes">패치 노트</a>
+      </li>
+      <li class="nav__item">
+        <!-- ELEMENT + MODIFIER: nav__link--active -->
+        <a class="nav__link nav__link--active" href="#" data-ko="앱 다운로드" data-en="Download App">앱 다운로드</a>
+      </li>
+    </ul>
+
+    <!-- ELEMENT: nav__actions -->
+    <div class="nav__actions">
+      <!-- ELEMENT: nav__lang -->
+      <div class="nav__lang">
+        <!-- ELEMENT: nav__lang-label -->
+        <span class="nav__lang-label" data-ko="언어" data-en="Lang">언어</span>
+        <!-- ELEMENT + MODIFIER: nav__lang-option--active -->
+        <span class="nav__lang-option nav__lang-option--active" onclick="toggleLang(this)">KO</span>
+        <span class="nav__lang-option" onclick="toggleLang(this)">EN</span>
+      </div>
+    </div>
+
+    <!-- ELEMENT: nav__hamburger (모바일) -->
+    <button class="nav__hamburger" onclick="toggleDrawer()" aria-label="메뉴 열기">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+  </nav>
+
+  <!-- 모바일 드로어 -->
+  <div class="nav__drawer" id="drawer">
+    <ul class="nav__drawer-menu">
+      <li><a class="nav__link" href="#" data-ko="고양이 친구들" data-en="Cat Friends">고양이 친구들</a></li>
+      <li><a class="nav__link" href="#" data-ko="패치 노트" data-en="Patch Notes">패치 노트</a></li>
+      <li><a class="nav__link nav__link--active" href="#" data-ko="앱 다운로드" data-en="Download App">앱 다운로드</a></li>
+    </ul>
+    <div class="nav__drawer-lang">
+      <div class="nav__lang">
+        <span class="nav__lang-label" data-ko="언어" data-en="Lang">언어</span>
+        <span class="nav__lang-option nav__lang-option--active" onclick="toggleLang(this)">KO</span>
+        <span class="nav__lang-option" onclick="toggleLang(this)">EN</span>
+      </div>
+    </div>
+  </div>
+
+
+
+  <script>
+    let currentLang = 'ko';
+
+    function toggleLang(el) {
+      const lang = el.textContent.trim().toLowerCase();
+      if (lang === currentLang) return;
+      currentLang = lang;
+
+      // 모든 lang-option 토글 (데스크탑 + 모바일 드로어)
+      document.querySelectorAll('.nav__lang-option').forEach(opt => {
+        opt.classList.toggle('nav__lang-option--active', opt.textContent.trim().toLowerCase() === lang);
+      });
+
+      // data-ko / data-en 속성 가진 요소 텍스트 교체
+      document.querySelectorAll('[data-ko][data-en]').forEach(el => {
+        el.textContent = lang === 'ko' ? el.dataset.ko : el.dataset.en;
+      });
+    }
+
+    // 모바일 햄버거
+    function toggleDrawer() {
+      document.getElementById('drawer').classList.toggle('is-open');
+    }
+  </script>
+
+</body>
+</html>
