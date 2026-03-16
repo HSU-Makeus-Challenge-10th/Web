@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      .container {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: 100px 350px 400px 100px;
+        width: 100%;
+        min-height: 100vh;
+        text-align: center;
+        color: white;
+        font-size: 32px;
+        font-weight: bold;
+      }
+
+      .container > * {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .container__header {
+        grid-column: 1 / 2;
+        background-color: #1a1e2e;
+      }
+
+      .container__menu {
+        grid-column: 2 / 5;
+        background-color: #ef4444;
+      }
+
+      .container__hero {
+        grid-column: 1 / 5;
+        background-color: #5585c5;
+      }
+
+      .container__main {
+        grid-column: 1 / 3;
+        background-color: #24344d;
+      }
+
+      .container__sidebar {
+        grid-column: 4 / 5;
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+      }
+
+      .sidebar-item {
+        width: 100%;
+        flex: 1; 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .sidebar-item--image {
+        background-color: #c2e5eb;
+        color: black; 
+      }
+
+      .sidebar-item--extra {
+        background-color: #58c09d;
+      }
+
+      /* [Banner] */
+      .container__banner {
+        grid-column: 1 / 5;
+        background-color: #fbd670;
+        color: black;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="container__header">HEADER</header>
+      <nav class="container__menu">MENU</nav>
+
+      <section class="container__hero">HERO</section>
+
+      <main class="container__main">MAIN</main>
+      <div></div>
+      <div class="container__sidebar">
+        <div class="sidebar-item sidebar-item--image">IMAGE</div>
+        <div class="sidebar-item sidebar-item--extra">EXTRA</div>
+      </div>
+
+      <footer class="container__banner">BANNER</footer>
+    </div>
+  </body>
+</html>
