@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TodoList</title>
+    <style>
+      body {
+        background-color: #e8eef4;
+        margin: 0;
+        font-family: sans-serif;
+      }
+
+      .header {
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px 0;
+      }
+
+      .header__title {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+      }
+
+      .header__divider {
+        border: none;
+        height: 1px;
+        background-color: #1a1e2e;
+      }
+
+      .todo-input-group {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .todo-input-group__field {
+        width: 80%;
+        max-width: 640px;
+        padding: 12px;
+        border: 1px solid #b9cadb;
+        border-radius: 4px;
+        font-size: 1rem;
+      }
+
+      .todo-input-group__field:focus {
+        outline: none;
+        border-color: #1a1e2e;
+      }
+
+      .todo-container {
+        display: flex;
+        justify-content: center;
+        gap: 60px;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      .todo-section {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .todo-section__title {
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 1.5rem;
+        border-bottom: 3px solid #b9cadb;
+        display: inline-block;
+        padding-bottom: 5px;
+        width: 100%;
+      }
+
+      .todo-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .todo-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 0;
+        border-bottom: 1px solid #b9cadb;
+      }
+
+      .todo-item__text {
+        font-size: 1.2rem;
+        font-weight: 700;
+        flex-grow: 1;
+        color: #1a1e2e;
+      }
+
+      .todo-item--done .todo-item__text {
+        color: #94a3b8;
+        text-decoration: line-through;
+        opacity: 0.7;
+      }
+
+      .btn {
+        border: none;
+        padding: 6px 14px;
+        border-radius: 2px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-left: 20px;
+        transition: filter 0.2s;
+      }
+
+      .btn:hover {
+        filter: brightness(0.9);
+      }
+
+      .btn--complete {
+        background-color: #a7f3d0;
+        color: #065f46;
+      }
+
+      .btn--delete {
+        background-color: #cbd5e1;
+        color: #1a1e2e;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-container">
+      <header class="header">
+        <h1 class="header__title">UMC Study Plan</h1>
+        <hr class="header__divider" />
+      </header>
+
+      <main>
+        <div class="todo-input-group">
+          <input
+            type="text"
+            id="todoInput"
+            class="todo-input-group__field"
+            placeholder="스터디 계획을 작성해보세요!"
+          />
+        </div>
+
+        <div class="todo-container">
+          <section class="todo-section">
+            <h3 class="todo-section__title">해야 할 일</h3>
+            <ul id="todo-list" class="todo-list"></ul>
+          </section>
+
+          <section class="todo-section">
+            <h3 class="todo-section__title">해낸 일</h3>
+            <ul id="done-list" class="todo-list"></ul>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      const todoInput = document.getElementById("todoInput");
+      const todoList = document.getElementById("todo-list");
+      const doneList = document.getElementById("done-list");
+
+      todoInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          addTodo();
+        }
+      });
+
+      function addTodo() {
+        const text = todoInput.value.trim();
+
+        if (!text) {
+          alert("내용을 입력해주세요!");
+          return;
+        }
+
+        const li = document.createElement("li");
+        li.className = "todo-item";
+
+        li.innerHTML = `
+          <span class="todo-item__text">${text}</span>
+          <button class="btn btn--complete">완료</button>
+        `;
+
+        const completeBtn = li.querySelector(".btn--complete");
+        completeBtn.addEventListener("click", () => completeTask(li, completeBtn));
+
+        todoList.appendChild(li);
+        todoInput.value = "";
+      }
+
+      function completeTask(li, btn) {
+        li.classList.add("todo-item--done");
+        doneList.appendChild(li);
+
+        btn.textContent = "삭제";
+        btn.classList.remove("btn--complete");
+        btn.classList.add("btn--delete");
+
+        btn.onclick = () => li.remove();
+      }
+    </script>
+  </body>
+</html>
