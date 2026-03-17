@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <!-- js 파일 업로드 -->
+    <script src="dist/TS_todolist.js" defer></script>
+    <title>UMC TODO</title>
+</head>
+
+<body>
+    <div class="todo-app">
+        <h1 class="todo-app__title">My Todo List</h1>
+
+        <input type="text" id="todo-input-field" class="todo-app__input-field" placeholder="할 일을 입력하고 Enter를 누르세요">
+
+        <div class="todo-app__container">
+            <section class="section">
+                <h2 class="section__title">해야 할 일</h2>
+                <ul id="todo-list" class="list"></ul>
+            </section>
+
+            <section class="section">
+                <h2 class="section__title">해낸 일</h2>
+                <ul id="done-list" class="list list--done"></ul>
+            </section>
+        </div>
+    </div>
+</body>
+
+</html>
