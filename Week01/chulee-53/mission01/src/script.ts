@@ -1,7 +1,13 @@
-const todoInput = document.getElementById("todo-input") as HTMLInputElement;
-const todoForm = document.getElementById("todo-form") as HTMLFormElement;
-const todoList = document.getElementById("todo-list") as HTMLUListElement;
-const doneList = document.getElementById("done-list") as HTMLUListElement;
+const requireElement = <T extends HTMLElement>(id: string): T => {
+  const el = document.getElementById(id);
+  if (!el) throw new Error(`Missing required element: ${id}`);
+  return el as T;
+};
+
+const todoInput = requireElement<HTMLInputElement>("todo-input");
+const todoForm = requireElement<HTMLFormElement>("todo-form");
+const todoList = requireElement<HTMLUListElement>("todo-list");
+const doneList = requireElement<HTMLUListElement>("done-list");
 
 type Todo = {
   id: number;
@@ -10,6 +16,7 @@ type Todo = {
 
 let todos: Todo[] = [];
 let doneTasks: Todo[] = [];
+let nextId = 1;
 
 const renderTasks = (): void => {
   todoList.innerHTML = "";
@@ -32,7 +39,7 @@ const getTodoText = (): string => {
 
 const addTodo = (text: string) => {
   // id 겹치지 않게 일단 Date로 설정
-  todos.push({ id: Date.now(), text });
+  todos.push({ id: nextId++, text });
   todoInput.value = "";
   renderTasks();
 };
