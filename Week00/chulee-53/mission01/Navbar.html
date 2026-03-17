@@ -182,6 +182,7 @@
         enBtn.classList.remove("navbar__lang-btn--active");
         koBtn.setAttribute("aria-pressed", "true");
         enBtn.setAttribute("aria-pressed", "false");
+        document.documentElement.lang = "ko";
 
         menuCats.textContent = "고양이 친구들";
         menuAlarm.textContent = "앱 다운로드";
@@ -193,6 +194,7 @@
         koBtn.classList.remove("navbar__lang-btn--active");
         enBtn.setAttribute("aria-pressed", "true");
         koBtn.setAttribute("aria-pressed", "false");
+        document.documentElement.lang = "en";
 
         menuCats.textContent = "Cat Friends";
         menuAlarm.textContent = "Download App";
