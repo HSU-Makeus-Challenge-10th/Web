@@ -160,8 +160,13 @@
 
         // Enter 키 입력
         inputField.addEventListener('keypress', (e) => {
+            const trimmedValue = inputField.value.trim();
+            /* 수정전 코드 - 입력 값 검증시 trim() 적용 안함
             if (e.key === 'Enter' && inputField.value.trim()) {
-                const newItem = createItem(inputField.value);
+-               const newItem = createItem(inputField.value);
+            */
+            if (e.key === 'Enter' && trimmedValue) {
+                const newItem = createItem(trimmedValue);
                 todoList.appendChild(newItem);
                 inputField.value = '';
             }
