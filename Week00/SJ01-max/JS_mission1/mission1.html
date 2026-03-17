@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Todo List</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: #f0f2f5;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 48px 16px;
+    }
+
+    /* ── 전체 컨테이너 ── */
+    .app {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* ── 헤더 ── */
+    .app__header {
+      text-align: center;
+    }
+
+    .app__title {
+      font-size: 28px;
+      font-weight: 900;
+      color: #1a1a1a;
+      letter-spacing: -0.5px;
+    }
+
+    .app__subtitle {
+      font-size: 13px;
+      color: #999;
+      margin-top: 4px;
+    }
+
+    /* ── 입력창 ── */
+    .app__input-wrap {
+      display: flex;
+      gap: 8px;
+    }
+
+    .app__input {
+      flex: 1;
+      padding: 14px 18px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s;
+      background: #fff;
+    }
+
+    .app__input:focus {
+      border-color: #4f7ef7;
+    }
+
+    .app__add-btn {
+      padding: 14px 20px;
+      background: #4f7ef7;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 20px;
+      cursor: pointer;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+
+    .app__add-btn:hover { background: #3a6ae0; }
+
+    /* ── 섹션 공통 ── */
+    .todo-section {
+      background: #fff;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+
+    .todo-section__title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .todo-section--pending .todo-section__title { color: #4f7ef7; }
+    .todo-section--done   .todo-section__title { color: #3cc87a; }
+
+    .todo-section__count {
+      background: #f0f2f5;
+      color: #999;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    /* ── 빈 상태 ── */
+    .todo-section__empty {
+      text-align: center;
+      color: #ccc;
+      font-size: 13px;
+      padding: 20px 0;
+    }
+
+    /* ── 아이템 ── */
+    .todo-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 0;
+      border-bottom: 1px solid #f5f5f5;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .todo-item:last-child { border-bottom: none; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .todo-item__text {
+      flex: 1;
+      font-size: 15px;
+      color: #1a1a1a;
+      line-height: 1.4;
+    }
+
+    /* 완료된 아이템 */
+    .todo-item--done .todo-item__text {
+      text-decoration: line-through;
+      color: #bbb;
+    }
+
+    /* ── 버튼 공통 ── */
+    .todo-item__btn {
+      padding: 5px 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+
+    /* 완료 버튼 */
+    .todo-item__btn--complete {
+      background: #e8f5ee;
+      color: #3cc87a;
+    }
+    .todo-item__btn--complete:hover { background: #3cc87a; color: #fff; }
+
+    /* 되돌리기 버튼 */
+    .todo-item__btn--undo {
+      background: #eef1fd;
+      color: #4f7ef7;
+    }
+    .todo-item__btn--undo:hover { background: #4f7ef7; color: #fff; }
+
+    /* 삭제 버튼 */
+    .todo-item__btn--delete {
+      background: #fdecea;
+      color: #e8394d;
+    }
+    .todo-item__btn--delete:hover { background: #e8394d; color: #fff; }
+  </style>
+</head>
+<body>
+
+  <div class="app">
+
+    <!-- 헤더 -->
+    <header class="app__header">
+      <h1 class="app__title">📝 Todo List</h1>
+      <p class="app__subtitle">오늘 할 일을 입력하고 Enter를 눌러보세요!</p>
+    </header>
+
+    <!-- 입력창 -->
+    <div class="app__input-wrap">
+      <input
+        class="app__input"
+        type="text"
+        id="todoInput"
+        placeholder="할 일을 입력하세요..."
+        autocomplete="off"
+      />
+      <button class="app__add-btn" onclick="addTodo()">+</button>
+    </div>
+
+    <!-- 해야 할 일 섹션 -->
+    <section class="todo-section todo-section--pending">
+      <h2 class="todo-section__title">
+        🔵 해야 할 일
+        <span class="todo-section__count" id="pendingCount">0</span>
+      </h2>
+      <ul class="todo-list" id="pendingList">
+        <li class="todo-section__empty" id="pendingEmpty">아직 할 일이 없어요!</li>
+      </ul>
+    </section>
+
+    <!-- 해낸 일 섹션 -->
+    <section class="todo-section todo-section--done">
+      <h2 class="todo-section__title">
+        ✅ 해낸 일
+        <span class="todo-section__count" id="doneCount">0</span>
+      </h2>
+      <ul class="todo-list" id="doneList">
+        <li class="todo-section__empty" id="doneEmpty">아직 완료한 일이 없어요!</li>
+      </ul>
+    </section>
+
+  </div>
+
+  <script>
+    const input        = document.getElementById('todoInput');
+    const pendingList  = document.getElementById('pendingList');
+    const doneList     = document.getElementById('doneList');
+    const pendingEmpty = document.getElementById('pendingEmpty');
+    const doneEmpty    = document.getElementById('doneEmpty');
+    const pendingCount = document.getElementById('pendingCount');
+    const doneCount    = document.getElementById('doneCount');
+
+    // ── localStorage 저장 / 불러오기 ──
+    function saveTodos() {
+      const pending = [...pendingList.querySelectorAll('.todo-item__text')].map(el => el.textContent);
+      const done    = [...doneList.querySelectorAll('.todo-item__text')].map(el => el.textContent);
+      localStorage.setItem('todos_pending', JSON.stringify(pending));
+      localStorage.setItem('todos_done',    JSON.stringify(done));
+    }
+
+    function loadTodos() {
+      const pending = JSON.parse(localStorage.getItem('todos_pending') || '[]');
+      const done    = JSON.parse(localStorage.getItem('todos_done')    || '[]');
+      pending.forEach(text => pendingList.appendChild(createItem(text, false)));
+      done.forEach(text    => doneList.appendChild(createItem(text, true)));
+      updateCount();
+    }
+
+    // Enter 키로 추가
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') addTodo();
+    });
+
+    // 카운트 업데이트
+    function updateCount() {
+      const pending = pendingList.querySelectorAll('.todo-item').length;
+      const done    = doneList.querySelectorAll('.todo-item').length;
+      pendingCount.textContent = pending;
+      doneCount.textContent    = done;
+      pendingEmpty.style.display = pending === 0 ? 'block' : 'none';
+      doneEmpty.style.display    = done    === 0 ? 'block' : 'none';
+    }
+
+    // 아이템 생성
+    function createItem(text, isDone = false) {
+      const li = document.createElement('li');
+      li.className = 'todo-item' + (isDone ? ' todo-item--done' : '');
+
+      const span = document.createElement('span');
+      span.className = 'todo-item__text';
+      span.textContent = text;
+
+      const actionBtn = document.createElement('button');
+      actionBtn.className = isDone
+        ? 'todo-item__btn todo-item__btn--undo'
+        : 'todo-item__btn todo-item__btn--complete';
+      actionBtn.textContent = isDone ? '↩ 되돌리기' : '✓ 완료';
+      actionBtn.addEventListener('click', () => completeTodo(li, text, isDone));
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'todo-item__btn todo-item__btn--delete';
+      deleteBtn.textContent = '✕ 삭제';
+      deleteBtn.addEventListener('click', () => deleteTodo(li));
+
+      li.append(span, actionBtn, deleteBtn);
+      return li;
+    }
+
+    // 할 일 추가
+    function addTodo() {
+      const text = input.value.trim();
+      if (!text) return;
+      pendingList.appendChild(createItem(text, false));
+      input.value = '';
+      input.focus();
+      updateCount();
+      saveTodos(); // 저장
+    }
+
+    // 완료 / 되돌리기
+    function completeTodo(li, text, isDone) {
+      li.remove();
+      const newItem = createItem(text, !isDone);
+      isDone ? pendingList.appendChild(newItem) : doneList.appendChild(newItem);
+      updateCount();
+      saveTodos(); // 저장
+    }
+
+    // 삭제
+    function deleteTodo(li) {
+      li.remove();
+      updateCount();
+      saveTodos(); // 저장
+    }
+
+    // 페이지 로드 시 불러오기
+    loadTodos();
+  </script>
+
+</body>
+</html>
