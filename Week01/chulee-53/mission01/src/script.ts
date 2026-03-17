@@ -38,7 +38,6 @@ const getTodoText = (): string => {
 };
 
 const addTodo = (text: string) => {
-  // id 겹치지 않게 일단 Date로 설정
   todos.push({ id: nextId++, text });
   todoInput.value = "";
   renderTasks();
