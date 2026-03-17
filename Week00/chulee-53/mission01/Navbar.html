@@ -149,10 +149,22 @@
 
         <div class="navbar__lang">
           <span class="navbar__lang-title" id="langTitle">언어</span>
-          <button class="navbar__lang-btn navbar__lang-btn--active" id="btnKO">
+          <button
+            type="button"
+            class="navbar__lang-btn navbar__lang-btn--active"
+            id="btnKO"
+            aria-pressed="true"
+          >
             KO
           </button>
-          <button class="navbar__lang-btn" id="btnEN">EN</button>
+          <button
+            type="button"
+            class="navbar__lang-btn"
+            id="btnEN"
+            aria-pressed="false"
+          >
+            EN
+          </button>
         </div>
       </div>
     </nav>
@@ -168,6 +180,8 @@
       koBtn.addEventListener("click", () => {
         koBtn.classList.add("navbar__lang-btn--active");
         enBtn.classList.remove("navbar__lang-btn--active");
+        koBtn.setAttribute("aria-pressed", "true");
+        enBtn.setAttribute("aria-pressed", "false");
 
         menuCats.textContent = "고양이 친구들";
         menuAlarm.textContent = "앱 다운로드";
@@ -177,6 +191,8 @@
       enBtn.addEventListener("click", () => {
         enBtn.classList.add("navbar__lang-btn--active");
         koBtn.classList.remove("navbar__lang-btn--active");
+        enBtn.setAttribute("aria-pressed", "true");
+        koBtn.setAttribute("aria-pressed", "false");
 
         menuCats.textContent = "Cat Friends";
         menuAlarm.textContent = "Download App";
