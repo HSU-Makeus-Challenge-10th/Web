@@ -171,7 +171,7 @@
       // '완료' 버튼 클릭 시 '해낸 일'로 이동
       function moveToDone(btn) {
         const li = btn.parentElement;
-        btn.textContent = "취소";
+        btn.textContent = "X";
         btn.setAttribute("onclick", "moveToTodo(this)");
         doneList.appendChild(li);
       }
