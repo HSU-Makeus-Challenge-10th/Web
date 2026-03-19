@@ -98,7 +98,6 @@ const input = document.getElementById("input");
 const todoList = document.getElementById("todo-list");
 const doneList = document.getElementById("done-list");
 
-// Enter로 추가
 input.addEventListener("keydown", function(e){
   if(e.key === "Enter"){
     addTodo(input.value);
@@ -128,7 +127,6 @@ function addTodo(text){
   todoList.appendChild(li);
 }
 
-// 완료 → 해낸 일로 이동
 function moveToDone(oldLi, text){
   oldLi.remove();
 
