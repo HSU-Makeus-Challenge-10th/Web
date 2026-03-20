@@ -23,24 +23,36 @@ function loadTodos(): void {
   doneList.innerHTML = '';
 
   // 해야할 일 렌더링
-  todos.forEach((todo) => {
+  todos.forEach((todo, index) => {
     const li = document.createElement('li');
-    li.innerHTML = `<span>${todo}</span> <button class="complete">완료</button>`;
-    li.querySelector('.complete')!.addEventListener('click', () =>
-      completeTodo(todo)
-    );
+    const span = document.createElement('span');
+    span.textContent = todo;
+    const btn = document.createElement('button');
+    btn.textContent = '완료';
+    btn.className = 'complete';
+    btn.addEventListener('click', () => completeTodo(index));
+    li.appendChild(span);
+    li.appendChild(btn);
     todoList.appendChild(li);
   });
 
   // 해낸 일 렌더링
-  dones.forEach((todo) => {
+  dones.forEach((done, index) => {
     const li = document.createElement('li');
-    li.innerHTML = `<span class="done">${todo}</span> <button class="delete">삭제</button>`;
-    li.querySelector('.delete')!.addEventListener('click', () => {
-      const newDones = dones.filter((done) => done !== todo);
+    const span = document.createElement('span');
+    span.textContent = done;
+    span.className = 'done';
+    const btn = document.createElement('button');
+    btn.textContent = '삭제';
+    btn.className = 'delete';
+    btn.addEventListener('click', () => {
+      const newDones = [...dones];
+      newDones.splice(index, 1);
       localStorage.setItem('dones', JSON.stringify(newDones));
       loadTodos();
     });
+    li.appendChild(span);
+    li.appendChild(btn);
     doneList.appendChild(li);
   });
 }
@@ -59,9 +71,11 @@ function addTodo(): void {
 }
 
 // 할 일 완료 처리
-function completeTodo(text: string): void {
-  let todos: string[] = JSON.parse(localStorage.getItem('todos') || '[]');
-  todos = todos.filter((todo) => todo !== text);
+function completeTodo(index: number): void {
+  const todos: string[] = JSON.parse(localStorage.getItem('todos') || '[]');
+  const removed = todos.splice(index, 1);
+  const text: string | undefined = removed[0];
+  if (text === undefined) return;
   localStorage.setItem('todos', JSON.stringify(todos));
 
   const dones: string[] = JSON.parse(localStorage.getItem('dones') || '[]');
