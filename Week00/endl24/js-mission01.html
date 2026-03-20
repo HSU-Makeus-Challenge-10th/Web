@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
@@ -138,6 +138,7 @@
             id="todoInput"
             class="todo-input-group__field"
             placeholder="스터디 계획을 작성해보세요!"
+            aria-label="할 일 입력"
           />
         </div>
 
@@ -177,13 +178,23 @@
         const li = document.createElement("li");
         li.className = "todo-item";
 
-        li.innerHTML = `
-          <span class="todo-item__text">${text}</span>
-          <button class="btn btn--complete">완료</button>
-        `;
+        // li.innerHTML = `
+        //   <span class="todo-item__text">${text}</span>
+        //   <button class="btn btn--complete">완료</button>
+        // `;
+        const textSpan = document.createElement("span");
+        textSpan.className = "todo-item__text";
+        textSpan.textContent = text;
 
-        const completeBtn = li.querySelector(".btn--complete");
-        completeBtn.addEventListener("click", () => completeTask(li, completeBtn));
+        const completeBtn = document.createElement("button");
+        completeBtn.className = "btn btn--complete";
+        completeBtn.textContent = "완료";
+
+        li.append(textSpan, completeBtn);
+        // const completeBtn = li.querySelector(".btn--complete");
+        completeBtn.addEventListener("click", () =>
+          completeTask(li, completeBtn),
+        );
 
         todoList.appendChild(li);
         todoInput.value = "";
