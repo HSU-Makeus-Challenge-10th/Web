@@ -10,8 +10,14 @@ function addTodo() {
   const text = input.value.trim();
   if (!text) return;
   const li = document.createElement('li');
-  li.innerHTML = `<span>${text}</span> <button class="done-btn">완료</button>`;
-  li.querySelector('button').addEventListener('click', () => completeTask(li, text));
+  const span = document.createElement('span');
+  span.textContent = text;
+  const btn = document.createElement('button');
+  btn.textContent = '완료';
+  btn.className = 'done-btn';
+  btn.addEventListener('click', () => completeTask(li, text));
+  li.appendChild(span);
+  li.appendChild(btn);
   todoList.appendChild(li);
   input.value = '';
 }
@@ -19,7 +25,13 @@ function addTodo() {
 function completeTask(li, text) {
   li.remove();
   const doneItem = document.createElement('li');
-  doneItem.innerHTML = `<span>${text}</span> <button class="delete-btn">삭제</button>`;
-  doneItem.querySelector('button').addEventListener('click', () => doneItem.remove());
+  const span = document.createElement('span');
+  span.textContent = text;
+  const btn = document.createElement('button');
+  btn.textContent = '삭제';
+  btn.className = 'delete-btn';
+  btn.addEventListener('click', () => doneItem.remove());
+  doneItem.appendChild(span);
+  doneItem.appendChild(btn);
   doneList.appendChild(doneItem);
 }
