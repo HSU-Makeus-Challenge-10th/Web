@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>미션 2 - 레이아웃 구조 잡기</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+
+    <!--
+      구조 설계 (사전 스케치):
+      ┌──────────────────────────────────────┐
+      │ HEADER(flex 1) │     MENU(flex 4)    │  ← flex
+      ├──────────────────────────────────────┤
+      │               HERO                   │
+      ├──────────────────────────────────────┤
+      │              │        │   IMAGE      │  ← grid (2fr 1fr 1fr)
+      │    MAIN      │ (공백) ├──────────────┤
+      │              │        │   EXTRA      │
+      ├──────────────────────────────────────┤
+      │              BANNER                  │
+      └──────────────────────────────────────┘
+    -->
+
+    <!-- Block: page-layout -->
+    <div class="page-layout">
+
+      <!-- Block: page-header (flex) -->
+      <header class="page-header">
+        <div class="page-header__logo">HEADER</div>
+        <nav class="page-header__menu">MENU</nav>
+      </header>
+
+      <!-- Block: hero -->
+      <section class="hero">HERO</section>
+
+      <!-- Block: content (grid - 3열) -->
+      <div class="content">
+        <!-- Element: content__main -->
+        <div class="content__main">MAIN</div>
+
+        <!-- Element: content__gap (흰 공백) -->
+        <div class="content__gap"></div>
+
+        <!-- Element: content__sidebar (flex column) -->
+        <div class="content__sidebar">
+          <div class="content__image">IMAGE</div>
+          <div class="content__extra">EXTRA</div>
+        </div>
+      </div>
+
+      <!-- Block: banner -->
+      <div class="banner">BANNER</div>
+
+    </div>
+
+  </body>
+</html>
