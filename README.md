@@ -34,7 +34,7 @@ UMC HSU 10기 Web 스터디 레포지토리입니다.
 # main 브랜치 기반으로 본인 GitHub 닉네임으로 브랜치 생성
 git checkout main
 git pull origin main
-git checkout -b <본인-GitHub-닉네임>
+git checkout -b <본인-GitHub-닉네임/주차>
 ```
 
 ### 2단계: 작업 수행
@@ -57,7 +57,7 @@ git checkout main
 git pull origin main
 
 # 본인 브랜치로 이동하여 main 내용 반영
-git checkout <본인-GitHub-닉네임>
+git checkout <본인-GitHub-닉네임/주차>
 git merge main
 ```
 
@@ -121,7 +121,7 @@ git add .
 git commit -m "커밋 메시지"
 
 # 푸시
-git push origin <본인-브랜치명>
+git push origin <본인-브랜치명/주차>
 ```
 
 ---
