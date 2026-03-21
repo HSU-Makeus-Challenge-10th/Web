@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>YONG TODO</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: #eef0f2;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ── 카드 ── */
+    .todo-app {
+      background: #fff;
+      border-radius: 20px;
+      padding: 40px 40px 48px;
+      width: 580px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+
+    /* ── 타이틀 ── */
+    .todo-app__title {
+      text-align: center;
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: #1a1a1a;
+      margin-bottom: 28px;
+    }
+
+    /* ── 입력 영역 ── */
+    .todo-app__input-wrap {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 32px;
+    }
+
+    .todo-app__input {
+      flex: 1;
+      padding: 12px 16px;
+      border: 1.5px solid #ddd;
+      border-radius: 8px;
+      font-size: 15px;
+      outline: none;
+      color: #333;
+      transition: border-color 0.2s;
+    }
+    .todo-app__input:focus { border-color: #3ab87a; }
+    .todo-app__input::placeholder { color: #bbb; }
+
+    .todo-app__add-btn {
+      padding: 12px 20px;
+      background: #3ab87a;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+    .todo-app__add-btn:hover { background: #2ea066; }
+
+    /* ── 목록 영역 ── */
+    .todo-app__lists {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 20px;
+    }
+
+    .todo-app__list-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1a1a1a;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    /* ── 아이템 ── */
+    .todo-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .todo-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      background: #fff;
+      border: 1.5px solid #e8e8e8;
+      border-radius: 10px;
+      animation: fadeIn 0.2s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .todo-item__text {
+      font-size: 15px;
+      color: #222;
+      font-weight: 500;
+    }
+
+    /* ── 버튼 ── */
+    .todo-item__btn {
+      padding: 7px 16px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      flex-shrink: 0;
+    }
+    .todo-item__btn:hover { opacity: 0.85; }
+
+    .todo-item__btn--complete {
+      background: #3ab87a;
+      color: #fff;
+    }
+
+    .todo-item__btn--delete {
+      background: #e8394d;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="todo-app">
+
+    <h1 class="todo-app__title">YONG TODO</h1>
+
+    <!-- 입력 영역 -->
+    <div class="todo-app__input-wrap">
+      <input
+        class="todo-app__input"
+        id="todoInput"
+        type="text"
+        placeholder="할 일 입력"
+        autocomplete="off"
+      />
+      <button class="todo-app__add-btn" onclick="addTodo()">할 일 추가</button>
+    </div>
+
+    <!-- 목록 영역 -->
+    <div class="todo-app__lists">
+      <!-- 할 일 -->
+      <div>
+        <h2 class="todo-app__list-title">할 일</h2>
+        <ul class="todo-list" id="pendingList"></ul>
+      </div>
+      <!-- 완료 -->
+      <div>
+        <h2 class="todo-app__list-title">완료</h2>
+        <ul class="todo-list" id="doneList"></ul>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // ── 타입 정의 (TypeScript 방식을 JS로 표현) ──
+    // interface Todo { id: number; text: string; isDone: boolean; }
+
+    const input       = document.getElementById('todoInput');
+    const pendingList = document.getElementById('pendingList');
+    const doneList    = document.getElementById('doneList');
+
+    // ── localStorage ──
+    function saveTodos() {
+      const pending = [...pendingList.querySelectorAll('.todo-item__text')].map(el => el.textContent);
+      const done    = [...doneList.querySelectorAll('.todo-item__text')].map(el => el.textContent);
+      localStorage.setItem('yong_pending', JSON.stringify(pending));
+      localStorage.setItem('yong_done',    JSON.stringify(done));
+    }
+
+    function loadTodos() {
+      const pending = JSON.parse(localStorage.getItem('yong_pending') || '[]');
+      const done    = JSON.parse(localStorage.getItem('yong_done')    || '[]');
+      pending.forEach(text => pendingList.appendChild(createItem(text, false)));
+      done.forEach(text    => doneList.appendChild(createItem(text, true)));
+    }
+
+    // ── 아이템 생성 ──
+    function createItem(text, isDone) {
+      const li = document.createElement('li');
+      li.className = 'todo-item';
+
+      const span = document.createElement('span');
+      span.className = 'todo-item__text';
+      span.textContent = text;
+
+      const btn = document.createElement('button');
+      btn.className = isDone
+        ? 'todo-item__btn todo-item__btn--delete'
+        : 'todo-item__btn todo-item__btn--complete';
+      btn.textContent = isDone ? '삭제' : '완료';
+      btn.addEventListener('click', () => {
+        if (isDone) {
+          deleteTodo(li);
+        } else {
+          completeTodo(li, text);
+        }
+      });
+
+      li.append(span, btn);
+      return li;
+    }
+
+    // ── 추가 ──
+    function addTodo() {
+      const text = input.value.trim();
+      if (!text) return;
+      pendingList.appendChild(createItem(text, false));
+      input.value = '';
+      input.focus();
+      saveTodos();
+    }
+
+    // ── 완료 ──
+    function completeTodo(li, text) {
+      li.remove();
+      doneList.appendChild(createItem(text, true));
+      saveTodos();
+    }
+
+    // ── 삭제 ──
+    function deleteTodo(li) {
+      li.remove();
+      saveTodos();
+    }
+
+    // Enter 키 (isComposing: 한글 조합 중이면 무시)
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.isComposing) addTodo();
+    });
+
+    // 초기 로드
+    loadTodos();
+  </script>
+
+</body>
+</html>
