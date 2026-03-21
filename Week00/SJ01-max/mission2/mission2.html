@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mission 2 - 복합 레이아웃</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: sans-serif;
+      font-weight: 700;
+      font-size: 20px;
+      color: white;
+    }
+
+    /* ── 공통 ── */
+    .label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+
+    /* ================================================
+       HEADER 영역: flex 사용
+       - HEADER(좌) + MENU(우) 가로 배치
+    ================================================ */
+    .header {
+      display: flex;               /* flex: 가로 배치 */
+      height: 80px;
+    }
+
+    .header__logo {
+      width: 200px;
+      background: #0f1923;
+      flex-shrink: 0;              /* 줄어들지 않게 고정 */
+    }
+
+    .header__menu {
+      flex: 1;                     /* 나머지 공간 모두 차지 */
+      background: #e8394d;
+      color: white;
+    }
+
+    /* ================================================
+       HERO 영역
+    ================================================ */
+    .hero {
+      height: 380px;
+      background: #4a7bbf;
+    }
+
+    /* ================================================
+       CONTENT 영역: grid 사용
+       - MAIN(좌) + 공백(중) + 우측(IMAGE+EXTRA) 3열
+    ================================================ */
+    .content {
+      display: grid;                              /* grid: 3열 배치 */
+      grid-template-columns: 1fr 1fr 1fr;        /* 3등분 */
+      height: 440px;
+    }
+
+    .content__main {
+      background: #1e2d40;
+      color: white;
+    }
+
+    .content__blank {
+      background: #ffffff;                        /* 흰색 공백 */
+    }
+
+    /* 우측 컬럼: flex로 IMAGE + EXTRA 세로 배치 */
+    .content__side {
+      display: flex;               /* flex: 세로 배치 */
+      flex-direction: column;
+    }
+
+    .content__image {
+      flex: 1;                     /* 위쪽 절반 */
+      background: #b2dbd6;
+      color: #1a1a1a;
+    }
+
+    .content__extra {
+      flex: 1;                     /* 아래쪽 절반 */
+      background: #3ab87a;
+      color: white;
+    }
+
+    /* ================================================
+       BANNER 영역
+    ================================================ */
+    .banner {
+      height: 120px;
+      background: #f5c842;
+      color: #1a1a1a;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- HEADER: flex로 로고 + 메뉴 가로 배치 -->
+  <header class="header">
+    <div class="header__logo label">HEADER</div>
+    <div class="header__menu label">MENU</div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero label">HERO</section>
+
+  <!-- CONTENT: grid로 3열 배치 -->
+  <section class="content">
+    <div class="content__main label">MAIN</div>
+    <div class="content__blank"></div>  <!-- 흰색 공백 -->
+    <!-- 우측: flex로 IMAGE + EXTRA 세로 배치 -->
+    <div class="content__side">
+      <div class="content__image label">IMAGE</div>
+      <div class="content__extra label">EXTRA</div>
+    </div>
+  </section>
+
+  <!-- BANNER -->
+  <section class="banner label">BANNER</section>
+
+</body>
+</html>
