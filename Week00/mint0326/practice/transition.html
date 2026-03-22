@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>transition</title>
+    <style>
+        .box {
+            padding: 10px;
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            transition-property: all;
+            transition-duration: 2s;
+            display: block;
+            opacity: 1;
+            transition-behavior: allow-discrete;
+        }
+
+        .box.hidden {
+            opacity: 0;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <button onclick="document.querySelector('.box').classList.toggle('hidden')">
+        transition-behavior 테스트
+    </button>
+    <div class="box">transition</div>
+</body>
+
+</html>

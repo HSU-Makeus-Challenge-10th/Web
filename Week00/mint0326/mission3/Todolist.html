@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>심플 투두 리스트</title>
+    <style>
+      /* 기본 스타일 초기화 */
+      body {
+        font-family: sans-serif;
+        background-color: lightblue;
+        display: flex;
+        justify-content: center;
+        padding: 50px;
+      }
+
+      .todo-app {
+        width: 600px;
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px black;
+      }
+
+      .todo-app__title {
+        text-align: center;
+        color: brown;
+      }
+
+      /* 입력 필드 스타일 */
+      .todo-input__field {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid beige;
+        border-radius: 5px;
+        box-sizing: border-box;
+        font-size: 16px;
+        margin-bottom: 20px;
+      }
+
+      .todo-container {
+        display: flex;
+        gap: 20px;
+      }
+
+      .todo-section {
+        flex: 1;
+      }
+
+      .todo-section__title {
+        font-size: 18px;
+        border-bottom: 2px solid bisque;
+        padding-bottom: 10px;
+      }
+
+      .todo-list {
+        list-style: none;
+        padding: 0;
+      }
+
+      .todo-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: white;
+        border: 1px solid beige;
+        padding: 10px;
+        margin-bottom: 5px;
+        border-radius: 4px;
+      }
+
+      .todo-item__text {
+        cursor: pointer;
+        flex-grow: 1;
+      }
+
+      .todo-list--done .todo-item__text {
+        text-decoration: line-through;
+        color: gray;
+      }
+
+      .todo-item__action {
+        padding: 5px 10px;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        color: white;
+        font-weight: bold;
+      }
+
+      /* 완료 버튼 */
+      .todo-item__action--done {
+        background-color: green;
+      }
+
+      /* 삭제 버튼 */
+      .todo-item__action--delete {
+        background-color: red;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="todo-app">
+      <h1 class="todo-app__title">My Todo List</h1>
+
+      <div class="todo-input">
+        <input
+          type="text"
+          id="todo-input-field"
+          class="todo-input__field"
+          aria-label="할 일 입력"
+          placeholder="할 일을 입력하고 Enter를 누르세요"
+        />
+      </div>
+      <div class="todo-container">
+        <section class="todo-section">
+          <h2 class="todo-section__title">해야 할 일</h2>
+          <ul id="todo-list" class="todo-list"></ul>
+        </section>
+
+        <section class="todo-section">
+          <h2 class="todo-section__title">해낸 일</h2>
+          <ul id="done-list" class="todo-list todo-list--done"></ul>
+        </section>
+      </div>
+    </div>
+    <script>
+      const inputField = document.getElementById("todo-input-field");
+      const todoList = document.getElementById("todo-list");
+      const doneList = document.getElementById("done-list");
+
+      // 아이템 생성 함수
+      function createItem(text) {
+        const li = document.createElement("li");
+        li.className = "todo-item";
+
+        // 텍스트 영역
+        const span = document.createElement("span");
+        span.className = "todo-item__text";
+        span.textContent = text;
+
+        // 버튼
+        const button = document.createElement("button");
+        button.className = "todo-item__action todo-item__action--done";
+        button.textContent = "완료";
+
+        // 버튼 클릭 이벤트
+        button.addEventListener("click", () => {
+          if (li.parentElement.id === "todo-list") {
+            button.textContent = "삭제";
+            button.className = "todo-item__action todo-item__action--delete";
+            doneList.appendChild(li);
+          } else {
+            li.remove();
+          }
+        });
+
+        li.appendChild(span);
+        li.appendChild(button);
+        return li;
+      }
+
+      // Enter 키 입력
+      inputField.addEventListener("keydown", (e) => {
+        const trimmedValue = inputField.value.trim();
+        /* 수정전 코드 - 입력 값 검증시 trim() 적용 안함
+            if (e.key === 'Enter' && inputField.value.trim()) {
+-               const newItem = createItem(inputField.value);
+            */
+        if (e.key === "Enter" && trimmedValue) {
+          const newItem = createItem(trimmedValue);
+          todoList.appendChild(newItem);
+          inputField.value = "";
+        }
+      });
+    </script>
+  </body>
+</html>

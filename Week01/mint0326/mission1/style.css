@@ -1,0 +1,94 @@
+/* 배경 */
+body {
+    background-color: lightblue;
+    display: flex;
+    justify-content: center;
+    padding: 50px;
+    font-family: sans-serif;
+    margin: 0;
+}
+
+
+.todo-app {
+    width: 600px;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.todo-app__title {
+    text-align: center;
+    color: brown;
+    margin-top: 0;
+}
+
+.todo-app__input-field {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid beige;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.todo-app__container {
+    display: flex;
+    gap: 20px;
+}
+
+.section {
+    flex: 1;
+}
+
+.section__title {
+    font-size: 18px;
+    border-bottom: 2px solid bisque;
+    padding-bottom: 10px;
+    color: #333;
+}
+
+.list {
+    list-style: none;
+    padding: 0;
+}
+
+.item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    border: 1px solid beige;
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+}
+
+.item__text {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+.list--done .item__text {
+    text-decoration: line-through;
+    color: gray;
+}
+
+.btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.btn--done {
+    background-color: green;
+}
+
+.btn--delete {
+    background-color: red;
+}
