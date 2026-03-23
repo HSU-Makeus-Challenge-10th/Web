@@ -1,0 +1,93 @@
+html {
+  width: 100vw;
+  height: 100vh;
+  background: aliceblue;
+}
+
+body {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+header {
+  font-size: 2vw;
+  font-weight: bold;
+  padding: 3vw 0;
+}
+
+main {
+  width: 70%;
+  border-top: 0.2vw solid gray;
+  display: flex;
+  gap: 1vw;
+  flex-direction: column;
+  align-items: center;
+  padding: 2vw 0;
+}
+
+input {
+  width: 80%;
+  height: 3vw;
+  background: azure;
+  outline: none;
+  border: 0.2vw solid skyblue;
+  padding: 0 1vw;
+  box-sizing: border-box;
+  font-size: 1vw;
+  font-style: italic;
+}
+
+.listSection {
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+}
+
+#todoList,
+#doneList {
+  width: 35%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1vw;
+}
+
+h2 {
+  font-size: 1vw;
+  font-weight: bold;
+  border-bottom: 0.2vw solid gray;
+}
+
+.todo-item {
+  width: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 0.2vw solid skyblue;
+  padding-bottom: 0.5vw;
+}
+
+span {
+  font-size: 1vw;
+  font-weight: bold;
+}
+
+button {
+  font-size: 1vw;
+  font-weight: bold;
+  padding: 0.2vw 0.7vw;
+  background: skyblue;
+  border: none;
+  border-radius: 0.3vw;
+  cursor: pointer;
+}
+.items-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5vw;
+    margin-top: 1vw;
+}
