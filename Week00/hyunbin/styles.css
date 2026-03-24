@@ -1,0 +1,91 @@
+body {
+  background: #f5f7fb;
+  margin: 0;
+  font-family: sans-serif;
+}
+
+/* 상단 */
+header {
+  text-align: center;
+  margin-top: 80px;
+}
+
+h1 {
+  font-size: 32px;
+}
+
+hr {
+  width: 700px;
+  margin: 40px auto;
+  border: none;
+  border-top: 1px solid #ddd;
+}
+
+/* 메인 */
+.container {
+  width: 700px;
+  margin: 0 auto;
+}
+
+/* 입력창 */
+input {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #aaa;
+  font-size: 14px;
+  margin-bottom: 40px;
+}
+
+input::placeholder {
+  color: #bbb;
+}
+
+/* 2컬럼 */
+.list-wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+section {
+  width: 45%;
+}
+
+h2 {
+  font-size: 16px;
+  border-bottom: 2px solid #cfd6e4;
+  padding-bottom: 5px;
+  margin-bottom: 20px;
+}
+
+/* 리스트 핵심 */
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 2px solid #e5e9f2;
+}
+
+li span {
+  font-size: 14px;
+}
+
+/* 버튼 */
+button {
+  font-size: 11px;
+  padding: 4px 8px;
+  border: none;
+  background: #dbe3f1;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+/* 완료 상태 */
+.done span {
+  color: #999;
+}
