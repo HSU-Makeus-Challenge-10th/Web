@@ -1,0 +1,62 @@
+body {
+  font-family: sans-serif;
+  background: #f5f7fb;
+  text-align: center;
+}
+
+.container {
+  width: 600px;
+  margin: 80px auto;
+}
+
+h1 {
+  margin-bottom: 40px;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #ccc;
+  margin-bottom: 40px;
+}
+
+/* 좌우 분할 */
+.list-wrapper {
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+section {
+  width: 50%;
+}
+
+h2 {
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 5px;
+  margin-bottom: 20px;
+}
+
+/* 리스트 스타일 핵심 */
+li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 2px solid #e5e9f2;
+}
+
+/* 완료 상태 */
+.done span {
+  text-decoration: line-through;
+  color: #aaa;
+}
+
+/* 버튼 작게 */
+button {
+  font-size: 12px;
+  padding: 3px 6px;
+  border: none;
+  background: #dbe3f1;
+  cursor: pointer;
+} 
