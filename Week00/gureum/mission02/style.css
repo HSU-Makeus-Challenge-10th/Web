@@ -1,0 +1,179 @@
+/* ============================================
+   Reset & Base
+   ============================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background-color: #ffffff;
+}
+
+/* ============================================
+   구조 설계 메모
+   ============================================
+   전체 레이아웃:
+   - page-layout: flex column (세로 쌓기)
+
+   page-header: display flex (가로 정렬)
+   - page-header__logo : flex 1 (좁은 왼쪽)
+   - page-header__menu : flex 4 (넓은 오른쪽)
+
+   content: display grid (3열 복합 레이아웃)
+   - grid-template-columns: 2fr 1fr 1fr
+     → MAIN(50%) / 공백(25%) / 사이드바(25%)
+   - content__sidebar: display flex + flex-direction column
+     → IMAGE / EXTRA 세로 쌓기
+
+   flex를 쓴 이유:
+   - page-header: 두 요소를 비율로 나누기만 하면 되는 단순 1행 구조
+   - content__sidebar: 두 요소를 세로로 동일하게 쌓는 구조
+
+   grid를 쓴 이유:
+   - content: 3열 + 오른쪽만 2행인 복합 구조 → grid로 명시적 열 제어
+   ============================================ */
+
+
+/* ============================================
+   Block: page-layout
+   전체 페이지를 세로로 쌓는 컨테이너
+   ============================================ */
+.page-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ============================================
+   Block: page-header
+   HEADER + MENU를 가로로 배치 → display: flex
+   ============================================ */
+.page-header {
+  display: flex;          /* ← flex 활용 */
+  height: 60px;
+}
+
+/* Element: page-header__logo */
+.page-header__logo {
+  flex: 1;                /* 전체의 1/5 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #1e2535;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* Element: page-header__menu */
+.page-header__menu {
+  flex: 4;                /* 전체의 4/5 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #e8424f;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* ============================================
+   Block: hero
+   전체 너비를 차지하는 히어로 영역
+   ============================================ */
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  background-color: #5b83be;
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* ============================================
+   Block: content
+   3열 복합 레이아웃 → display: grid
+   grid-template-columns: 2fr 1fr 1fr
+   ============================================ */
+.content {
+  display: grid;          /* ← grid 활용 */
+  grid-template-columns: 2fr 1fr 1fr;
+  height: 340px;
+}
+
+/* Element: content__main */
+.content__main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #2b3453;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* Element: content__gap (흰 공백 - 빈 영역) */
+.content__gap {
+  background-color: #ffffff;
+}
+
+/* Element: content__sidebar
+   IMAGE + EXTRA를 세로로 쌓기 → display: flex + flex-direction: column
+   ============================================ */
+.content__sidebar {
+  display: flex;          /* ← flex 활용 (세로 쌓기) */
+  flex-direction: column;
+}
+
+/* Element: content__image */
+.content__image {
+  flex: 1;                /* 사이드바의 절반 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #aed4d0;
+  color: #1a1a1a;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* Element: content__extra */
+.content__extra {
+  flex: 1;                /* 사이드바의 절반 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #4cad7e;
+  color: #1a1a1a;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* ============================================
+   Block: banner
+   전체 너비 하단 배너
+   ============================================ */
+.banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+  background-color: #f6c94e;
+  color: #1a1a1a;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}

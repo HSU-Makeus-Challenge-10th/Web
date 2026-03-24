@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="src/style.css" />
+    <title>Hyeon TODO</title>
+  </head>
+  <body>
+    <main>
+      <header>Hyeon TODO</header>
+      <section class="input-section">
+        <input type="text" placeholder="스터디 계획을 작성해보세요!" />
+        <button class="add-button">할 일 추가</button>
+      </section>
+      <section class="container">
+        <section>
+          <h2>해야할 일</h2>
+          <ul class="todo"></ul>
+        </section>
+        <section>
+          <h2>해낸 일</h2>
+          <ul class="done"></ul>
+        </section>
+      </section>
+    </main>
+    <script src="./dist/app.js"></script>
+  </body>
+</html>
