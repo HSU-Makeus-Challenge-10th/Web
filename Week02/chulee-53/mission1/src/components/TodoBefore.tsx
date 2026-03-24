@@ -23,7 +23,7 @@ const TodoBefore = () => {
         }
     };
 
-    const completeToto = (todo: TTodo) => {
+    const completeTodo = (todo: TTodo) => {
         setTodos(prev => prev.filter(t => t.id !== todo.id));
         setDoneTodos(prev => [...prev, todo]);
     }
@@ -45,7 +45,7 @@ const TodoBefore = () => {
                         {todos.map((todo) => (
                             <li key={todo.id} className="render-container__item">
                                 <span className="render-container__item-text">{todo.text}</span>
-                                <button onClick={() => completeToto(todo)} style={{ backgroundColor: "#28a745" }} className="render-container__item-button">완료</button>
+                                <button onClick={() => completeTodo(todo)} style={{ backgroundColor: "#28a745" }} className="render-container__item-button">완료</button>
                             </li>
                         ))}
                     </ul>

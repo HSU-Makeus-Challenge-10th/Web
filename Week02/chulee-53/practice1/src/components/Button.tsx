@@ -1,11 +1,12 @@
 interface ButtonProps {
     onClick: () => void;
     text: string;
+    type?: "button" | "submit" | "reset";
 }
 
-const Button = ({ onClick, text }: ButtonProps) => {
+const Button = ({ onClick, text, type = "button" }: ButtonProps) => {
     return (
-        <button onClick={onClick}>{text}</button>
+        <button onClick={onClick} type={type}>{text}</button>
     );
 };
 

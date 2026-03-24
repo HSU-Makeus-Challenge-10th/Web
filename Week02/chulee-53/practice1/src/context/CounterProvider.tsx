@@ -12,11 +12,11 @@ export const CounterProvider = ({ children }: { children: React.ReactNode }) => 
     const [count, setCount] = useState(0);
 
     const handleIncrement = () => {
-        setCount(count + 1);
+        setCount(prev => prev + 1);
     };
 
     const handleDecrement = () => {
-        setCount(count - 1);
+        setCount(prev => prev - 1);
     };
 
     return (
@@ -29,7 +29,7 @@ export const CounterProvider = ({ children }: { children: React.ReactNode }) => 
 export const useCount = () => {
     const context = useContext(CounterContext);
     if (!context) {
-        throw new Error('useCount는 반드시 CountPrvider 내부에서 사용되어야 합니다.');
+        throw new Error('useCount는 반드시 CounterProvider 내부에서 사용되어야 합니다.');
     }
     return context;
 };
