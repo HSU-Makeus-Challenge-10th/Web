@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { THEME, useTheme } from "./context/ThemeProvider";
+import { THEME, useTheme } from "../context/ThemeProvider";
 
 export default function ThemeContent() {
   const { theme, toggleTheme } = useTheme();

@@ -1,6 +1,6 @@
-import Navbar from "./Navbar";
-import ThemeContent from "./ThemeContent";
-import { ThemeProvider } from "./context/ThemeProvider";
+import Navbar from "../components/Navbar";
+import ThemeContent from "../components/ThemeContent";
+import { ThemeProvider } from "../context/ThemeProvider";
 
 export default function ContextPage() {
   return (

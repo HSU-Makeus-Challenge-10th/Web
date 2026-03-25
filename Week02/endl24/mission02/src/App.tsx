@@ -1,6 +1,5 @@
 import './App'
-import ContextPage from './ContextPage'
-import ThemeToggleButton from './ThemeToggleButton';
+import ContextPage from './pages/ContextPage'
 
 function App() {
 
