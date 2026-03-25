@@ -13,7 +13,7 @@ export default function ThemeContent() {
     >
       <h1
         className={clsx(
-          "text-wxl font-bold",
+          "text-xl font-bold",
           isLightMode ? "text-black" : "text-white",
         )}
       >
