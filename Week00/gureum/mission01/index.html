@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aido - Navbar 미션</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="page">
+      <!-- Block: navbar -->
+      <header class="navbar">
+        <div class="navbar__inner">
+
+          <!-- Element: logo -->
+          <a href="/" class="navbar__logo">
+            <img
+              class="navbar__logo-image"
+              src="https://www.aido.kr/logo.png"
+              alt="Aido 로고"
+            />
+            <span class="navbar__logo-text">Aido</span>
+          </a>
+
+          <!-- Element: menu -->
+          <nav class="navbar__menu">
+            <ul class="navbar__menu-list">
+              <li class="navbar__menu-item">
+                <a href="#" class="navbar__menu-link">
+                  <span class="navbar__menu-text" data-ko="고양이 친구들" data-en="Friends">고양이 친구들</span>
+                </a>
+              </li>
+              <li class="navbar__menu-item">
+                <a href="#" class="navbar__menu-link">
+                  <span class="navbar__menu-text" data-ko="패치 노트" data-en="Patch Notes">패치 노트</span>
+                </a>
+              </li>
+              <li class="navbar__menu-item">
+                <a href="#" class="navbar__menu-link navbar__menu-link--active">
+                  <span class="navbar__menu-text" data-ko="앱 다운로드" data-en="App Download">앱 다운로드</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+
+          <!-- Element: lang 토글 -->
+          <div class="navbar__lang">
+            <button class="navbar__lang-btn navbar__lang-btn--active" data-lang="ko">KO</button>
+            <button class="navbar__lang-btn" data-lang="en">EN</button>
+          </div>
+
+        </div>
+      </header>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

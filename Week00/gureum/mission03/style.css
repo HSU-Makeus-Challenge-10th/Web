@@ -1,0 +1,60 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0 20px 20px;
+  text-align: center;
+  background-color: #f2f2f2;
+}
+
+header {
+  font-size: 36px;
+  font-weight: bold;
+  margin: 4rem;
+}
+
+input {
+  width: 60%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+section {
+  margin-top: 20px;
+  display: inline-block;
+  width: 40%;
+  vertical-align: top;
+}
+
+h2 {
+  font-size: 18px;
+  display: inline-block;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border-bottom: 2px solid #ccc;
+}
+
+button {
+  border: none;
+  padding: 4px 8px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.done-btn { background: green; color: white; }
+.delete-btn { background: red; color: white; }

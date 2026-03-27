@@ -1,0 +1,238 @@
+/* ============================================
+   Reset & Base
+   ============================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR',
+    sans-serif;
+  background-color: #f0efe8;
+  /* 점무늬 배경 */
+  background-image: radial-gradient(circle, #c8c7be 1px, transparent 1px);
+  background-size: 24px 24px;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 48px 24px;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  list-style: none;
+}
+
+/* ============================================
+   Page wrapper
+   ============================================ */
+.page {
+  width: 100%;
+  max-width: 860px;
+}
+
+/* ============================================
+   Block: navbar
+   플로팅 카드 스타일 - 두꺼운 테두리 + 오프셋 그림자
+   ============================================ */
+.navbar {
+  background-color: #ffffff;
+  border: 3px solid #1a1a1a;
+  border-radius: 24px;
+  /* 오프셋 그림자로 입체감 */
+  box-shadow: 5px 5px 0px #1a1a1a;
+}
+
+/* ============================================
+   Element: navbar__inner
+   ============================================ */
+.navbar__inner {
+  display: flex;              /* 수평 정렬 핵심 */
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  gap: 16px;
+}
+
+/* ============================================
+   Element: navbar__logo
+   ============================================ */
+.navbar__logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+.navbar__logo-image {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 2px solid #1a1a1a;
+}
+
+.navbar__logo-text {
+  font-size: 22px;
+  font-weight: 800;
+  color: #1a1a1a;
+  letter-spacing: -0.5px;
+}
+
+/* ============================================
+   Element: navbar__menu
+   ============================================ */
+.navbar__menu {
+  flex: 1;                    /* 남은 공간 차지 - 중앙 정렬 */
+  display: flex;
+  justify-content: center;
+}
+
+.navbar__menu-list {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.navbar__menu-item {
+  display: flex;
+}
+
+.navbar__menu-link {
+  display: flex;
+  align-items: center;
+  padding: 6px 14px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #888;
+  transition: color 0.15s ease, background-color 0.15s ease;
+  white-space: nowrap;
+}
+
+.navbar__menu-link:hover {
+  color: #1a1a1a;
+  background-color: #f5f5f5;
+}
+
+/* Modifier: 활성 메뉴 - 주황색 */
+.navbar__menu-link--active {
+  color: #f07040;
+  font-weight: 600;
+}
+
+.navbar__menu-link--active:hover {
+  background-color: #fff4ef;
+  color: #f07040;
+}
+
+.navbar__menu-text {
+  white-space: nowrap;
+}
+
+/* ============================================
+   Element: navbar__lang
+   Pill 토글 스타일 KO / EN 스위처
+   ============================================ */
+.navbar__lang {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  background-color: #fff;
+  border: 2.5px solid #1a1a1a;
+  border-radius: 999px;
+  padding: 4px;
+  gap: 2px;
+}
+
+.navbar__lang-btn {
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  color: #1a1a1a;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  letter-spacing: 0.3px;
+}
+
+.navbar__lang-btn:hover {
+  background-color: #f5f5f5;
+}
+
+/* Modifier: 활성 언어 버튼 - 주황 채움 */
+.navbar__lang-btn--active {
+  background-color: #f07040;
+  color: #ffffff;
+}
+
+.navbar__lang-btn--active:hover {
+  background-color: #e06030;
+}
+
+/* ============================================
+   반응형 구현 방법 정리
+   ============================================
+   사용 기술: CSS @media query (미디어 쿼리)
+
+   미디어 쿼리란?
+   - 화면 너비(width) 등 조건에 따라 CSS를 분기 적용하는 문법
+   - @media (max-width: Npx) { ... } 형태로 사용
+   - 조건에 해당하는 경우에만 내부 스타일이 적용됨
+
+   적용한 breakpoint:
+   ┌─────────────────────────────────────────────────┐
+   │ > 680px  : 기본 레이아웃 - 메뉴 텍스트 모두 표시   │
+   │ ≤ 680px  : 메뉴 텍스트(.navbar__menu-text) 숨김  │
+   │            → 아이콘 없이 링크 영역만 남음          │
+   │ ≤ 480px  : 추가 압축 - 패딩/폰트/아이콘 크기 축소  │
+   └─────────────────────────────────────────────────┘
+
+   핵심 속성:
+   - display: none  → 요소를 완전히 숨겨 공간도 차지하지 않음
+   - flex: 1        → 메뉴가 남은 공간을 채워 자동으로 중앙 유지
+   - white-space: nowrap → 텍스트 줄바꿈 방지
+   ============================================ */
+@media (max-width: 680px) {
+  .navbar__menu-text {
+    display: none;
+  }
+
+  .navbar__menu-link {
+    padding: 6px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar__inner {
+    padding: 10px 14px;
+  }
+
+  .navbar__logo-text {
+    font-size: 18px;
+  }
+
+  .navbar__logo-image {
+    width: 36px;
+    height: 36px;
+  }
+
+  .navbar__lang-btn {
+    width: 34px;
+    height: 34px;
+    font-size: 12px;
+  }
+}
