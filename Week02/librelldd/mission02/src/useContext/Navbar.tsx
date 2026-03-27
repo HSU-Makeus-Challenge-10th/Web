@@ -8,7 +8,7 @@ export default function Navbar()  {
   console.log(theme);
   return (
   <div>
-    <ThemeToggleButton/>
+    < ThemeToggleButton/>
   </div>
   );
 

@@ -9,7 +9,7 @@ export default function ContextPage() {
         <ThemeProvider>
             <div className='flex flex-col item-center justify-center min-h-screen'>
                 <Navbar />
-                <main className='flex-1'>
+                <main className= 'flex-1'>
                     <ThemeContent />
                 </main>
             </div>
