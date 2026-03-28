@@ -18,7 +18,10 @@ export default function TodoInput() {
 
   return (
     <section className="input-section">
+      <label htmlFor="todo-input">할 일 입력</label>
       <input
+        id="todo-input"
+        aria-label="할 일 입력"
         value={value}
         onChange={(e) => setValue(e.target.value)}
         onKeyUp={onKeyUp}
