@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import MovieBanner from "../components/MovieBanner";
 import PersonCard from "../components/PersonCard";
-import type { Movie, Cast, Crew } from "../types/movie";
+import type { Movie, Cast, Crew, CreditResponse } from "../types/movie";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { LoadingSpinner } from "../components/LoadingSpinner";
@@ -16,8 +16,15 @@ export default function MovieDetailPage() {
 
     useEffect(() => {
         const fetchMovieDetail = async () => {
+            if (!id) {
+                setError(true);
+                setPending(false);
+                return;
+            }
+            setPending(true);
+            setError(false);
             try {
-                const { data } = await axios.get(`https://api.themoviedb.org/3/movie/${id}?language=ko-KR&append_to_response=credits`, {
+                const { data } = await axios.get<Movie & CreditResponse>(`https://api.themoviedb.org/3/movie/${id}?language=ko-KR&append_to_response=credits`, {
                     headers: {
                         Authorization: `Bearer ${import.meta.env.VITE_TMDB_KEY}`,
                     },

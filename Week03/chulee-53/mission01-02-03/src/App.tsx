@@ -21,6 +21,10 @@ const router = createBrowserRouter([
     path: '/movie/:id',
     element: <MovieDetailPage />,
   },
+  {
+    path: '*',
+    element: <NotFound />,
+  }
 ]);
 
 function App() {

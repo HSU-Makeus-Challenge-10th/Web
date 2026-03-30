@@ -33,7 +33,7 @@ export default function MoviePage() {
         fetchMovies();
     }, [page, category]);
 
-    if (error || !movies) {
+    if (error) {
         return <div className="bg-[#141413] min-h-screen text-white text-center pt-20">
             데이터를 불러오는데 실패했습니다.
         </div>
@@ -58,17 +58,11 @@ export default function MoviePage() {
                     <button className="disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition-all bg-[#141413] text-[#F3F4F4] px-6 py-2 rounded-lg border-[#141413] border-b-4 hover:bg-[#262624] active:brightness-90" onClick={() => setPage(page + 1)}>{`>`}</button>
                 </div>
 
-                {pending && (
-                    <LoadingSpinner />
-                )}
-
-                {!pending && (
-                    <div className="p-10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                        {movies.map((movie) => (
-                            <MovieCard key={movie.id} movie={movie} />
-                        ))}
-                    </div>
-                )}
+                <div className="p-10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                    {movies.map((movie) => (
+                        <MovieCard key={movie.id} movie={movie} />
+                    ))}
+                </div>
             </div>
         </>
     );

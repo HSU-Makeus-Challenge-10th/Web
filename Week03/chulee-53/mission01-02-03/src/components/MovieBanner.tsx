@@ -26,8 +26,8 @@ export default function MovieBanner({ movie }: MovieBannerProps) {
 
                 <div className="flex items-center gap-4 mb-6 text-lg font-medium text-gray-300">
                     <span className="text-[#FFD700]">★ {movie.vote_average.toFixed(1)}</span>
-                    <span>{movie.release_date.split('-')[0]}</span>
-                    <span>{movie.runtime}분</span>
+                    <span>{movie.release_date ? movie.release_date.split("-")[0] : "개봉일 미정"}</span>
+                    <span>{movie.runtime ? `${movie.runtime}분` : "상영시간 미정"}</span>
                 </div>
 
                 <p className="text-lg md:text-xl text-gray-200 leading-relaxed mb-4">
