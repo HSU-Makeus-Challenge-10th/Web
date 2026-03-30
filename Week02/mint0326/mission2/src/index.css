@@ -1,0 +1,112 @@
+/* 1. 변수 정의 (상동) */
+:root {
+    --bg-color: lightblue;
+    /* 기본 배경색을 lightblue로 설정 */
+    --card-bg: #ffffff;
+    /* 투두 리스트 박스 배경 */
+    --text-color: #333333;
+    --border-color: beige;
+}
+
+[data-theme='dark'] {
+    --bg-color: #1a1a1a;
+    --card-bg: #2d2d2d;
+    /* 다크모드용 박스 배경 */
+    --text-color: #f5f5f5;
+    --border-color: #444444;
+}
+
+/* 2. body 설정 통합 */
+body {
+    background-color: var(--bg-color);
+    /* 변수 사용 */
+    color: var(--text-color);
+    /* 변수 사용 */
+    transition: all 0.3s ease;
+    display: flex;
+    justify-content: center;
+    padding: 50px;
+    font-family: sans-serif;
+    margin: 0;
+}
+
+.todo-app {
+    width: 600px;
+    background: var(--card-bg);
+    /* white 대신 변수 사용 */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    background: var(--card-bg);
+    color: var(--text-color);
+}
+
+.todo-app__input-field {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid beige;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.todo-app__container {
+    display: flex;
+    gap: 20px;
+}
+
+.section {
+    flex: 1;
+}
+
+.section__title {
+    color: var(--text-color);
+    font-size: 18px;
+    border-bottom: 2px solid bisque;
+    padding-bottom: 10px;
+}
+
+.list {
+    list-style: none;
+    padding: 0;
+}
+
+.item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+}
+
+.item__text {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+.list--done .item__text {
+    text-decoration: line-through;
+    color: gray;
+}
+
+.btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.btn--done {
+    background-color: green;
+}
+
+.btn--delete {
+    background-color: red;
+}
