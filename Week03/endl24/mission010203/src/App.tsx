@@ -4,6 +4,7 @@ import MoviePage from "./pages/MoviePage";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import NotFoundPage from "./pages/NotFoundPage";
 import MovieDetailPage from "./pages/MovieDetailPage";
+import MainPage from "./pages/MainPage";
 
 const router = createBrowserRouter([
   {
@@ -11,6 +12,10 @@ const router = createBrowserRouter([
     element: <HomePage />,
     errorElement: <NotFoundPage />,
     children: [
+      {
+        index:true,
+        element:<MainPage/>
+      },
       {
         path: "movies/:category",
         element: <MoviePage />,
