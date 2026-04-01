@@ -1,11 +1,12 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { Navbar } from "../components/Navbar.tsx";
 
 const HomePage = () => {
+  const location = useLocation();
   return (
     <>
       <Navbar />
-      <Outlet />
+      <Outlet key={location.pathname}/>
     </>
   );
 };

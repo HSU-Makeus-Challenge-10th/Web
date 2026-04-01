@@ -15,6 +15,7 @@ export const Navbar = () => {
         <NavLink
           key={to}
           to={to}
+          end={to === "/"}
           className={({ isActive }) => {
             return isActive ? "text-[#b2dab1] font-bold" : "text-gray-500";
           }}

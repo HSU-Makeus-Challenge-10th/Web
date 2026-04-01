@@ -15,10 +15,11 @@ export default function MainPage() {
         const apiKey = import.meta.env.VITE_TMDB_KEY;
         const url = `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=ko-KR&page=1`;
         const { data } = await axios.get<MovieResponse>(url);
-        
+        if (!data.results?.length) {
+          throw new Error("No movies available");
+        }
         const firstMovieId = data.results[0].id;
 
-        
         const detailUrl = `https://api.themoviedb.org/3/movie/${firstMovieId}?api_key=${apiKey}&language=ko-KR`;
         const { data: movieDetail } = await axios.get<MovieDetail>(detailUrl);
 
@@ -34,12 +35,15 @@ export default function MainPage() {
   }, []);
 
   if (isPending || !heroMovie) {
-    return <div className="flex justify-center items-center h-screen bg-black"><LoadingSpinner /></div>;
+    return (
+      <div className="flex justify-center items-center h-screen bg-black">
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   return (
     <div className="relative w-full h-[80vh] bg-black text-white overflow-hidden">
-      
       <img
         src={`https://image.tmdb.org/t/p/original${heroMovie.backdrop_path}`}
         alt={heroMovie.title}
@@ -53,13 +57,15 @@ export default function MainPage() {
         <h1 className="text-6xl font-bold leading-tight drop-shadow-lg">
           {heroMovie.title}
         </h1>
-        
+
         {heroMovie.tagline && (
           <p className="text-2xl italic text-gray-300">"{heroMovie.tagline}"</p>
         )}
 
         <div className="flex items-center gap-3 text-lg font-medium">
-          <span className="text-yellow-400">⭐ {heroMovie.vote_average.toFixed(1)}</span>
+          <span className="text-yellow-400">
+            ⭐ {heroMovie.vote_average.toFixed(1)}
+          </span>
           <span>|</span>
           <span>{heroMovie.release_date.substring(0, 4)}</span>
           <span>|</span>

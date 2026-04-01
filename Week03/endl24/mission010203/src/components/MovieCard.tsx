@@ -18,9 +18,12 @@ export default function MovieCard({ movie }: MovieCardProps) {
       onMouseLeave={() => setIsHovered(false)}
     >
       <img
-        src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
+        src={
+          movie.poster_path
+            ? `https://image.tmdb.org/t/p/w200${movie.poster_path}`
+            : "/placeholder-poster.png"
+        }
         alt={`${movie.title}의 이미지`}
-        className=""
       />
       {isHovered && (
         <div

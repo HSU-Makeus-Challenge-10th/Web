@@ -23,7 +23,7 @@ export type MovieDetail = Movie & {
 export type MovieResponse = {
   page: number;
   results: Movie[];
-  totalPages: number;
+  total_Pages: number;
   total_results: number;
 };
 export type Cast = {
