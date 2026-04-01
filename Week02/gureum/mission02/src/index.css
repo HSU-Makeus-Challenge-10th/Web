@@ -1,0 +1,4 @@
+@import "tailwindcss";
+
+/* class 기반 다크모드: .dark 클래스가 있는 요소와 그 하위에 dark: 변형 적용 */
+@custom-variant dark (&:where(.dark, .dark *));
