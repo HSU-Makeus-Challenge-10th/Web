@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { getTmdbHeaders } from '../apis/tmdb';
 import type { MovieDetail, MovieCredits } from '../types/movie';
 import CrewSection from '../components/CrewSection';
 
@@ -12,7 +13,7 @@ const DetailPage = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [isError, setIsError] = useState(false);
 
-    const TOKEN = `eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNzJjZGEyMTQ0ZDA5ODY3Nzc5ODc4MDBlMmI4MDNlMiIsIm5iZiI6MTc3NDg3ODIzOC40OTIsInN1YiI6IjY5Y2E3ZTFlZjQ4MTU0YjA3ODI2MzkxZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.32ziEfDFjE-dE6iImbJxHzW8uvIpbTWcFV_KDsdP_MI`;
+// TOKEN 변수 제거
 
     useEffect(() => {
         const fetchDetailData = async () => {
@@ -21,10 +22,10 @@ const DetailPage = () => {
             try {
                 const [movieRes, creditsRes] = await Promise.all([
                     axios.get<MovieDetail>(`https://api.themoviedb.org/3/movie/${movieId}?language=ko-KR`, {
-                        headers: { Authorization: `Bearer ${TOKEN}` }
+                        headers: getTmdbHeaders()
                     }),
                     axios.get<MovieCredits>(`https://api.themoviedb.org/3/movie/${movieId}/credits?language=ko-KR`, {
-                        headers: { Authorization: `Bearer ${TOKEN}` }
+                        headers: getTmdbHeaders()
                     })
                 ]);
                 setMovie(movieRes.data);

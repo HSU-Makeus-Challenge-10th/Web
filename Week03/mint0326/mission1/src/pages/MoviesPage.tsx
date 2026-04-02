@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import type { Movie, MovieResponse } from '../types/movie';
 import axios from 'axios';
+import { getTmdbHeaders } from '../apis/tmdb';
+
 
 const MoviesPage = () => {
     const [movies, setMovies] = useState<Movie[]>([]);
@@ -11,9 +13,7 @@ const MoviesPage = () => {
                 const { data } = await axios.get<MovieResponse>(
                     'https://api.themoviedb.org/3/movie/popular?language=ko-KR&page=1',
                     {
-                        headers: {
-                            Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNzJjZGEyMTQ0ZDA5ODY3Nzc5ODc4MDBlMmI4MDNlMiIsIm5iZiI6MTc3NDg3ODIzOC40OTIsInN1YiI6IjY5Y2E3ZTFlZjQ4MTU0YjA3ODI2MzkxZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.32ziEfDFjE-dE6iImbJxHzW8uvIpbTWcFV_KDsdP_MI`, // Bearer 꼭 붙이세요!
-                        },
+                        headers: getTmdbHeaders(),
                     }
                 );
                 setMovies(data.results);
