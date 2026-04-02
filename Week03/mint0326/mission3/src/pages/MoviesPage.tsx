@@ -17,6 +17,9 @@ const MoviesPage = ({ category }: MoviesPageProps) => {
     const [totalPages, setTotalPages] = useState(1);
 
     useEffect(() => {
+        let ignore = false;
+        const controller = new AbortController();
+
         const fetchMovies = async () => {
             setIsLoading(true);
             setIsError(false);
@@ -24,19 +27,32 @@ const MoviesPage = ({ category }: MoviesPageProps) => {
                 const { data } = await axios.get<MovieResponse>(
                     `https://api.themoviedb.org/3/movie/${category}?language=ko-KR&page=${page}`,
                     {
+                        signal: controller.signal,
                         headers: getTmdbHeaders(),
                     }
                 );
-                setMovies(data.results);
-                setTotalPages(data.total_pages);
-            } catch (error) {
-                console.error(error);
-                setIsError(true);
-            } finally {
-                setIsLoading(false);
+                if (!ignore) {
+                    setMovies(data.results);
+                    setTotalPages(data.total_pages);
+                }
+            }
+            catch (error) {
+                if (!ignore) {
+                    console.error(error);
+                    setIsError(true);
+                }
+            }
+            finally {
+                if (!ignore) {
+                    setIsLoading(false);
+                }
             }
         };
         fetchMovies();
+        return () => {
+            ignore = true;
+            controller.abort();
+        };
     }, [category, page]);
 
     // 카테고리가 바뀌면 페이지를 1로 리셋

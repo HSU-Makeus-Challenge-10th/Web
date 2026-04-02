@@ -32,6 +32,7 @@ const MoviesPage = () => {
                     <div key={movie.id} className="group relative overflow-hidden rounded-lg bg-gray-900">
                         <img
                             src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                            alt={movie.title}
                             className="w-full h-auto transition-transform group-hover:scale-105 group-hover:blur-sm"
                         />
                         {/* 호버 오버레이: group-hover로 부모 호버 시에만 나타나게 함 */}
