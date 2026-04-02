@@ -1,0 +1,29 @@
+.container {
+  padding: 40px;
+  text-align: center;
+}
+
+.nav {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.nav button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  background-color: #3b82f6;
+  color: white;
+  cursor: pointer;
+}
+
+.nav button:hover {
+  background-color: #2563eb;
+}
+
+.content {
+  margin-top: 30px;
+  font-size: 24px;
+}
