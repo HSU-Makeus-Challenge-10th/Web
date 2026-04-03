@@ -150,7 +150,7 @@ const MovieDetailPage = () => {
     
 `}</style>
 </div> 
-    ); 
+    );
 }; 
 
 export default MovieDetailPage;
