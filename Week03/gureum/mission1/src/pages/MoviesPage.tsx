@@ -4,22 +4,63 @@ import axios from 'axios';
 
 const MoviesPage = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
-  console.log(movies); // 영화 데이터 체크
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
   useEffect(() => {
+    let cancelled = false;
+
     const fetchMovies = async () => {
-      const { data } = await axios.get<MovieResponse>(
-        'https://api.themoviedb.org/3/movie/popular?language=ko-KR&page=1',
-        {
-          headers: {
-            Authorization: `Bearer ${import.meta.env.VITE_TMDB_API_KEY}`, // 본인 TMDB 토큰으로 교체
-          },
+      try {
+        setError(null);
+
+        const { data } = await axios.get<MovieResponse>(
+          'https://api.themoviedb.org/3/movie/popular?language=ko-KR&page=1',
+          {
+            headers: {
+              Authorization: `Bearer ${import.meta.env.VITE_TMDB_API_KEY}`,
+            },
+          }
+        );
+
+        if (!cancelled) {
+          setMovies(data.results);
         }
-      );
-      setMovies(data.results);
+      } catch (requestError) {
+        console.error('영화 목록 조회 실패', requestError);
+
+        if (!cancelled) {
+          setError('영화 데이터를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.');
+        }
+      } finally {
+        if (!cancelled) {
+          setIsLoading(false);
+        }
+      }
     };
 
-    fetchMovies();
+    void fetchMovies();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray text-white p-8 flex items-center justify-center">
+        <p className="text-lg">영화 데이터를 불러오는 중...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray text-white p-8 flex items-center justify-center">
+        <p className="text-lg text-red-300">{error}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray text-white p-8">
@@ -32,11 +73,17 @@ const MoviesPage = () => {
             className="relative group cursor-pointer rounded-lg overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105"
           >
             {/* 포스터 이미지 */}
-            <img
-              src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-              alt={movie.title}
-              className="w-full h-auto object-cover transition-all duration-300 group-hover:blur-sm"
-            />
+            {movie.poster_path ? (
+              <img
+                src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                alt={movie.title}
+                className="w-full h-auto object-cover transition-all duration-300 group-hover:blur-sm"
+              />
+            ) : (
+              <div className="w-full aspect-[2/3] bg-gray-800 flex items-center justify-center text-sm text-gray-400">
+                이미지 없음
+              </div>
+            )}
             
             {/* 호버 시 나타나는 정보 */}
             <div className="absolute inset-0 bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300 flex flex-col justify-center items-center p-4 opacity-0 group-hover:opacity-100">
