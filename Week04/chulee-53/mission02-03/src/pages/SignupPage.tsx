@@ -37,10 +37,12 @@ const SignupPage = () => {
     const onSubmit: SubmitHandler<SignupFormFields> = async (data) => {
         const { passwordCheck, ...rest } = data;
 
-        const response = await signup(rest);
-        navigate('/');
-
-        console.log(response);
+        try {
+            await signup(rest);
+            navigate('/');
+        } catch (error) {
+            console.error(error);
+        }
     }
 
 

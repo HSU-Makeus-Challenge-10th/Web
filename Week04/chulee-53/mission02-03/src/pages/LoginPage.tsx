@@ -29,7 +29,7 @@ const LoginPage = () => {
             setItem(response.data.accessToken);
             navigate('/mypage');
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     }
 

@@ -10,10 +10,10 @@ function useForm<T>({ initialValues, validate }: UseFormProps<T>) {
   const [error, setError] = useState<Record<keyof T, string>>();
 
   const handleChange = (name: keyof T, value: string) => {
-    setValues({
-      ...values,
+    setValues((prev) => ({
+      ...prev,
       [name]: value,
-    });
+    }));
   };
 
   const getInputProps = (name: keyof T) => {
