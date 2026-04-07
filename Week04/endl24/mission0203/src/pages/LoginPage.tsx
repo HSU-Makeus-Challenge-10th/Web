@@ -8,7 +8,10 @@ import axios from "axios";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "올바른 이메일 형식이 아닙니다." }),
-  password: z.string().min(1, { message: "비밀번호를 입력해주세요." }),
+  password: z
+    .string()
+    .min(8, { message: "비밀번호는 8자 이상이어야 합니다." })
+    .max(20, { message: "비밀번호는 20자 이하여야 합니다." }),
 });
 
 type LoginFields = z.infer<typeof loginSchema>;
@@ -23,23 +26,22 @@ const LoginPage = () => {
     mode: "onChange",
   });
 
-  // 3. 로그인 제출 함수
   const onSubmit: SubmitHandler<LoginFields> = async (data) => {
     try {
       const response = await postSignin(data);
-      
+
       const token = response.data.accessToken;
 
       if (token) {
         localStorage.setItem(LOCAL_STORAGE_KEY.accessToken, token);
-        
+
         alert("로그인 되었습니다.");
         window.location.replace("/");
       }
     } catch (error: unknown) {
       console.error("로그인 실패:", error);
       let errorMessage = "로그인 중 오류가 발생했습니다.";
-      
+
       if (axios.isAxiosError(error)) {
         errorMessage = error.response?.data?.message || errorMessage;
       }
