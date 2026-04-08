@@ -1,15 +1,16 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import type { FormEvent } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { postSignin } from '../api/auth';
 import AuthDivider from '../components/auth/AuthDivider';
 import AuthField from '../components/auth/AuthField';
 import AuthPageTitle from '../components/auth/AuthPageTitle';
 import SocialLoginButton from '../components/auth/SocialLoginButton';
 import { LOCAL_STORAGE_KEYS } from '../constants/key';
-import { validateLoginForm } from '../constants/loginValidation';
-import { useForm } from '../hooks/useForm';
 import { useLocalStorage } from '../hooks/useLocalStorage';
+import { loginSchema } from '../schemas/authSchema';
+import type { LoginFormValues } from '../schemas/authSchema';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -17,22 +18,21 @@ const LoginPage = () => {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const { setItem } = useLocalStorage(LOCAL_STORAGE_KEYS.accessToken);
 
-  // useForm으로 입력값/에러/버튼 활성화 여부를 공통 규칙으로 관리
-  const { values, touched, errors, isFormValid, getFieldProps } = useForm({
-    initialValues: {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isValid, touchedFields },
+  } = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+    mode: 'onChange',
+    defaultValues: {
       email: '',
       password: '',
     },
-    validate: validateLoginForm,
   });
 
-  const emailProps = getFieldProps('email');
-  const passwordProps = getFieldProps('password');
-
-  // 제출 시: 유효성 확인 -> API 호출 -> 토큰 저장 -> 홈 이동
-  const handleLogin = async (event: FormEvent) => {
-    event.preventDefault();
-    if (!isFormValid || isSubmitting) return;
+  const handleLogin = async (values: LoginFormValues) => {
+    if (!isValid || isSubmitting) return;
 
     try {
       setIsSubmitting(true);
@@ -54,36 +54,48 @@ const LoginPage = () => {
         <div className="w-full max-w-md">
           <AuthPageTitle title="로그인" onBack={() => navigate(-1)} />
 
-          <form onSubmit={handleLogin} className="space-y-6">
+          <form onSubmit={handleSubmit(handleLogin)} className="space-y-6">
             <SocialLoginButton label="구글 로그인" />
 
             <AuthDivider />
 
-            <AuthField
-              type="email"
-              placeholder="이메일을 입력해주세요!"
-              value={emailProps.value}
-              onChange={emailProps.onChange}
-              onBlur={emailProps.onBlur}
-              error={touched.email ? errors.email : undefined}
+            <Controller
+              name="email"
+              control={control}
+              render={({ field }) => (
+                <AuthField
+                  type="email"
+                  placeholder="이메일을 입력해주세요!"
+                  value={field.value}
+                  onChange={field.onChange}
+                  onBlur={field.onBlur}
+                  error={touchedFields.email ? errors.email?.message : undefined}
+                />
+              )}
             />
 
-            <AuthField
-              type="password"
-              placeholder="비밀번호를 입력해주세요!"
-              value={passwordProps.value}
-              onChange={passwordProps.onChange}
-              onBlur={passwordProps.onBlur}
-              error={touched.password ? errors.password : undefined}
+            <Controller
+              name="password"
+              control={control}
+              render={({ field }) => (
+                <AuthField
+                  type="password"
+                  placeholder="비밀번호를 입력해주세요!"
+                  value={field.value}
+                  onChange={field.onChange}
+                  onBlur={field.onBlur}
+                  error={touchedFields.password ? errors.password?.message : undefined}
+                />
+              )}
             />
 
             {submitError && <p className="text-sm text-red-500">{submitError}</p>}
 
             <button
               type="submit"
-              disabled={!isFormValid || isSubmitting}
+              disabled={!isValid || isSubmitting}
               className={`w-full py-3 rounded-md font-medium transition-colors ${
-                isFormValid && !isSubmitting
+                isValid && !isSubmitting
                   ? 'bg-pink-500 text-white hover:bg-pink-600'
                   : 'bg-gray-700 text-gray-400 cursor-not-allowed'
               }`}

@@ -8,7 +8,20 @@ export const axiosInstance = axios.create({
 
 // 요청 직전에 로컬스토리지 토큰을 자동으로 붙여 인증 헤더를 표준화
 axiosInstance.interceptors.request.use((config) => {
-  const accessToken = localStorage.getItem(LOCAL_STORAGE_KEYS.accessToken);
+  const storedToken = localStorage.getItem(LOCAL_STORAGE_KEYS.accessToken);
+  let accessToken: string | null = storedToken;
+
+  // 과거 JSON.stringify("token") 형태로 저장된 값도 안전하게 복원
+  if (storedToken) {
+    try {
+      const parsed = JSON.parse(storedToken);
+      if (typeof parsed === 'string') {
+        accessToken = parsed;
+      }
+    } catch {
+      // raw 문자열이면 그대로 사용
+    }
+  }
 
   if (accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`;

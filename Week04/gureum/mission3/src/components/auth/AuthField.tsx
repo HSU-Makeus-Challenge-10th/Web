@@ -1,5 +1,5 @@
 interface AuthFieldProps {
-  type: 'email' | 'password';
+  type: 'email' | 'password' | 'text';
   placeholder: string;
   value: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
