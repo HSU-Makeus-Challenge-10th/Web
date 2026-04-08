@@ -8,7 +8,7 @@ import { useMovieDetail } from '../hooks/useMovieDetail';
 
 const MovieDetailPage = () => {
   const { movieId } = useParams<{ movieId: string }>();
-  // 해석: 상세 페이지도 목록 페이지와 같은 규칙으로 refetch를 사용합니다.
+  // 상세 페이지도 목록 페이지와 같은 규칙으로 refetch를 사용합니다.
   // 그래서 에러가 나도 홈으로 튕기지 않고, 현재 상세 요청만 다시 시도할 수 있습니다.
   const { movie, director, mainCast, isLoading, error, refetch } = useMovieDetail(movieId);
 

@@ -11,7 +11,7 @@ interface MoviesPageProps {
 }
 
 const MoviesPage = ({ endpoint, title }: MoviesPageProps) => {
-  // 해석: 이제 목록 페이지는 "다시 시도"를 위해 refetch를 받아옵니다.
+  // 이제 목록 페이지는 "다시 시도"를 위해 refetch를 받아옵니다.
   // 예전처럼 브라우저 전체를 새로고침하지 않아도 현재 요청만 다시 보낼 수 있습니다.
   const {
     movies,

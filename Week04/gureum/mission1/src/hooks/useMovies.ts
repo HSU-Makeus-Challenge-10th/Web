@@ -6,7 +6,7 @@ import { useFetch } from './useFetch';
 export const useMovies = (type: MovieListType) => {
   const [currentPage, setCurrentPage] = useState(1);
 
-  // 해석: "영화 목록을 가져오는 방법"만 fetcher에 담고,
+  // "영화 목록을 가져오는 방법"만 fetcher에 담고,
   // 실제 로딩/에러/재요청 관리는 useFetch가 공통으로 처리합니다.
   // 그래서 type(카테고리)나 currentPage가 바뀌면 자동으로 새 데이터를 받아옵니다.
   const fetcher = useCallback(() => fetchMovies(type, currentPage), [type, currentPage]);

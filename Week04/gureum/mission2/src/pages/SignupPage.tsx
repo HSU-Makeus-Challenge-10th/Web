@@ -3,7 +3,6 @@ import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { postSignup } from '../api/auth';
 import AuthPageTitle from '../components/auth/AuthPageTitle';
-import AuthTopBar from '../components/auth/AuthTopBar';
 import AuthField from '../components/auth/AuthField';
 import { useForm } from '../hooks/useForm';
 
@@ -13,6 +12,7 @@ interface SignupValues {
   confirmPassword: string;
 }
 
+// 회원가입 전용 검증 규칙(이메일 형식, 비밀번호 길이, 비밀번호 일치)
 const validateSignupForm = (values: SignupValues) => {
   const errors: Partial<Record<keyof SignupValues, string>> = {};
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -43,6 +43,7 @@ const SignupPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
+  // useForm으로 필드별 상태/검증 로직을 공통 인터페이스로 사용
   const { values, touched, errors, isFormValid, getFieldProps } = useForm({
     initialValues: {
       email: '',
@@ -56,6 +57,7 @@ const SignupPage = () => {
   const passwordProps = getFieldProps('password');
   const confirmPasswordProps = getFieldProps('confirmPassword');
 
+  // 제출 시: 검증 통과 -> 회원가입 API -> 성공 시 로그인 화면 이동
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     if (!isFormValid || isSubmitting) return;
@@ -80,10 +82,7 @@ const SignupPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black flex flex-col">
-      <AuthTopBar onLoginClick={() => navigate('/login')} onSignupClick={() => navigate('/signup')} />
-
-      <div className="flex-1 flex items-center justify-center px-4">
+    <div className="min-h-[calc(100vh-72px)] bg-black opacity-95 flex items-center justify-center px-4">
         <div className="w-full max-w-md">
           <AuthPageTitle title="회원가입" onBack={() => navigate(-1)} />
 
@@ -130,7 +129,6 @@ const SignupPage = () => {
             </button>
           </form>
         </div>
-      </div>
     </div>
   );
 };

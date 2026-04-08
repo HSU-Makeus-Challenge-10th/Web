@@ -5,7 +5,6 @@ import { postSignin } from '../api/auth';
 import AuthDivider from '../components/auth/AuthDivider';
 import AuthField from '../components/auth/AuthField';
 import AuthPageTitle from '../components/auth/AuthPageTitle';
-import AuthTopBar from '../components/auth/AuthTopBar';
 import SocialLoginButton from '../components/auth/SocialLoginButton';
 import { LOCAL_STORAGE_KEYS } from '../constants/key';
 import { validateLoginForm } from '../constants/loginValidation';
@@ -18,6 +17,7 @@ const LoginPage = () => {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const { setItem } = useLocalStorage(LOCAL_STORAGE_KEYS.accessToken);
 
+  // useForm으로 입력값/에러/버튼 활성화 여부를 공통 규칙으로 관리
   const { values, touched, errors, isFormValid, getFieldProps } = useForm({
     initialValues: {
       email: '',
@@ -29,11 +29,7 @@ const LoginPage = () => {
   const emailProps = getFieldProps('email');
   const passwordProps = getFieldProps('password');
 
-  const handleSubmit = (event: FormEvent) => {
-    event.preventDefault();
-    if (!isFormValid) return;
-  };
-
+  // 제출 시: 유효성 확인 -> API 호출 -> 토큰 저장 -> 홈 이동
   const handleLogin = async (event: FormEvent) => {
     event.preventDefault();
     if (!isFormValid || isSubmitting) return;
@@ -54,10 +50,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black flex flex-col">
-      <AuthTopBar onLoginClick={() => navigate('/login')} onSignupClick={() => navigate('/signup')} />
-
-      <div className="flex-1 flex items-center justify-center px-4">
+    <div className="min-h-[calc(100vh-72px)] bg-black opacity-95 flex items-center justify-center px-4">
         <div className="w-full max-w-md">
           <AuthPageTitle title="로그인" onBack={() => navigate(-1)} />
 
@@ -99,7 +92,6 @@ const LoginPage = () => {
             </button>
           </form>
         </div>
-      </div>
     </div>
   );
 };

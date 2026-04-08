@@ -9,7 +9,7 @@ type MovieDetailPayload = {
 };
 
 export const useMovieDetail = (movieId?: string) => {
-  // 해석: 상세 정보 API와 크레딧 API를 따로 관리하지 않고,
+  // 상세 정보 API와 크레딧 API를 따로 관리하지 않고,
   // "한 번의 fetch 작업"으로 묶어서 useFetch에 맡깁니다.
   const fetcher = useCallback(async (): Promise<MovieDetailPayload> => {
     if (!movieId) {
