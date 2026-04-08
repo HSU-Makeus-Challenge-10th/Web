@@ -5,8 +5,8 @@ export type UserSigninInformation = {
 
 function validateUser(values: UserSigninInformation) {
   const errors = {
-    email: "",
-    password: "",
+    email: { message: "" },
+    password: { message: "" },
   };
 
   if (
@@ -14,10 +14,10 @@ function validateUser(values: UserSigninInformation) {
       values.email,
     )
   ) {
-    errors.email = "올바른 이메일 형식이 아닙니다!";
+    errors.email.message = "올바른 이메일 형식이 아닙니다!";
   }
   if (!(values.password.length >= 8 && values.password.length <= 20)) {
-    errors.password = "비밀번호는 8~20자 사이로 입력해주세요.";
+    errors.password.message = "비밀번호는 8~20자 사이로 입력해주세요.";
   }
   return errors;
 }

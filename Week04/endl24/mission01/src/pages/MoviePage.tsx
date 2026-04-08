@@ -24,12 +24,10 @@ export default function MoviePage() {
   if (isError) {
     return (
       <div>
-        {" "}
         <ErrorView
           message={errorMsg}
           onRetry={() => window.location.reload()}
         />
-        ;
       </div>
     );
   }

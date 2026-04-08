@@ -6,6 +6,7 @@ import { LoadingSpinner } from "../components/LoadingSpinner";
 const MyPage = () => {
   const [data, setData] = useState<ResponseMyInfoDto | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const getData = async () => {
@@ -15,6 +16,7 @@ const MyPage = () => {
         setData(response);
       } catch (error) {
         console.error("정보를 가져오는데 실패했습니다.", error);
+        setError("정보를 가져오는데 실패했습니다.");
       } finally {
         setIsLoading(false);
       }
@@ -24,6 +26,14 @@ const MyPage = () => {
 
   if (isLoading) {
     return <LoadingSpinner />;
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center mt-16">
+        <p className="text-red-500">{error}</p>
+      </div>
+    );
   }
 
   const user = data?.data;

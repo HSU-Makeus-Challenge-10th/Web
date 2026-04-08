@@ -6,9 +6,23 @@ const HomePage = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
-    if (token) {
-      getMyInfo().then((res) => setUserName(res.data.name));
-    }
+    if (!token) return;
+
+    let mounted = true;
+
+    (async () => {
+      try {
+        const res = await getMyInfo();
+        if (mounted) setUserName(res.data.name);
+      } catch {
+        localStorage.removeItem("accessToken");
+        if (mounted) setUserName("");
+      }
+    })();
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   return (

@@ -11,7 +11,8 @@ export const useLocalStorage = (key: string) => {
       const item = window.localStorage.getItem(key);
       return item ? JSON.parse(item) : null;
     } catch (e) {
-      console.log(e);
+      console.error("localStorage getItem parse failed", e);
+      return null;
     }
   };
   const removeItem = () => {

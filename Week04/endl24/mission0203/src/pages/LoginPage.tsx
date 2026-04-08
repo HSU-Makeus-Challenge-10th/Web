@@ -50,7 +50,10 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-full gap-4">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="flex flex-col items-center justify-center h-full gap-4"
+    >
       <div className="flex flex-col gap-3 w-75">
         <input
           {...register("email")}
@@ -77,8 +80,7 @@ const LoginPage = () => {
         )}
 
         <button
-          type="button"
-          onClick={handleSubmit(onSubmit)}
+          type="submit"
           disabled={!isValid || isSubmitting}
           className="w-full h-14 bg-blue-600 text-white rounded-md text-lg font-bold hover:bg-blue-700 transition-colors flex items-center justify-center disabled:bg-gray-300 cursor-pointer"
         >
@@ -91,7 +93,7 @@ const LoginPage = () => {
           )}
         </button>
       </div>
-    </div>
+    </form>
   );
 };
 

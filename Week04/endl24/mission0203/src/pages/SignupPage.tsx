@@ -88,6 +88,10 @@ const SignupPage = () => {
         localStorage.setItem(LOCAL_STORAGE_KEY.accessToken, token);
         alert("회원가입 및 로그인이 완료되었습니다");
         window.location.replace("/");
+      } else {
+        alert(
+          "회원가입은 완료되었으나 로그인에 실패했습니다. 로그인 페이지에서 다시 시도해주세요.",
+        );
       }
     } catch (error: unknown) {
       let errorMessage = "오류가 발생했습니다.";
