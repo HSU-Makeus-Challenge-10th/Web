@@ -1,7 +1,11 @@
 import axios from 'axios';
 
 export const getTmdbToken = () => {
-    return import.meta.env.VITE_TMDB_TOKEN;
+    const token = import.meta.env.VITE_TMDB_TOKEN;
+    if (!token) {
+        throw new Error('TMDB token is not defined in environment variables');
+    }
+    return token;
 };
 
 export const getTmdbHeaders = () => {

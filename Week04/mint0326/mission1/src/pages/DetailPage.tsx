@@ -9,16 +9,16 @@ const DetailPage = () => {
     const { movieId } = useParams<{ movieId: string }>();
     const navigate = useNavigate();
 
-    const { 
-        data: movie, 
-        isLoading: isMovieLoading, 
-        isError: isMovieError 
+    const {
+        data: movie,
+        isLoading: isMovieLoading,
+        isError: isMovieError
     } = useCustomFetch<MovieDetail>(`/movie/${movieId}?language=ko-KR`);
 
-    const { 
-        data: credits, 
-        isLoading: isCreditsLoading, 
-        isError: isCreditsError 
+    const {
+        data: credits,
+        isLoading: isCreditsLoading,
+        isError: isCreditsError
     } = useCustomFetch<MovieCredits>(`/movie/${movieId}/credits?language=ko-KR`);
 
     const isLoading = isMovieLoading || isCreditsLoading;
@@ -85,7 +85,7 @@ const DetailPage = () => {
                         <div className="flex flex-wrap justify-center md:justify-start items-center gap-4 mb-8">
                             <div className="flex items-center bg-yellow-500/20 px-3 py-1 rounded-md border border-yellow-500/50">
                                 <span className="text-yellow-400 mr-1.5">⭐</span>
-                                <span className="font-bold text-yellow-500">{movie.vote_average.toFixed(1)}</span>
+                                <span className="font-bold text-yellow-500">{(movie.vote_average ?? 0).toFixed(1)}</span>
                             </div>
                             <span className="text-gray-400">|</span>
                             <span>{movie.release_date.split('-')[0]}</span>
