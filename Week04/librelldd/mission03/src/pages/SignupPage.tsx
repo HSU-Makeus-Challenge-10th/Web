@@ -13,15 +13,15 @@ interface SignupFormValues {
 
 const SignupPage = () => {
   const navigate = useNavigate();
-  
-  // UI 상태 관리: step(0: 이메일, 1: 비밀번호), 비밀번호 보기 토글
+
+
   const [step, setStep] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
-  /** 2. 커스텀 훅 설정 */
+
   const { getInputProps, errors, touched, values } = useForm<SignupFormValues>({
-    initialValue: { 
+    initialValue: {
       email: "",
       name: "",
       password: "",
@@ -39,14 +39,14 @@ const SignupPage = () => {
 
   // 버튼 활성화 조건
   const isEmailValid = values.email.includes("@") && !errors.email;
-  const isPasswordValid = 
-    values.password.length >= 8 && 
-    values.password === values.passwordCheck && 
+  const isPasswordValid =
+    values.password.length >= 8 &&
+    values.password === values.passwordCheck &&
     !errors.passwordCheck;
 
-  /** 3. 최종 제출 함수 */
+
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault(); 
+    e.preventDefault();
     try {
       const response = await postSignup({
         email: values.email,
@@ -56,9 +56,9 @@ const SignupPage = () => {
         bio: "",
         avatar: ""
       });
-      console.log("🚀 [성공] 회원가입 완료:", response);
+      console.log(" 회원가입 완료:", response);
       alert("회원가입이 완료되었습니다! 로그인 페이지로 이동합니다.");
-      navigate("/login"); 
+      navigate("/login");
     } catch (error: any) {
       console.error("회원가입 실패:", error);
       alert(error.response?.data?.message || "회원가입 중 오류가 발생했습니다.");
@@ -67,7 +67,7 @@ const SignupPage = () => {
 
   return (
     <div className="flex flex-col min-h-screen w-full bg-black text-white font-sans">
-      {/* 네비게이션 바 */}
+
       <nav className="w-full flex justify-between items-center px-6 py-4">
         <div className="text-pink-500 font-bold text-xl tracking-tighter cursor-pointer" onClick={() => navigate("/")}>
           돌려돌려LP판
@@ -80,11 +80,11 @@ const SignupPage = () => {
 
       <div className="flex-1 flex flex-col items-center justify-center p-6">
         <div className="w-full max-w-[360px]">
-          
-          {/* 헤더: 뒤로가기 아이콘 + 타이틀 */}
+
+
           <div className="relative flex items-center justify-center mb-10">
-            <button 
-              onClick={() => (step === 1 ? setStep(0) : navigate(-1))} 
+            <button
+              onClick={() => (step === 1 ? setStep(0) : navigate(-1))}
               className="absolute left-0 text-xl font-light hover:text-gray-400"
             >
               〈
@@ -93,13 +93,13 @@ const SignupPage = () => {
           </div>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-            
+
             {/* --- 1단계: 이메일 입력 --- */}
             {step === 0 && (
               <div className="flex flex-col gap-4 animate-fadeIn">
                 <div className="flex items-center bg-[#1a1a1a] border border-[#333] rounded-lg p-4 focus-within:border-pink-500 transition-all">
                   <span className="mr-3 text-gray-500">✉️</span>
-                  <input 
+                  <input
                     {...getInputProps("email")}
                     className="bg-transparent w-full outline-none text-sm"
                     placeholder="이메일을 입력하세요"
@@ -109,27 +109,26 @@ const SignupPage = () => {
 
                 <div className="flex items-center bg-[#1a1a1a] border border-[#333] rounded-lg p-4">
                   <span className="mr-3 text-gray-500">👤</span>
-                  <input 
+                  <input
                     {...getInputProps("name")}
                     className="bg-transparent w-full outline-none text-sm"
                     placeholder="이름(닉네임)"
                   />
                 </div>
 
-                <button 
+                <button
                   type="button"
                   disabled={!isEmailValid || !values.name}
                   onClick={() => setStep(1)}
-                  className={`w-full py-4 rounded-lg font-bold text-sm mt-4 transition-all ${
-                    isEmailValid && values.name ? "bg-pink-500" : "bg-gray-800 text-gray-500 cursor-not-allowed"
-                  }`}
+                  className={`w-full py-4 rounded-lg font-bold text-sm mt-4 transition-all ${isEmailValid && values.name ? "bg-pink-500" : "bg-gray-800 text-gray-500 cursor-not-allowed"
+                    }`}
                 >
                   다음
                 </button>
               </div>
             )}
 
-            {/* --- 2단계: 비밀번호 입력 (이미지 UI와 동일) --- */}
+
             {step === 1 && (
               <div className="flex flex-col gap-4 animate-fadeIn">
                 {/* 상단 고정 이메일 표시 */}
@@ -140,15 +139,15 @@ const SignupPage = () => {
 
                 {/* 비밀번호 필드 */}
                 <div className="relative">
-                  <input 
+                  <input
                     {...getInputProps("password")}
                     type={showPassword ? "text" : "password"}
                     className="w-full p-4 bg-[#1a1a1a] border border-[#333] rounded-lg outline-none text-sm focus:border-pink-500"
                     placeholder="비밀번호"
                   />
-                  <button 
+                  <button
                     type="button"
-                    onClick={() => setShowPassword(!showPassword)} 
+                    onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-4 top-4 text-gray-500"
                   >
                     {showPassword ? "👁️" : "👁️‍🗨️"}
@@ -157,15 +156,15 @@ const SignupPage = () => {
 
                 {/* 비밀번호 확인 필드 */}
                 <div className="relative">
-                  <input 
+                  <input
                     {...getInputProps("passwordCheck")}
                     type={showConfirm ? "text" : "password"}
                     className="w-full p-4 bg-[#1a1a1a] border border-[#333] rounded-lg outline-none text-sm focus:border-pink-500"
                     placeholder="비밀번호 확인"
                   />
-                  <button 
+                  <button
                     type="button"
-                    onClick={() => setShowConfirm(!showConfirm)} 
+                    onClick={() => setShowConfirm(!showConfirm)}
                     className="absolute right-4 top-4 text-gray-500"
                   >
                     {showConfirm ? "👁️" : "👁️‍🗨️"}
@@ -175,12 +174,11 @@ const SignupPage = () => {
                   <p className="text-red-500 text-xs px-1">{errors.passwordCheck}</p>
                 )}
 
-                <button 
+                <button
                   type="submit"
                   disabled={!isPasswordValid}
-                  className={`w-full py-4 rounded-lg font-bold text-sm mt-4 transition-all ${
-                    isPasswordValid ? "bg-pink-500" : "bg-gray-800 text-gray-500 cursor-not-allowed"
-                  }`}
+                  className={`w-full py-4 rounded-lg font-bold text-sm mt-4 transition-all ${isPasswordValid ? "bg-pink-500" : "bg-gray-800 text-gray-500 cursor-not-allowed"
+                    }`}
                 >
                   다음
                 </button>

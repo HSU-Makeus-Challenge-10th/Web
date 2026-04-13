@@ -20,7 +20,7 @@ export type ResponseSignupDto = CommonResponse<{
   updatedAt: Date;
 }>;
 
-/** 2. 로그인 (이름을 RequestLoginDto로 변경) */
+
 export type RequestLoginDto = {
   email: string;
   password: string;

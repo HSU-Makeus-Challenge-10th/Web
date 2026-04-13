@@ -12,7 +12,7 @@ export const useLocalStorage = (key: string) => {
   const getItem = () => {
     try {
       const item = window.localStorage.getItem(key);
-      // ✅ json.parse -> JSON.parse (대문자 수정)
+
       return item ? JSON.parse(item) : null;
     } catch (e) {
       console.log(e);
@@ -20,8 +20,7 @@ export const useLocalStorage = (key: string) => {
     }
   };
 
-  // 데이터 삭제
-  // ✅ (0) -> ()로 수정 (인자가 없을 때는 빈 괄호)
+
   const removeItem = () => {
     try {
       window.localStorage.removeItem(key);
