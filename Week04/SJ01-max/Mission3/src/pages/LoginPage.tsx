@@ -2,17 +2,10 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from 'react-router-dom';
-import { z } from 'zod';
 import { signIn } from '../lib/authApi';
 import useLocalStorage from '../hooks/useLocalStorage';
-import type { AuthTokens } from '../lib/schemas';
-
-const loginSchema = z.object({
-  email: z.string().min(1, '이메일을 입력해주세요.').email('올바른 이메일 형식을 입력해주세요.'),
-  password: z.string().min(1, '비밀번호를 입력해주세요.').min(8, '비밀번호는 8자 이상이어야 합니다.'),
-});
-
-type LoginFormValues = z.infer<typeof loginSchema>;
+import { loginSchema, type LoginFormValues, type AuthTokens } from '../lib/schemas';
+import Input from '../components/common/Input';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -89,32 +82,18 @@ export default function LoginPage() {
         )}
 
         <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-3">
-          <div>
-            <input
-              type="email"
-              placeholder="이메일을 입력해주세요!"
-              {...register('email')}
-              className={`w-full bg-gray-900 border rounded-lg px-4 py-3 text-white text-sm placeholder-gray-600 outline-none transition-colors ${
-                errors.email ? 'border-red-500' : 'border-gray-700 focus:border-pink-500'
-              }`}
-            />
-            {errors.email && (
-              <p className="text-red-500 text-xs mt-1 pl-1">{errors.email.message}</p>
-            )}
-          </div>
-          <div>
-            <input
-              type="password"
-              placeholder="비밀번호를 입력해주세요!"
-              {...register('password')}
-              className={`w-full bg-gray-900 border rounded-lg px-4 py-3 text-white text-sm placeholder-gray-600 outline-none transition-colors ${
-                errors.password ? 'border-red-500' : 'border-gray-700 focus:border-pink-500'
-              }`}
-            />
-            {errors.password && (
-              <p className="text-red-500 text-xs mt-1 pl-1">{errors.password.message}</p>
-            )}
-          </div>
+          <Input
+            type="email"
+            placeholder="이메일을 입력해주세요!"
+            {...register('email')}
+            error={errors.email?.message}
+          />
+          <Input
+            showPasswordToggle
+            placeholder="비밀번호를 입력해주세요!"
+            {...register('password')}
+            error={errors.password?.message}
+          />
           <button
             type="submit"
             disabled={!isValid || isLoading}

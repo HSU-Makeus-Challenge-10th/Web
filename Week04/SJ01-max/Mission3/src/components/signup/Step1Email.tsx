@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { emailSchema, type EmailFormValues } from '../../lib/schemas';
+import Input from '../common/Input';
 
 interface Step1EmailProps {
   onNext: (email: string) => void;
@@ -64,17 +65,12 @@ export default function Step1Email({ onNext, onBack }: Step1EmailProps) {
 
       {/* 이메일 */}
       <div className="mb-3">
-        <input
+        <Input
           type="email"
           placeholder="이메일을 입력해주세요!"
           {...register('email')}
-          className={`w-full bg-gray-900 border rounded-lg px-4 py-3 text-white text-sm placeholder-gray-600 outline-none transition-colors ${
-            errors.email ? 'border-red-500' : 'border-gray-700 focus:border-pink-500'
-          }`}
+          error={errors.email?.message}
         />
-        {errors.email && (
-          <p className="text-red-500 text-xs mt-1 pl-1">{errors.email.message}</p>
-        )}
       </div>
 
       {/* 다음 버튼 */}

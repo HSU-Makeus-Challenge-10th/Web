@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { nicknameSchema, type NicknameFormValues, type AuthTokens } from '../../lib/schemas';
 import { signUp } from '../../lib/authApi';
 import useLocalStorage from '../../hooks/useLocalStorage';
+import Input from '../common/Input';
 
 interface Step3NicknameProps {
   email: string;
@@ -82,17 +83,12 @@ export default function Step3Nickname({ email, password, onBack }: Step3Nickname
 
       {/* 닉네임 입력 */}
       <div className="mb-3">
-        <input
+        <Input
           type="text"
           placeholder="닉네임을 입력해주세요!"
           {...register('nickname')}
-          className={`w-full bg-gray-900 border rounded-lg px-4 py-3 text-white text-sm placeholder-gray-600 outline-none transition-colors ${
-            errors.nickname ? 'border-red-500' : 'border-gray-700 focus:border-pink-500'
-          }`}
+          error={errors.nickname?.message}
         />
-        {errors.nickname && (
-          <p className="text-red-500 text-xs mt-1 pl-1">{errors.nickname.message}</p>
-        )}
       </div>
 
       {/* 회원가입 완료 버튼 */}
