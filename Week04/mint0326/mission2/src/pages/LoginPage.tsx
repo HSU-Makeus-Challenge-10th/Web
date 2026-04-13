@@ -1,39 +1,45 @@
 import { useNavigate } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { ChevronLeft } from 'lucide-react';
-import { loginSchema } from '../schemas/authSchema';
-import type { LoginFormValues } from '../schemas/authSchema';
-
-import useLocalStorage from '../hooks/useLocalStorage';
+import useForm from '../hooks/useForm';
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [token, setToken] = useLocalStorage<string | null>('accessToken', null);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isValid },
-  } = useForm<LoginFormValues>({
-    resolver: zodResolver(loginSchema),
-    mode: 'onBlur',
+  // 유효성 검사 함수
+  const validate = (values: { email: string; password: string }) => {
+    const errors: { email?: string; password?: string } = {};
+
+    // 이메일
+    if (!values.email) {
+      errors.email = '이메일을 입력해주세요!';
+    } else {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(values.email)) {
+        errors.email = '유효하지 않은 이메일 형식입니다.';
+      }
+    }
+
+    // 비밀번호
+    if (!values.password) {
+      errors.password = '비밀번호를 입력해주세요!';
+    } else if (values.password.length < 6) {
+      errors.password = '비밀번호는 최소 6자 이상이어야 합니다.';
+    }
+
+    return errors;
+  };
+
+  const { values, errors, handleChange, handleBlur, isValid } = useForm({
+    initialValues: { email: '', password: '' },
+    validate,
   });
 
-  const onSubmit = (data: LoginFormValues) => {
-    console.log('로그인 시도 데이터:', data);
-    // 로그인 성공 시뮬레이션
-    setToken('dummy-jwt-token-for-mission3');
-
-    alert('로그인에 성공했습니다!');
-    navigate('/');
-  };
+  const isFormValid = isValid;
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white pt-16">
       <div className="w-full max-w-sm px-6">
-        {/* 뒤로 가기 버튼 */}
+        {/* 뒤로 가기 버튼. */}
         <div className="flex items-center justify-center mb-8 relative">
           <button
             onClick={() => navigate(-1)}
@@ -60,18 +66,20 @@ const LoginPage = () => {
           </div>
 
           {/* 이메일/비밀번호 입력 */}
-          <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+          <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
             <div className="space-y-1">
               {/* 이메일 */}
               <input
                 type="email"
-                {...register('email')}
+                value={values.email}
+                onChange={(e) => handleChange('email', e.target.value)}
+                onBlur={() => handleBlur('email')}
                 placeholder="이메일을 입력해주세요!"
                 className={`w-full px-4 py-3 bg-[#1a1a1a] border ${errors.email ? 'border-red-500' : 'border-[#3a3a3a]'
                   } rounded text-sm placeholder-[#7a7a7a] focus:outline-none focus:border-[#ff007f] transition-colors`}
               />
               {errors.email && (
-                <p className="text-red-500 text-xs mt-1 ml-1">{errors.email.message}</p>
+                <p className="text-red-500 text-xs mt-1 ml-1">{errors.email}</p>
               )}
             </div>
 
@@ -79,21 +87,22 @@ const LoginPage = () => {
               {/* 비밀번호 */}
               <input
                 type="password"
-                {...register('password')}
+                value={values.password}
+                onChange={(e) => handleChange('password', e.target.value)}
+                onBlur={() => handleBlur('password')}
                 placeholder="비밀번호를 입력해주세요!"
                 className={`w-full px-4 py-3 bg-[#1a1a1a] border ${errors.password ? 'border-red-500' : 'border-[#3a3a3a]'
                   } rounded text-sm placeholder-[#7a7a7a] focus:outline-none focus:border-[#ff007f] transition-colors`}
               />
               {errors.password && (
-                <p className="text-red-500 text-xs mt-1 ml-1">{errors.password.message}</p>
+                <p className="text-red-500 text-xs mt-1 ml-1">{errors.password}</p>
               )}
             </div>
 
-            {/* 로그인 버튼 */}
+            {/* 로그인 버튼. */}
             <button
-              type="submit"
-              disabled={!isValid}
-              className={`w-full py-3 mt-4 rounded text-sm font-bold transition-colors cursor-pointer ${isValid
+              disabled={!isFormValid}
+              className={`w-full py-3 mt-4 rounded text-sm font-bold transition-colors cursor-pointer ${isFormValid
                 ? 'bg-[#ff007f] text-white hover:bg-[#e60072]'
                 : 'bg-[#2a2a2a] text-[#7a7a7a] cursor-not-allowed'
                 }`}
@@ -101,16 +110,6 @@ const LoginPage = () => {
               로그인
             </button>
           </form>
-
-          <div className="text-center pt-4">
-            <span className="text-[#7a7a7a] text-sm">회원이 아니신가요? </span>
-            <button
-              onClick={() => navigate('/signup')}
-              className="text-[#ff007f] text-sm font-bold hover:underline cursor-pointer"
-            >
-              회원가입
-            </button>
-          </div>
         </div>
       </div>
     </div>
@@ -118,4 +117,3 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
-

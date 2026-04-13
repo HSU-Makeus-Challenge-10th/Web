@@ -8,11 +8,18 @@ import { useState, useCallback } from 'react';
 function useLocalStorage<T>(key: string, initialValue: T) {
   // 로컬 스토리지에 데이터가 존재하면 가져오기
   const getStoredValue = useCallback(() => {
+    const item = window.localStorage.getItem(key);
+    if (!item) return initialValue;
+
     try {
-      const item = window.localStorage.getItem(key);
-      return item ? (JSON.parse(item) as T) : initialValue;
+      return JSON.parse(item) as T;
     } catch (error) {
-      console.warn(`로컬 스토리지 키 "${key}" 읽기 오류:`, error);
+      // JSON 형식이 아닌 경우(일반 문자열 등) 원본을 반환하거나 초기값을 반환
+      // 타입 T가 string인 경우 raw string으로 간주
+      if (typeof initialValue === 'string' || item === 'undefined') {
+        return item as unknown as T;
+      }
+      console.warn(`로컬 스토리지 키 "${key}" 파싱 오류 (초기값 사용):`, error);
       return initialValue;
     }
   }, [key, initialValue]);
@@ -23,14 +30,16 @@ function useLocalStorage<T>(key: string, initialValue: T) {
   const setValue = useCallback(
     (value: T | ((val: T) => T)) => {
       try {
-        const valueToStore = value instanceof Function ? value(storedValue) : value;
-        setStoredValue(valueToStore);
-        window.localStorage.setItem(key, JSON.stringify(valueToStore));
+        setStoredValue((prev) => {
+          const valueToStore = value instanceof Function ? value(prev) : value;
+          window.localStorage.setItem(key, JSON.stringify(valueToStore));
+          return valueToStore;
+        });
       } catch (error) {
         console.warn(`로컬 스토리지 키 "${key}" 설정 오류:`, error);
       }
     },
-    [key, storedValue]
+    [key]
   );
 
   const removeValue = useCallback(() => {

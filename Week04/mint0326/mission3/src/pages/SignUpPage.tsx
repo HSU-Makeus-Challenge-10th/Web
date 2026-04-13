@@ -40,20 +40,16 @@ const SignUpPage = () => {
       if (isStepValid) setStep(2);
     } else if (step === 2) {
       isStepValid = await trigger(['password', 'passwordConfirm']);
-      const isPasswordMatched = passwordValue === passwordConfirmValue;
-      if (isStepValid && isPasswordMatched) setStep(3);
+      if (isStepValid) setStep(3);
     } else if (step === 3) {
       isStepValid = await trigger('nickname');
       if (isStepValid) {
-        // 실제 폼 제출은 handleSubmit(onSubmit)을 통해 이루어집니다.
-        // 다만 현재의 UI 흐름(멀티스텝) 유지를 위해 여기서 최종 액션을 트리거합니다.
         handleSubmit(onSubmit)();
       }
     }
   };
 
-  const onSubmit = (data: SignUpFormValues) => {
-    console.log('회원가입 완료 데이터:', data);
+  const onSubmit = () => {
     setToken('dummy-signup-token');
     alert('회원가입이 완료되었습니다!');
     navigate('/');
@@ -178,8 +174,8 @@ const SignUpPage = () => {
               <button
                 type="button"
                 onClick={handleNext}
-                disabled={!passwordValue || !passwordConfirmValue || passwordValue !== passwordConfirmValue || !!errors.password || !!errors.passwordConfirm}
-                className={`w-full py-3.5 mt-4 rounded text-sm font-bold transition-colors cursor-pointer ${passwordValue && passwordConfirmValue && passwordValue === passwordConfirmValue && !errors.password && !errors.passwordConfirm
+                disabled={!!errors.password || !!errors.passwordConfirm || !passwordValue || !passwordConfirmValue || passwordValue !== passwordConfirmValue}
+                className={`w-full py-3.5 mt-4 rounded text-sm font-bold transition-colors cursor-pointer ${!errors.password && !errors.passwordConfirm && passwordValue && passwordConfirmValue && passwordValue === passwordConfirmValue
                   ? 'bg-[#ff007f] text-white hover:bg-[#e60072]'
                   : 'bg-[#2a2a2a] text-[#7a7a7a] cursor-not-allowed'
                   }`}
