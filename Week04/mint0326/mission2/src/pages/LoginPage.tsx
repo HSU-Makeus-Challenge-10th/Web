@@ -1,12 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft } from 'lucide-react';
 import useForm from '../hooks/useForm';
+import { useCallback } from 'react';
 
 const LoginPage = () => {
   const navigate = useNavigate();
 
   // 유효성 검사 함수
-  const validate = (values: { email: string; password: string }) => {
+  const validate = useCallback((values: { email: string; password: string }) => {
     const errors: { email?: string; password?: string } = {};
 
     // 이메일
@@ -27,9 +28,9 @@ const LoginPage = () => {
     }
 
     return errors;
-  };
+  }, []);
 
-  const { values, errors, handleChange, handleBlur, isValid } = useForm({
+  const { values, errors, touched, handleChange, handleBlur, isValid } = useForm({
     initialValues: { email: '', password: '' },
     validate,
   });
@@ -75,10 +76,11 @@ const LoginPage = () => {
                 onChange={(e) => handleChange('email', e.target.value)}
                 onBlur={() => handleBlur('email')}
                 placeholder="이메일을 입력해주세요!"
+                autoComplete="email"
                 className={`w-full px-4 py-3 bg-[#1a1a1a] border ${errors.email ? 'border-red-500' : 'border-[#3a3a3a]'
                   } rounded text-sm placeholder-[#7a7a7a] focus:outline-none focus:border-[#ff007f] transition-colors`}
               />
-              {errors.email && (
+              {touched.email && errors.email && (
                 <p className="text-red-500 text-xs mt-1 ml-1">{errors.email}</p>
               )}
             </div>
@@ -91,10 +93,11 @@ const LoginPage = () => {
                 onChange={(e) => handleChange('password', e.target.value)}
                 onBlur={() => handleBlur('password')}
                 placeholder="비밀번호를 입력해주세요!"
+                autoComplete="current-password"
                 className={`w-full px-4 py-3 bg-[#1a1a1a] border ${errors.password ? 'border-red-500' : 'border-[#3a3a3a]'
                   } rounded text-sm placeholder-[#7a7a7a] focus:outline-none focus:border-[#ff007f] transition-colors`}
               />
-              {errors.password && (
+              {touched.password && errors.password && (
                 <p className="text-red-500 text-xs mt-1 ml-1">{errors.password}</p>
               )}
             </div>

@@ -10,7 +10,7 @@ import useLocalStorage from '../hooks/useLocalStorage';
 const SignUpPage = () => {
   const navigate = useNavigate();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [token, setToken] = useLocalStorage<string | null>('accessToken', null);
+  const [, setToken] = useLocalStorage<string | null>('accessToken', null);
 
   const [step, setStep] = useState(1);
   const [showPassword, setShowPassword] = useState(false);
@@ -21,10 +21,10 @@ const SignUpPage = () => {
     handleSubmit,
     trigger,
     watch,
-    formState: { errors, isValid },
+    formState: { errors },
   } = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpSchema),
-    mode: 'onChange',
+    mode: 'onTouched',
   });
 
   const emailValue = watch('email');
@@ -89,6 +89,7 @@ const SignUpPage = () => {
                   type="email"
                   {...register('email')}
                   placeholder="이메일을 입력해주세요!"
+                  autoComplete="email"
                   className={`w-full px-4 py-3.5 bg-[#1a1a1a] border ${errors.email ? 'border-red-500' : 'border-[#3a3a3a]'
                     } rounded text-sm placeholder-[#7a7a7a] focus:outline-none focus:border-[#ff007f] transition-colors`}
                 />
@@ -97,12 +98,11 @@ const SignUpPage = () => {
                 )}
               </div>
 
-              {/* 다음 버튼 */}
               <button
                 type="button"
                 onClick={handleNext}
-                disabled={!emailValue || !!errors.email}
-                className={`w-full py-3.5 mt-4 rounded text-sm font-bold transition-colors cursor-pointer ${emailValue && !errors.email
+                disabled={!emailValue}
+                className={`w-full py-3.5 mt-4 rounded text-sm font-bold transition-colors cursor-pointer ${emailValue
                   ? 'bg-[#ff007f] text-white hover:bg-[#e60072]'
                   : 'bg-[#2a2a2a] text-[#7a7a7a] cursor-not-allowed'
                   }`}
@@ -129,6 +129,7 @@ const SignUpPage = () => {
                     type={showPassword ? 'text' : 'password'}
                     {...register('password')}
                     placeholder="비밀번호를 입력해주세요!"
+                    autoComplete="new-password"
                     className={`w-full pl-4 pr-12 py-3.5 bg-[#1a1a1a] border ${errors.password ? 'border-red-500' : 'border-[#3a3a3a]'
                       } rounded text-sm placeholder-[#7a7a7a] focus:outline-none focus:border-[#ff007f] transition-colors`}
                   />
@@ -152,6 +153,7 @@ const SignUpPage = () => {
                     type={showConfirmPassword ? 'text' : 'password'}
                     {...register('passwordConfirm')}
                     placeholder="비밀번호를 다시 한 번 입력해주세요!"
+                    autoComplete="new-password"
                     className={`w-full pl-4 pr-12 py-3.5 bg-[#1a1a1a] border ${errors.passwordConfirm ? 'border-red-500' : 'border-[#3a3a3a]'
                       } rounded text-sm placeholder-[#7a7a7a] focus:outline-none focus:border-[#ff007f] transition-colors`}
                   />
@@ -163,9 +165,9 @@ const SignUpPage = () => {
                     {showConfirmPassword ? <Eye size={18} /> : <EyeOff size={18} />}
                   </button>
                 </div>
-                {(errors.passwordConfirm || (passwordValue && passwordConfirmValue && passwordValue !== passwordConfirmValue)) && (
+                {errors.passwordConfirm && (
                   <p className="text-red-500 text-xs mt-2 ml-1">
-                    {errors.passwordConfirm?.message || "비밀번호가 일치하지 않습니다."}
+                    {errors.passwordConfirm.message}
                   </p>
                 )}
               </div>
@@ -174,8 +176,8 @@ const SignUpPage = () => {
               <button
                 type="button"
                 onClick={handleNext}
-                disabled={!!errors.password || !!errors.passwordConfirm || !passwordValue || !passwordConfirmValue || passwordValue !== passwordConfirmValue}
-                className={`w-full py-3.5 mt-4 rounded text-sm font-bold transition-colors cursor-pointer ${!errors.password && !errors.passwordConfirm && passwordValue && passwordConfirmValue && passwordValue === passwordConfirmValue
+                disabled={!passwordValue || !passwordConfirmValue}
+                className={`w-full py-3.5 mt-4 rounded text-sm font-bold transition-colors cursor-pointer ${passwordValue && passwordConfirmValue
                   ? 'bg-[#ff007f] text-white hover:bg-[#e60072]'
                   : 'bg-[#2a2a2a] text-[#7a7a7a] cursor-not-allowed'
                   }`}
@@ -205,6 +207,7 @@ const SignUpPage = () => {
                   type="text"
                   {...register('nickname')}
                   placeholder="닉네임을 입력해주세요!"
+                  autoComplete="nickname"
                   className={`w-full px-4 py-3.5 bg-[#1a1a1a] border ${errors.nickname ? 'border-red-500' : 'border-[#3a3a3a]'
                     } rounded text-sm placeholder-[#7a7a7a] focus:outline-none focus:border-[#ff007f] transition-colors font-medium`}
                 />
@@ -217,8 +220,8 @@ const SignUpPage = () => {
               <button
                 type="button"
                 onClick={handleNext}
-                disabled={!nicknameValue || !!errors.nickname}
-                className={`w-full py-3.5 mt-8 rounded text-sm font-bold transition-all duration-300 cursor-pointer shadow-lg ${nicknameValue && !errors.nickname
+                disabled={!nicknameValue}
+                className={`w-full py-3.5 mt-8 rounded text-sm font-bold transition-all duration-300 cursor-pointer shadow-lg ${nicknameValue
                   ? 'bg-gradient-to-r from-[#ff007f] to-[#e60072] text-white hover:scale-[1.02] active:scale-95'
                   : 'bg-[#2a2a2a] text-[#7a7a7a] cursor-not-allowed'
                   }`}

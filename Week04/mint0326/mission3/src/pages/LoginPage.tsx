@@ -10,7 +10,7 @@ import useLocalStorage from '../hooks/useLocalStorage';
 const LoginPage = () => {
   const navigate = useNavigate();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [token, setToken] = useLocalStorage<string | null>('accessToken', null);
+  const [, setToken] = useLocalStorage<string | null>('accessToken', null);
 
   const {
     register,
@@ -18,10 +18,10 @@ const LoginPage = () => {
     formState: { errors, isValid },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
-    mode: 'onBlur',
+    mode: 'onTouched',
   });
 
-  const onSubmit = (data: LoginFormValues) => {
+  const onSubmit = (_data: LoginFormValues) => {
     // 로그인 성공 시뮬레이션
     setToken('dummy-jwt-token-for-mission3');
 
@@ -66,6 +66,7 @@ const LoginPage = () => {
                 type="email"
                 {...register('email')}
                 placeholder="이메일을 입력해주세요!"
+                autoComplete="email"
                 className={`w-full px-4 py-3 bg-[#1a1a1a] border ${errors.email ? 'border-red-500' : 'border-[#3a3a3a]'
                   } rounded text-sm placeholder-[#7a7a7a] focus:outline-none focus:border-[#ff007f] transition-colors`}
               />
@@ -80,6 +81,7 @@ const LoginPage = () => {
                 type="password"
                 {...register('password')}
                 placeholder="비밀번호를 입력해주세요!"
+                autoComplete="current-password"
                 className={`w-full px-4 py-3 bg-[#1a1a1a] border ${errors.password ? 'border-red-500' : 'border-[#3a3a3a]'
                   } rounded text-sm placeholder-[#7a7a7a] focus:outline-none focus:border-[#ff007f] transition-colors`}
               />
