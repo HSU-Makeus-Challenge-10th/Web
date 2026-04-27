@@ -1,7 +1,10 @@
 {
 	"dependencies": {
+		"@prisma/client": "^7.6.0",
 		"@tailwindcss/vite": "^4.2.2",
 		"axios": "^1.14.0",
+		"prisma": "^7.6.0",
+		"tailwind": "^4.0.0",
 		"tailwindcss": "^4.2.2"
 	},
 	"devDependencies": {
