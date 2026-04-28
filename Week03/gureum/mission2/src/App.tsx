@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
 import HomePage from './pages/HomePage';
 import PopularPage from './pages/PopularPage';
-import UpcomingPage from './pages/UpComingPage';
+import UpcomingPage from './pages/UpcomingPage';
 import TopRatedPage from './pages/TopRatedPage';
 import MovieDetailPage from './pages/MovieDetailPage';
 import './App.css';
