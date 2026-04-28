@@ -4,8 +4,8 @@ const HomePage = () => {
   return (
     <div className="min-h-[calc(100vh-72px)] bg-black opacity-95 text-white flex items-center justify-center px-4">
       <div className="w-full max-w-xl text-center space-y-4">
-        <h2 className="text-3xl font-bold">UMC 5주차 미션1</h2>
-        <p className="text-gray-300">ProtectedRoute를 구현한 미션1 프로젝트입니다.</p>
+        <h2 className="text-3xl font-bold">UMC 5주차 미션2</h2>
+        <p className="text-gray-300">RefreshToken을 활용하여 지속적인 로그인을 구현한 미션2 프로젝트입니다.</p>
         <div className="flex items-center justify-center gap-3 pt-4">
           <Link
             to="/login"
