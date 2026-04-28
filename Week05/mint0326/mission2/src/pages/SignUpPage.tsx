@@ -6,6 +6,7 @@ import { ChevronLeft, Mail, Eye, EyeOff, User } from 'lucide-react';
 import { signUpSchema } from '../schemas/authSchema';
 import type { SignUpFormValues } from '../schemas/authSchema';
 import useLocalStorage from '../hooks/useLocalStorage';
+import api from '../api/axios';
 
 const SignUpPage = () => {
   const navigate = useNavigate();
@@ -49,10 +50,19 @@ const SignUpPage = () => {
     }
   };
 
-  const onSubmit = () => {
-    setToken('dummy-signup-token');
-    alert('회원가입이 완료되었습니다!');
-    navigate('/');
+  const onSubmit = async () => {
+    try {
+      await api.post('/v1/auth/signup', {
+        email: emailValue,
+        password: passwordValue,
+        name: nicknameValue,
+      });
+      alert('회원가입이 완료되었습니다!');
+      navigate('/login');
+    } catch (error) {
+      alert('회원가입에 실패했습니다. 이미 가입된 이메일일 수 있습니다.');
+      console.error('회원가입 에러:', error);
+    }
   };
 
   const handleBack = () => {

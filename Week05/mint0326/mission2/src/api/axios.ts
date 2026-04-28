@@ -28,13 +28,17 @@ api.interceptors.response.use(
 
                 // Refresh Token으로 Access Token 갱신 요청
                 const res = await axios.post('http://localhost:8000/v1/auth/refresh', {
-                    refreshToken: JSON.parse(refreshToken || '')
+                    refresh: JSON.parse(refreshToken || '')
                 });
 
-                const { accessToken: newAccessToken } = res.data;
+                const newAccessToken = res.data?.data?.accessToken || res.data?.accessToken;
+                const newRefreshToken = res.data?.data?.refreshToken || res.data?.refreshToken;
 
                 // 새로운 토큰 저장
                 localStorage.setItem('accessToken', JSON.stringify(newAccessToken));
+                if (newRefreshToken) {
+                    localStorage.setItem('refreshToken', JSON.stringify(newRefreshToken));
+                }
 
                 // 실패했던 기존 요청의 헤더를 새 토큰으로 교체 후 재시도
                 originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;

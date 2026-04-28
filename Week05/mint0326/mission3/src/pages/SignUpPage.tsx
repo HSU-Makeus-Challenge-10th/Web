@@ -6,6 +6,7 @@ import { ChevronLeft, Mail, Eye, EyeOff, User } from 'lucide-react';
 import { signUpSchema } from '../schemas/authSchema';
 import type { SignUpFormValues } from '../schemas/authSchema';
 import useLocalStorage from '../hooks/useLocalStorage';
+import api from '../api/axios';
 
 const SignUpPage = () => {
   const navigate = useNavigate();

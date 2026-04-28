@@ -21,16 +21,16 @@ const LoginPage = () => {
     mode: 'onTouched', // 실시간 유효성 검사를 위해 추가
   });
 
-  // 이미 로그인한 사용자가 로그인 페이지에 오면 홈으로 보냄 (영상 내용 반영)
   useEffect(() => {
     if (isLoggedIn) navigate('/');
-  }, [isLoggedIn, navigate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const onSubmit = (_data: LoginFormValues) => {
     // 로그인 성공 시뮬레이션
     login('dummy-jwt-token-for-mission1');
     alert('로그인에 성공했습니다!');
-    navigate('/');
+    navigate('/my');
   };
 
   return (

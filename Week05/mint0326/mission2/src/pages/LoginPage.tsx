@@ -7,6 +7,7 @@ import type { LoginFormValues } from '../schemas/authSchema';
 
 import { useAuth } from '../contexts/AuthContext';
 import { useEffect } from 'react';
+import api from '../api/axios';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -21,19 +22,33 @@ const LoginPage = () => {
     mode: 'onTouched', // 실시간 유효성 검사를 위해 추가
   });
 
-  // 이미 로그인한 사용자가 로그인 페이지에 오면 홈으로 보냄
+  // 이미 로그인한 사용자가 로그인 페이지에 처음 진입했을 때만 홈으로 보냄
   useEffect(() => {
     if (isLoggedIn) navigate('/');
-  }, [isLoggedIn, navigate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const onSubmit = (_data: LoginFormValues) => {
-    // 로그인 성공 시뮬레이션
-    login({
-      accessToken: 'dummy-jwt-access-token-for-mission2',
-      refreshToken: 'dummy-jwt-refresh-token-for-mission2'
-    });
-    alert('로그인에 성공했습니다!');
-    navigate('/');
+  const onSubmit = async (data: LoginFormValues) => {
+    try {
+      // 실제 백엔드 API로 로그인 요청
+      const response = await api.post('/v1/auth/signin', data);
+      const newAccessToken = response.data?.data?.accessToken || response.data?.accessToken;
+      const newRefreshToken = response.data?.data?.refreshToken || response.data?.refreshToken;
+
+      if (newAccessToken && newRefreshToken) {
+        login({
+          accessToken: newAccessToken,
+          refreshToken: newRefreshToken
+        });
+        alert('로그인에 성공했습니다!');
+        navigate('/my');
+      } else {
+        throw new Error('토큰이 응답에 없습니다.');
+      }
+    } catch (error) {
+      alert('로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.');
+      console.error('로그인 에러:', error);
+    }
   };
 
   return (
