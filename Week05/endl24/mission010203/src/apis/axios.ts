@@ -95,6 +95,8 @@ axiosInstance.interceptors.response.use(
             );
             removeAccessToken();
             removeRefreshToken();
+            window.location.href = "/login";
+            throw error;
           })
           .finally(() => {
             refreshPromise = null;
@@ -103,6 +105,7 @@ axiosInstance.interceptors.response.use(
       //진행중인 refreshPromise가 해결되 때까지 기다림
       return refreshPromise.then((newAccessToken) => {
         //원본 요청의 Authorization 헤더를 갱신된 토큰으로 업데이트
+        originalRequest.headers = originalRequest.headers ?? {};
         originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
         //업데이트 된 원본요청을 재시도 합니다.
         return axiosInstance.request(originalRequest);
