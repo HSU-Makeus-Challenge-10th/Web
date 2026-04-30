@@ -28,11 +28,7 @@ const LoginPage = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        try {
-            await login(values);
-        } catch (error) {
-            alert("로그인에 실패했습니다.");
-        }
+        await login(values);
     }
 
     const handleGoogleLogin = () => {

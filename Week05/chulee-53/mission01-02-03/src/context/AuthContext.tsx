@@ -2,7 +2,7 @@ import { createContext, useContext, useState, type PropsWithChildren } from "rea
 import type { RequestLogin } from "../types/auth";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { LOCAL_STORAGE_KEY } from "../constants/key";
-import { postSignin } from './../../../../../Week04/gureum/mission2/src/api/auth';
+import { login as loginAPI } from "../api/auth";
 
 interface AuthContextType {
     accessToken: string | null;
@@ -11,12 +11,7 @@ interface AuthContextType {
     logout: () => Promise<void>;
 }
 
-export const AuthContext = createContext<AuthContextType>({
-    accessToken: null,
-    refreshToken: null,
-    login: async () => { },
-    logout: async () => { }
-});
+export const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
     const {
@@ -36,7 +31,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
     const login = async (signinData: RequestLogin) => {
         try {
-            const { data } = await postSignin(signinData);
+            const { data } = await loginAPI(signinData);
 
             if (data) {
                 const newAccessToken = data.accessToken;

@@ -11,12 +11,14 @@ const GoogleLoginRedirectPage = () => {
         const accessToken = urlParams.get(LOCAL_STORAGE_KEY.accessToken);
         const refreshToken = urlParams.get(LOCAL_STORAGE_KEY.refreshToken);
 
-        if (accessToken) {
-            setAccessToken(accessToken!);
-            setRefreshToken(refreshToken!);
+        if (accessToken && refreshToken) {
+            setAccessToken(accessToken);
+            setRefreshToken(refreshToken);
             window.location.href = "/mypage";
+            return;
         }
 
+        window.location.href = "/login";
     }, [setAccessToken, setRefreshToken]);
 
     return (

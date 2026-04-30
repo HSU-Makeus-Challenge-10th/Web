@@ -7,22 +7,33 @@ const MyPage = () => {
     const { logout } = useAuth();
 
     const [data, setData] = useState<ResponseMyInfo | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const getData = async () => {
-            const response = await getMyInfo();
-            setData(response);
+            try {
+                const response = await getMyInfo();
+                setData(response);
+            } catch (err) {
+                setError("정보를 불러오는데 실패했습니다.")
+            } finally {
+                setIsLoading(false);
+            }
         }
         getData();
     }, []);
 
     const handleLogout = async () => {
         await logout();
-
     }
 
-    if (!data) {
+    if (isLoading) {
         return <div>로딩 중...</div>;
+    }
+
+    if (error || !data) {
+        return <div>에러가 발생했습니다.</div>
     }
 
     return (

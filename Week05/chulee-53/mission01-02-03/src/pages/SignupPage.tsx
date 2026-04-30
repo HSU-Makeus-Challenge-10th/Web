@@ -45,6 +45,9 @@ const SignupPage = () => {
         }
     }
 
+    const handleGoogleLogin = () => {
+        window.location.href = import.meta.env.VITE_SERVER_API_URL + "/v1/auth/google/login"
+    };
 
     return (
         <div className="w-full max-w-85 mx-auto flex flex-col">
@@ -62,6 +65,7 @@ const SignupPage = () => {
                     <>
                         <button
                             type="button"
+                            onClick={handleGoogleLogin}
                             className="flex justify-center items-center gap-2 w-full py-3 px-4 rounded-[40px] border border-gray-100 bg-black text-white hover:bg-gray-900 transition-colors font-medium text-sm cursor-pointer"
                         >
                             <img src={googleIcon} alt="google icon" className="w-5 h-5" />

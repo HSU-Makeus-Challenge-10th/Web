@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 
 interface UseFormProps<T> {
   initialValues: T;
@@ -7,7 +7,7 @@ interface UseFormProps<T> {
 
 function useForm<T>({ initialValues, validate }: UseFormProps<T>) {
   const [values, setValues] = useState<T>(initialValues);
-  const [error, setError] = useState<Record<keyof T, string>>();
+  const error = useMemo(() => validate(values), [validate, values]);
 
   const handleChange = (name: keyof T, value: string) => {
     setValues((prev) => ({
@@ -27,11 +27,6 @@ function useForm<T>({ initialValues, validate }: UseFormProps<T>) {
       onChange,
     };
   };
-
-  useEffect(() => {
-    const errors = validate(values);
-    setError(errors);
-  }, [validate, values]);
 
   return {
     values,
