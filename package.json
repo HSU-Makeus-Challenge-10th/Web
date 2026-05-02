@@ -1,8 +1,9 @@
 {
 	"dependencies": {
+		"@prisma/client": "^7.6.0",
 		"@tailwindcss/vite": "^4.2.2",
 		"axios": "^1.14.0",
-		"react-router-dom": "^7.14.0",
+
 		"tailwindcss": "^4.2.2"
 	},
 	"devDependencies": {
