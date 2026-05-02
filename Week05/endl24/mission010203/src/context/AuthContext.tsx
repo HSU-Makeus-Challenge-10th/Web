@@ -1,4 +1,9 @@
-import { createContext, useContext, useState, type PropsWithChildren } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  type PropsWithChildren,
+} from "react";
 import type { RequestSigninDto } from "../types/auth";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { LOCAL_STORAGE_KEY } from "../constants/key";
@@ -62,31 +67,32 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   const logout = async () => {
     try {
       await postLogout();
-      removeAccessTokenFromStorage();
-      removeRefreshTokenFromStorage();
-
-      setAccessToken(null);
-      setRefreshToken(null);
-
       alert("로그아웃 되었습니다");
       window.location.href = "/";
     } catch (error) {
       console.error("로그아웃 오류", error);
       alert("로그아웃 실패");
+    } finally {
+      removeAccessTokenFromStorage();
+      removeRefreshTokenFromStorage();
+      setAccessToken(null);
+      setRefreshToken(null);
+
+      window.location.href = "/";
     }
   };
 
-  return(
-    <AuthContext.Provider value={{accessToken, refreshToken, login, logout}}>
-        {children}
+  return (
+    <AuthContext.Provider value={{ accessToken, refreshToken, login, logout }}>
+      {children}
     </AuthContext.Provider>
   );
 };
 
-export const useAuth=()=>{
-    const context = useContext(AuthContext);
-    if(!context){
-        throw new Error("AuthContext를 찾을 수 없습니다.");
-    }
-    return context;
-}
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("AuthContext를 찾을 수 없습니다.");
+  }
+  return context;
+};
