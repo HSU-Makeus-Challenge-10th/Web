@@ -21,7 +21,7 @@ const SignUpPage = () => {
     handleSubmit,
     trigger,
     watch,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpSchema),
     mode: 'onTouched',
@@ -44,7 +44,7 @@ const SignUpPage = () => {
     } else if (step === 3) {
       isStepValid = await trigger('nickname');
       if (isStepValid) {
-        handleSubmit(onSubmit)();
+        await handleSubmit(onSubmit)();
       }
     }
   };
@@ -245,13 +245,13 @@ const SignUpPage = () => {
               <button
                 type="button"
                 onClick={handleNext}
-                disabled={!nicknameValue}
+                disabled={!nicknameValue || isSubmitting}
                 className={`w-full py-3.5 mt-8 rounded text-sm font-bold transition-all duration-300 cursor-pointer shadow-lg ${nicknameValue
                   ? 'bg-gradient-to-r from-[#ff007f] to-[#e60072] text-white hover:scale-[1.02] active:scale-95'
                   : 'bg-[#2a2a2a] text-[#7a7a7a] cursor-not-allowed'
                   }`}
               >
-                회원가입 완료
+                {isSubmitting ? '가입 중...' : '회원가입 완료'}
               </button>
             </div>
           </div>
@@ -269,7 +269,7 @@ const SignUpPage = () => {
           <button
             onClick={handleBack}
             className="absolute left-0 p-1 hover:bg-[#1a1a1a] rounded-full transition-colors cursor-pointer"
-            aria-label="Back"
+            aria-label="뒤로"
           >
             <ChevronLeft size={24} />
           </button>
