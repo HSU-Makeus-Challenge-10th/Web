@@ -1,4 +1,4 @@
-import { Navigate } from 'react-router-dom'
+import { Navigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import type { ReactNode } from 'react'
 
@@ -15,6 +15,7 @@ interface ProtectedRouteProps {
  */
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   const { status } = useAuth()
+  const location = useLocation()
 
   if (status === 'loading') {
     return (
@@ -28,7 +29,7 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   }
 
   if (status === 'unauthenticated') {
-    return <Navigate to="/login" replace />
+    return <Navigate to="/login" state={{ from: location }} replace />
   }
 
   return <>{children}</>

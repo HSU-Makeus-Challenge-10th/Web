@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { apiSignin } from '../api/client'
 import { useAuth } from '../contexts/AuthContext'
 
@@ -7,14 +7,17 @@ const GOOGLE_LOGIN_URL = 'http://localhost:8000/v1/auth/google/login'
 
 export default function LoginPage() {
   const navigate = useNavigate()
+  const location = useLocation()
   const { login } = useAuth()
+
+  const from = (location.state as { from?: { pathname: string } })?.from?.pathname ?? '/'
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setError('')
     setIsLoading(true)
@@ -22,7 +25,7 @@ export default function LoginPage() {
     try {
       const tokens = await apiSignin({ email, password })
       await login(tokens)
-      navigate('/', { replace: true })
+      navigate(from, { replace: true })
     } catch (err: unknown) {
       const message =
         (err as { response?: { data?: { message?: string } } })?.response?.data
