@@ -1,0 +1,31 @@
+import { useNavigate } from "react-router-dom";
+
+const FloatingButton = () => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate("/create"); 
+  };
+
+  return (
+    <button
+      onClick={handleClick}
+      className="fixed bottom-8 right-8 z-50 flex items-center justify-center w-14 h-14 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+      aria-label="추가하기"
+    >
+      {/* 깔끔한 + 모양 SVG 아이콘 */}
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={2.5}
+        stroke="currentColor"
+        className="w-7 h-7"
+      >
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+      </svg>
+    </button>
+  );
+};
+
+export default FloatingButton;
