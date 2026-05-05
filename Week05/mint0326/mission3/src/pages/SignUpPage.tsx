@@ -5,13 +5,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ChevronLeft, Mail, Eye, EyeOff, User } from 'lucide-react';
 import { signUpSchema } from '../schemas/authSchema';
 import type { SignUpFormValues } from '../schemas/authSchema';
-import useLocalStorage from '../hooks/useLocalStorage';
+import { useAuth } from '../contexts/AuthContext';
 import api from '../api/axios';
 
 const SignUpPage = () => {
   const navigate = useNavigate();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [, setToken] = useLocalStorage<string | null>('accessToken', null);
+  const { login } = useAuth();
 
   const [step, setStep] = useState(1);
   const [showPassword, setShowPassword] = useState(false);
@@ -50,10 +49,35 @@ const SignUpPage = () => {
     }
   };
 
-  const onSubmit = () => {
-    setToken('dummy-signup-token');
-    alert('회원가입이 완료되었습니다!');
-    navigate('/');
+  const onSubmit = async (data: SignUpFormValues) => {
+    try {
+      // 실제 백엔드 API로 회원가입 요청
+      const response = await api.post('/v1/auth/signup', {
+        email: data.email,
+        password: data.password,
+        passwordConfirm: data.passwordConfirm,
+        nickname: data.nickname,
+      });
+
+      // API 응답 구조에 따라 토큰 추출 (LoginPage와 동일한 방식)
+      const newAccessToken = response.data?.data?.accessToken || response.data?.accessToken;
+      const newRefreshToken = response.data?.data?.refreshToken || response.data?.refreshToken;
+
+      if (newAccessToken && newRefreshToken) {
+        login({
+          accessToken: newAccessToken,
+          refreshToken: newRefreshToken
+        });
+        alert('회원가입이 완료되었습니다!');
+        navigate('/');
+      } else {
+        alert('회원가입이 완료되었습니다! 로그인해주세요.');
+        navigate('/login');
+      }
+    } catch (error) {
+      alert('회원가입에 실패했습니다. 다시 시도해주세요.');
+      console.error('회원가입 에러:', error);
+    }
   };
 
   const handleBack = () => {
