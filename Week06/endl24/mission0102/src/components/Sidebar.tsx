@@ -34,12 +34,14 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
         <nav className="p-4 flex flex-col gap-2">
           <Link
             to="/"
+            onClick={onClose}
             className="p-3 rounded-lg hover:bg-gray-50 text-gray-700 font-medium transition-colors"
           >
             🏠 홈
           </Link>
           <Link
             to="/my"
+            onClick={onClose}
             className="p-3 rounded-lg hover:bg-gray-50 text-gray-700 font-medium transition-colors"
           >
             👤 마이페이지

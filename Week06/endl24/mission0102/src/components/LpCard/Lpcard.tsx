@@ -17,6 +17,11 @@ const LpCard = ({ lp }: LpCardProps) => {
   return (
     <div
       onClick={() => navigate(`/lp/${lp.id}`)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") navigate(`/lp/${lp.id}`);
+      }}
+      role="button"
+      tabIndex={0}
       className="group relative rounded-lg overflow-hidden shadow-lg cursor-pointer bg-gray-100"
     >
       <img
@@ -26,11 +31,10 @@ const LpCard = ({ lp }: LpCardProps) => {
       />
 
       <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
-        
         <h3 className="text-white text-lg font-bold truncate mb-2">
           {lp.title}
         </h3>
-        
+
         <div className="flex items-center justify-between text-sm text-gray-200">
           <span>{formattedDate}</span>
           <span className="flex items-center gap-1">
@@ -45,7 +49,6 @@ const LpCard = ({ lp }: LpCardProps) => {
             <span className="font-medium">{lp.likes.length}</span>
           </span>
         </div>
-
       </div>
     </div>
   );
