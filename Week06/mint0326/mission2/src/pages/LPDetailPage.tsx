@@ -5,6 +5,7 @@ import { useInView } from 'react-intersection-observer';
 import { useAuth } from '../contexts/AuthContext';
 import api from '../api/axios';
 import { Heart, Pencil, Trash2, ChevronLeft, RefreshCw, AlertCircle, MoreVertical, Send } from 'lucide-react';
+import { useQueryClient } from '@tanstack/react-query';
 
 const CommentSkeleton = () => (
     <div className="flex gap-4 mb-6 animate-pulse">
@@ -25,7 +26,14 @@ const LPDetailPage = () => {
     const hasAlerted = useRef(false);
 
     const [commentSort, setCommentSort] = useState<'desc' | 'asc'>('desc');
-    const { ref: commentRef, inView: commentInView } = useInView();
+    const [content, setContent] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const queryClient = useQueryClient();
+
+    const { ref: commentRef, inView: commentInView } = useInView({
+        threshold: 0,
+        rootMargin: '100px',
+    });
 
     // 비로그인 사용자 접근 제한
     useEffect(() => {
@@ -46,7 +54,7 @@ const LPDetailPage = () => {
         enabled: isLoggedIn,
     });
 
-    // 댓글 무한 스크롤 조회 (20개 이후 무한 스켈레톤 모드)
+    // 댓글 무한 스크롤 조회
     const {
         data: commentData,
         fetchNextPage: fetchNextComments,
@@ -55,29 +63,20 @@ const LPDetailPage = () => {
         isLoading: isCommentsLoading,
     } = useInfiniteQuery({
         queryKey: ['lpComments', lpId, commentSort],
-        queryFn: async ({ pageParam = 0 }) => {
-            // 1. 처음 2페이지(20개)만 실제 데이터 조회
-            if ((pageParam as number) < 2) {
-                const response = await api.get(`/v1/lps/${lpId}/comments`, {
-                    params: {
-                        order: commentSort,
-                        limit: 10,
-                        cursor: (pageParam as number) === 0 ? undefined : (pageParam as number),
-                    }
-                });
-                const apiData = response.data.data;
-                
-                return {
-                    ...apiData,
-                    hasNext: true, // 20개 이후에도 계속 스크롤 가능하게 강제 설정
-                    nextCursor: (pageParam as number) + 1
-                };
-            }
+        queryFn: async ({ pageParam = undefined }) => {
+            // 💡 로컬 환경이라 응답이 너무 빨라서 스켈레톤이 안 보이는 것을 막기 위해 1.5초 딜레이 추가
+            await new Promise(resolve => setTimeout(resolve, 1500));
 
-            // 2. 20개 이후부터는 영원히 끝나지 않는 Promise 반환 (스켈레톤 무한 노출)
-            return new Promise(() => {}); 
+            const response = await api.get(`/v1/lps/${lpId}/comments`, {
+                params: {
+                    order: commentSort,
+                    limit: 10,
+                    cursor: pageParam,
+                }
+            });
+            return response.data.data;
         },
-        initialPageParam: 0,
+        initialPageParam: undefined,
         getNextPageParam: (lastPage) => lastPage.hasNext ? lastPage.nextCursor : undefined,
         enabled: isLoggedIn,
     });
@@ -88,6 +87,23 @@ const LPDetailPage = () => {
             fetchNextComments();
         }
     }, [commentInView, hasNextComments, isFetchingNextComments, fetchNextComments]);
+
+    // 댓글 작성 핸들러
+    const handleSubmit = async () => {
+        if (!content.trim()) return;
+        setIsSubmitting(true);
+        try {
+            await api.post(`/v1/lps/${lpId}/comments`, { content });
+            setContent('');
+            // 작성 후 댓글 목록 초기화 및 재조회
+            queryClient.invalidateQueries({ queryKey: ['lpComments', lpId, commentSort] });
+        } catch (e) {
+            console.error('댓글 작성 실패:', e);
+            alert('댓글 작성에 실패했습니다.');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
 
     if (isLpLoading || !lp) {
         return (
@@ -223,11 +239,22 @@ const LPDetailPage = () => {
                         <div className="flex-1 relative">
                             <input
                                 type="text"
+                                value={content}
+                                onChange={(e) => setContent(e.target.value)}
+                                onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
                                 placeholder="댓글을 입력해주세요"
                                 className="w-full bg-[#121214] border border-[#2a2a2e] rounded-xl py-3.5 px-5 pr-20 focus:outline-none focus:border-[#ff007f] transition-all text-sm"
                             />
-                            <button className="absolute right-2 top-1.5 px-4 py-2 bg-[#ff007f] text-white rounded-lg text-xs font-bold hover:bg-[#e60072] transition-all cursor-pointer">
-                                작성
+                            <button
+                                onClick={handleSubmit}
+                                disabled={isSubmitting || !content.trim()}
+                                className={`absolute right-2 top-1.5 px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                                    isSubmitting || !content.trim() 
+                                    ? 'bg-gray-600 text-gray-400 cursor-not-allowed' 
+                                    : 'bg-[#ff007f] text-white hover:bg-[#e60072]'
+                                }`}
+                            >
+                                {isSubmitting ? '작성중' : '작성'}
                             </button>
                         </div>
                     </div>
@@ -263,9 +290,9 @@ const LPDetailPage = () => {
                         ))
                     )}
 
-                    {/* 20개 이후부터는 영원히 스켈레톤이 표시됩니다 */}
+                    {/* 다음 페이지 스켈레톤 */}
                     {isFetchingNextComments && (
-                        Array.from({ length: 10 }).map((_, i) => <CommentSkeleton key={`next-${i}`} />)
+                        Array.from({ length: 3 }).map((_, i) => <CommentSkeleton key={`next-${i}`} />)
                     )}
                 </div>
 
