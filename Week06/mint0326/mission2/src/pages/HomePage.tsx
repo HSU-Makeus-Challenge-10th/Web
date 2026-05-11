@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useLpList } from '../hooks/useLpList';
 import { Link } from 'react-router-dom';
 import { useInView } from 'react-intersection-observer';
-import api from '../api/axios';
 import { RefreshCw, AlertCircle, Calendar, Heart } from 'lucide-react';
 
 interface Tag {
@@ -43,22 +42,7 @@ const HomePage = () => {
         hasNextPage,
         isFetchingNextPage,
         refetch,
-    } = useInfiniteQuery({
-        queryKey: ['lps', sort],
-        queryFn: async ({ pageParam = undefined }) => {
-            const response = await api.get(`/v1/lps`, {
-                params: {
-                    order: sort,
-                    limit: 20,
-                    cursor: pageParam,
-                }
-            });
-            return response.data.data;
-        },
-        initialPageParam: undefined,
-        getNextPageParam: (lastPage) => lastPage.hasNext ? lastPage.nextCursor : undefined,
-        staleTime: 5000,
-    });
+    } = useLpList(sort);
 
     useEffect(() => {
         if (inView && hasNextPage && !isFetchingNextPage) {

@@ -6,12 +6,12 @@ import FloatingActionButton from './components/common/FloatingActionButton';
 import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
 import MyPage from './pages/MyPage';
-import LPCreatePage from './pages/LPCreatePage';
+import LpCreatePage from './pages/LpCreatePage';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import GoogleCallbackPage from './pages/GoogleCallbackPage';
 import './App.css';
 import HomePage from './pages/HomePage';
-import LPDetailPage from './pages/LPDetailPage';
+import LpDetailPage from './pages/LpDetailPage';
 
 function App() {
   const location = useLocation();
@@ -40,10 +40,10 @@ function App() {
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
       <Header onToggleSidebar={toggleSidebar} />
-      
+
       <div className="flex pt-16">
         <Sidebar isOpen={isSidebarOpen} onClose={closeSidebar} isDesktop={isDesktop} />
-        
+
         <main className={`flex-1 min-h-[calc(100vh-64px)] transition-all duration-300 ${isSidebarOpen && isDesktop ? 'pl-64' : 'pl-0'}`}>
           <div className="p-4 md:p-8">
             <Routes location={location} key={location.pathname}>
@@ -51,11 +51,11 @@ function App() {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignUpPage />} />
               <Route path="/v1/auth/google/callback" element={<GoogleCallbackPage />} />
-              <Route path="/lp/:lpId" element={<LPDetailPage />} />
+              <Route path="/lp/:lpId" element={<LpDetailPage />} />
 
               <Route element={<ProtectedRoute />}>
                 <Route path="/my" element={<MyPage />} />
-                <Route path="/lp/create" element={<LPCreatePage />} />
+                <Route path="/lp/create" element={<LpCreatePage />} />
               </Route>
             </Routes>
           </div>
