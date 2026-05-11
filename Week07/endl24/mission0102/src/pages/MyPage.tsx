@@ -25,7 +25,6 @@ const MyPage = () => {
   return (
     <div className="max-w-2xl mx-auto py-10 px-4">
       <div className="flex items-center gap-6 p-6 bg-white rounded-2xl shadow-sm border border-gray-100">
-        {/* 프로필 이미지 표시 영역 */}
         <div className="w-20 h-20 bg-gray-200 rounded-full overflow-hidden shrink-0">
           {user.avatar ? (
             <img
@@ -47,7 +46,7 @@ const MyPage = () => {
           </p>
         </div>
 
-        {/* 💡 설정 버튼 클릭 시 모달 오픈 */}
+        {/*설정 버튼 클릭 시 모달 오픈 */}
         <button
           onClick={() => setIsEditModalOpen(true)}
           className="px-4 py-2 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200"
@@ -56,7 +55,7 @@ const MyPage = () => {
         </button>
       </div>
 
-      {/* 💡 작성한 모달 컴포넌트 연결 */}
+      {/* 모달 컴포넌트 연결 */}
       <ProfileEditModal
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}

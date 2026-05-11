@@ -41,7 +41,7 @@ export const ProfileEditModal = ({ isOpen, onClose, initialData }: ProfileEditMo
 
   const handleRemoveImage = () => {
     setImageFile(null);
-    setImagePreview(null); // 미리보기 제거 (기본 이미지로 돌아감)
+    setImagePreview(null); 
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
@@ -53,16 +53,14 @@ export const ProfileEditModal = ({ isOpen, onClose, initialData }: ProfileEditMo
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // 💡 이름만 필수! Bio와 사진은 옵션이므로 검사하지 않습니다.
     if (!name.trim()) {
       return alert("이름(닉네임)은 필수입니다.");
     }
 
     try {
-      // 기본값은 현재 화면에 보이는 미리보기 (또는 null)
       let finalAvatarUrl = imagePreview;
 
-      // 💡 사용자가 "새로운 사진"을 등록한 경우에만 업로드 API 호출
+      // 사용자가 사진을 등록한 경우에만 업로드 API 호출
       if (imageFile) {
         const imgFormData = new FormData();
         imgFormData.append("file", imageFile);

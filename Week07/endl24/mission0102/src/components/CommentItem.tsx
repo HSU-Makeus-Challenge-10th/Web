@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useCommentMutations } from "../hooks/mutations/useCommentMutations";
 
-// 💡 기존의 authorName 대신, author 객체를 통째로 정의해 줍니다.
 export interface CommentType {
   id: number;
   content: string;
@@ -9,15 +8,15 @@ export interface CommentType {
   author: {
     id: number;
     name: string;
-    email?: string; // (선택 사항) 스웨거에 있는 데이터들
+    email?: string;
     avatar?: string | null;
   };
 }
 
 interface CommentItemProps {
   lpId: number;
-  comment: CommentType; // 서버에서 내려오는 댓글 타입
-  currentUserId?: number; // 현재 로그인한 유저 ID
+  comment: CommentType; 
+  currentUserId?: number; 
   postAuthorId?: number;
 }
 

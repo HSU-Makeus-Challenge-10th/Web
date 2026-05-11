@@ -6,7 +6,7 @@ import type { RequestLpDto, ResponseLpDto } from "../../types/lp";
 import { useAuth } from "../../context/AuthContext"; // 💡 1. AuthContext 임포트 경로 확인!
 
 function useDeleteLike() {
-  // 💡 2. 훅 내부에서 useAuth를 직접 호출해서 확실하게 유저 정보를 가져옵니다.
+  // 훅 내부에서 useAuth를 직접 호출해서 확실하게 유저 정보 받아오기
   const { user } = useAuth(); 
 
   return useMutation({
@@ -19,7 +19,6 @@ function useDeleteLike() {
 
       const previousLpPost = queryClient.getQueryData<ResponseLpDto>(queryKey);
 
-      // 💡 3. 캐시가 아니라 useAuth에서 꺼낸 정보로 아이디를 변환합니다.
       const userId = Number(user?.id);
 
       if (previousLpPost) {

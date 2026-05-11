@@ -10,8 +10,6 @@ import type { ResponseMyInfoDto } from "../types/auth";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { LOCAL_STORAGE_KEY } from "../constants/key";
 import { getMyInfo } from "../apis/auth";
-
-// 💡 1. 인터페이스 정의 (이제 login은 토큰만 받습니다)
 interface AuthContextType {
   accessToken: string | null;
   refreshToken: string | null;
@@ -21,7 +19,6 @@ interface AuthContextType {
   logout: () => void;
 }
 
-// 💡 2. 초기값 설정 (인터페이스와 타입을 맞춥니다)
 export const AuthContext = createContext<AuthContextType>({
   accessToken: null,
   refreshToken: null,
@@ -88,7 +85,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     setAccessToken(null);
     setRefreshToken(null);
     setUser(null);
-  }; // 여기서 }; 가 하나만 있어야 합니다!
+  };
 
   return (
     <AuthContext.Provider

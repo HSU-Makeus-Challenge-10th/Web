@@ -8,7 +8,7 @@ export const useAuthMutations = () => {
   const queryClient = useQueryClient();
   const { login, logout: clearAuthContext } = useAuth();
 
-  // 💡 1. 로그인 Mutation
+  // 로그인 Mutation
   const loginMutation = useMutation({
     mutationFn: postSignin,
     onSuccess: (response) => {
@@ -25,7 +25,7 @@ export const useAuthMutations = () => {
     },
   });
 
-  // 💡 2. 로그아웃 Mutation
+  // 로그아웃 Mutation
   const logoutMutation = useMutation({
     mutationFn: postLogout,
     onSuccess: () => {
@@ -35,14 +35,13 @@ export const useAuthMutations = () => {
     },
     onError: (error) => {
       console.error("로그아웃 에러:", error);
-      // 에러가 나더라도 프론트엔드에서는 쫓아내는 것이 안전합니다.
       clearAuthContext();
       queryClient.clear();
       navigate("/login");
     },
   });
 
-  // 💡 3. 회원 탈퇴 Mutation
+  // 회원 탈퇴 Mutation
   const withdrawMutation = useMutation({
     mutationFn: withdrawApi,
     onSuccess: () => {

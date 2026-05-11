@@ -120,7 +120,6 @@ export const LpCreateModal = ({
         finalImageUrl = imgResponse.data.data?.imageUrl;
       }
 
-      // 💡 1. 하드코딩 되어있던 태그 배열을 사용자가 입력한 tags 상태로 변경!
       const requestData = {
         title: title,
         content: content,
@@ -166,7 +165,6 @@ export const LpCreateModal = ({
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-          {/* 1. 제목 입력 */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               제목
@@ -180,7 +178,6 @@ export const LpCreateModal = ({
             />
           </div>
 
-          {/* 2. 사진 업로드 영역 */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               사진 업로드
@@ -219,7 +216,6 @@ export const LpCreateModal = ({
             )}
           </div>
 
-          {/* 3. 내용 입력 */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               내용
@@ -231,7 +227,6 @@ export const LpCreateModal = ({
             />
           </div>
 
-          {/* 💡 4. 태그 입력창 & 추가된 태그 리스트 영역 추가 */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               태그 (엔터로 추가)
@@ -245,7 +240,6 @@ export const LpCreateModal = ({
               className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
             
-            {/* 추가된 태그들 뱃지로 보여주기 */}
             {tags.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-2">
                 {tags.map((tag) => (
@@ -267,7 +261,6 @@ export const LpCreateModal = ({
             )}
           </div>
 
-          {/* 하단 버튼 */}
           <div className="flex justify-end gap-3 mt-4">
             <button
               type="button"

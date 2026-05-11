@@ -3,7 +3,7 @@ import { LOCAL_STORAGE_KEY } from "../constants/key";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
 interface CustomInternalAxiosRequestConfig extends InternalAxiosRequestConfig {
-  _retry?: boolean; //요청 재시도 여부 나타내는 플래그
+  _retry?: boolean; 
 }
 
 //전역 변수로 리프레시 요청의 Promise를 저장해 중복 요청 방지
@@ -16,8 +16,6 @@ export const axiosInstance = axios.create({
 //요청 인터셉터 : 모든 요청 전에 accessToken을 Authorization 헤더에 추가
 axiosInstance.interceptors.request.use(
   (config) => {
-    // const {getItem} = useLocalStorage{LOCAL_STORAGE_KEY.accessToken};
-    // let token = getItem();
     let accessToken = localStorage.getItem(LOCAL_STORAGE_KEY.accessToken); //localStorage에서 accessToken 가져옴
 
     //accessToken 존재하면
@@ -26,9 +24,6 @@ axiosInstance.interceptors.request.use(
       config.headers = config.headers || {};
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
-    // if (token) {
-    //   config.headers.Authorization = `Bearer ${token}`;
-    // }
     return config;
   },
   //요청 인터셉터 실패하면 , 에러

@@ -10,19 +10,18 @@ interface SidebarProps {
 const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
   const { withdrawMutation } = useAuthMutations();
   
-  // 💡 1. 모달을 열고 닫을 상태(State)를 추가합니다.
+  // 모달을 열고 닫을 상태(State)를 추가
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleWithdraw = () => {
-    // 💡 2. 모달에서 '탈퇴하기'를 눌렀을 때만 뮤테이션을 실행합니다.
+    // 모달에서 '탈퇴하기'를 눌렀을 때만 뮤테이션 실행
     withdrawMutation.mutate(undefined, {
-      onSettled: () => setIsModalOpen(false) // 성공하든 실패하든 모달은 닫아줍니다.
+      onSettled: () => setIsModalOpen(false) // 성공하든 실패하든 모달은 닫기
     });
   };
 
   return (
     <>
-      {/* 모바일 배경 오버레이 */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 md:hidden transition-all duration-300"
@@ -62,10 +61,9 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
           </Link>
         </nav>
 
-        {/* 탈퇴 버튼 영역 */}
+        // 탈퇴 버튼 영역
         <div className="mt-auto p-4 border-t border-gray-50">
           <button
-            // 💡 3. 버튼을 누르면 알림창 대신 모달을 엽니다.
             onClick={() => setIsModalOpen(true)} 
             className="w-full p-3 flex items-center gap-2 text-sm text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all font-medium cursor-pointer"
           >
@@ -83,12 +81,10 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
         </div>
       </aside>
 
-      {/* 💡 4. 커스텀 모달 UI */}
       {isModalOpen && (
         <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
           <div className="bg-white rounded-xl shadow-2xl w-full max-w-sm overflow-hidden scale-in zoom-in duration-200">
             <div className="p-6 text-center">
-              {/* 경고 아이콘 */}
               <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
                 <svg className="w-6 h-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />

@@ -6,14 +6,11 @@ import { LoadingSpinner } from "../components/LoadingSpinner";
 import { useAuth } from "../context/AuthContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-// 💡 1. 우리가 만든 강력한 뮤테이션 훅을 불러옵니다.
 import { useAuthMutations } from "../hooks/mutations/useAuthMutations"; 
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  // 💡 2. 이제 여기서 login 함수를 꺼내지 않습니다. (accessToken만 사용)
   const { accessToken } = useAuth(); 
-  // 💡 3. 뮤테이션 객체를 꺼내옵니다.
   const { loginMutation } = useAuthMutations(); 
   
   const location = useLocation();
@@ -28,7 +25,6 @@ const LoginPage = () => {
   const {
     register,
     handleSubmit,
-    // 💡 4. isSubmitting 대신 뮤테이션의 isPending을 사용할 것이므로 제거합니다.
     formState: { errors, isValid }, 
   } = useForm<LoginFields>({
     resolver: zodResolver(loginSchema),
@@ -36,8 +32,6 @@ const LoginPage = () => {
   });
 
   const onSubmit: SubmitHandler<LoginFields> = (data) => {
-    // 💡 5. 대망의 변경 포인트! 이제 서버 요청은 뮤테이션이 전담합니다.
-    // (성공 시 알아서 토큰을 저장하고 홈으로 이동시켜 줍니다.)
     loginMutation.mutate(data);
   };
 
@@ -46,7 +40,6 @@ const LoginPage = () => {
       import.meta.env.VITE_SERVER_API_URL + "/v1/auth/google/login";
   };
 
-  // 💡 6. 버튼 로딩 상태는 리액트 쿼리의 isPending으로 관리합니다.
   const isPending = loginMutation.isPending; 
 
   return (

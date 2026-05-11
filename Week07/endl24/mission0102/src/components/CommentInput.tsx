@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { usePostComment } from "../hooks/mutations/usePostComment"; // (경로에 맞게 임포트)
+import { usePostComment } from "../hooks/mutations/usePostComment"; 
 
 export const CommentInput = ({ lpId }: { lpId: number }) => {
   const [content, setContent] = useState("");
