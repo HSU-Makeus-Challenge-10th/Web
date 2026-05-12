@@ -243,9 +243,10 @@ const LpDetailPage = () => {
             <div className="flex-1 space-y-4">
               <h1 className="text-3xl font-bold">{lp.title}</h1>
               <p className="text-gray-400 text-sm">{formatDate(lp.createdAt)}</p>
-              <p className="text-gray-400 text-sm">{getLikeCount(lp._count?.likes, lp.likes)}개의 좋아요</p>
               <LpDetailActions
                 hasLiked={hasLiked}
+                likeCount={getLikeCount(lp._count?.likes, lp.likes)}
+                isLikePending={likeMutation.isPending}
                 isAuthor={isAuthor}
                 onToggleLike={() => likeMutation.mutate({ liked: hasLiked })}
                 onEdit={() => setShowEditModal(true)}
