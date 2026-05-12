@@ -1,20 +1,30 @@
-import { useAuth } from "../context/AuthContext"
-import { Navigate, Outlet } from "react-router-dom"
+import Navbar from "../components/Navbar";
+import { useAuth } from "../context/AuthContext";
+import { Navigate, Outlet } from "react-router-dom";
+import { useSidebar } from "../hooks/useSidebar";
+import { SideBar } from "../components/Sidebar";
 
 const ProtectedLayout = () => {
-    const { accessToken } = useAuth()
+  const { accessToken } = useAuth();
 
-    if (!accessToken) {
-        return <Navigate to="/login" replace />
-    }
+  if (!accessToken) {
+    return <Navigate to="/login" replace />;
+  }
+  const { isOpen, toggle, close } = useSidebar();
 
-    return (
-        <div className="min-h-screen bg-black text-white flex flex-col font-sans">
-            <div className="flex-1 flex flex-col items-center justify-center p-4">
-                <Outlet />
-            </div>
-        </div>
-    )
-}
+  return (
+    <div className="min-h-screen bg-black text-white flex flex-col font-sans">
+      <Navbar onToggle={toggle} />
+      <div
+        className={`h-full min-h-[calc(100vh-80px)] flex flex-col items-center justify-center p-4 transition-all duration-300 ${
+          isOpen ? "blur-xs" : ""
+        }`}
+      >
+        <Outlet />
+      </div>
+      <SideBar isOpen={isOpen} onClose={close} />
+    </div>
+  );
+};
 
-export default ProtectedLayout
+export default ProtectedLayout;
