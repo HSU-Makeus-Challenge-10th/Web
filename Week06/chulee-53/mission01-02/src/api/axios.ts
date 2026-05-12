@@ -43,11 +43,7 @@ axiosInstance.interceptors.response.use(
         const { removeItem: removeAccessToken } = useLocalStorage(
           LOCAL_STORAGE_KEY.accessToken,
         );
-        const { removeItem: removeRefreshToken } = useLocalStorage(
-          LOCAL_STORAGE_KEY.refreshToken,
-        );
         removeAccessToken();
-        removeRefreshToken();
         window.location.href = "/login";
         return Promise.reject(error);
       }
@@ -56,34 +52,19 @@ axiosInstance.interceptors.response.use(
       if (!refreshPromise) {
         refreshPromise = (async () => {
           try {
-            const { getItem: getRefreshToken } = useLocalStorage(
-              LOCAL_STORAGE_KEY.refreshToken,
-            );
-            const refreshToken = getRefreshToken();
-
-            const { data } = await axiosInstance.post("v1/auth/refresh", {
-              refresh: refreshToken,
-            });
+            const { data } = await axiosInstance.post("v1/auth/refresh", {});
 
             const { setItem: setAccessToken } = useLocalStorage(
               LOCAL_STORAGE_KEY.accessToken,
             );
-            const { setItem: setRefreshToken } = useLocalStorage(
-              LOCAL_STORAGE_KEY.refreshToken,
-            );
             setAccessToken(data.data.accessToken);
-            setRefreshToken(data.data.refreshToken);
 
             return data.data.accessToken;
           } catch (refreshError) {
             const { removeItem: removeAccessToken } = useLocalStorage(
               LOCAL_STORAGE_KEY.accessToken,
             );
-            const { removeItem: removeRefreshToken } = useLocalStorage(
-              LOCAL_STORAGE_KEY.refreshToken,
-            );
             removeAccessToken();
-            removeRefreshToken();
             window.location.href = "/login";
             return null;
           } finally {

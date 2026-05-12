@@ -2,11 +2,10 @@ import { createContext, useContext, useState, type PropsWithChildren } from "rea
 import type { RequestLogin } from "../types/auth";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { LOCAL_STORAGE_KEY } from "../constants/key";
-import { login as loginAPI } from "../api/auth";
+import { login as loginAPI, logout as logoutAPI } from "../api/auth";
 
 interface AuthContextType {
     accessToken: string | null;
-    refreshToken: string | null;
     login: (signinData: RequestLogin) => Promise<void>;
     logout: () => Promise<void>;
 }
@@ -20,14 +19,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
         removeItem: removeAccessTokenFromStorage
     } = useLocalStorage(LOCAL_STORAGE_KEY.accessToken);
 
-    const {
-        getItem: getRefreshTokenFromStorage,
-        setItem: setRefreshTokenInStorage,
-        removeItem: removeRefreshTokenFromStorage
-    } = useLocalStorage(LOCAL_STORAGE_KEY.refreshToken);
-
     const [accessToken, setAccessToken] = useState<string | null>(getAccessTokenFromStorage());
-    const [refreshToken, setRefreshToken] = useState<string | null>(getRefreshTokenFromStorage());
 
     const login = async (signinData: RequestLogin) => {
         try {
@@ -35,13 +27,10 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
             if (data) {
                 const newAccessToken = data.accessToken;
-                const newRefreshToken = data.refreshToken;
 
                 setAccessTokenInStorage(newAccessToken);
-                setRefreshTokenInStorage(newRefreshToken);
 
                 setAccessToken(newAccessToken);
-                setRefreshToken(newRefreshToken);
                 alert('로그인에 성공했습니다.');
             }
         } catch (error) {
@@ -53,20 +42,18 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
     const logout = async () => {
         try {
-            removeAccessTokenFromStorage();
-            removeRefreshTokenFromStorage();
-
-            setAccessToken(null);
-            setRefreshToken(null);
-            window.location.href = '/';
+            await logoutAPI();
         } catch (error) {
             console.error(error);
-            alert('로그아웃에 실패했습니다.');
+        } finally {
+            removeAccessTokenFromStorage();
+            setAccessToken(null);
+            window.location.href = '/';
         }
     };
 
     return (
-        <AuthContext.Provider value={{ accessToken, refreshToken, login, logout }}>
+        <AuthContext.Provider value={{ accessToken, login, logout }}>
             {children}
         </AuthContext.Provider>
     );

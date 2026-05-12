@@ -46,7 +46,7 @@ const SignupPage = () => {
       await signup(rest);
       navigate("/");
     } catch (error) {
-      console.error(error);
+      alert("회원가입 실패");
     }
   };
 

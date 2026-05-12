@@ -1,27 +1,26 @@
 import { useLocalStorage } from "../hooks/useLocalStorage"
 import { LOCAL_STORAGE_KEY } from "../constants/key"
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const GoogleLoginRedirectPage = () => {
+    const navigate = useNavigate();
     const { setItem: setAccessToken } = useLocalStorage(LOCAL_STORAGE_KEY.accessToken);
-    const { setItem: setRefreshToken } = useLocalStorage(LOCAL_STORAGE_KEY.refreshToken);
 
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
         const accessToken = urlParams.get(LOCAL_STORAGE_KEY.accessToken);
-        const refreshToken = urlParams.get(LOCAL_STORAGE_KEY.refreshToken);
 
-        if (accessToken && refreshToken) {
+        if (accessToken) {
             setAccessToken(accessToken);
-            setRefreshToken(refreshToken);
             const redirectUrl = localStorage.getItem("redirectUrl") || "/mypage";
             localStorage.removeItem("redirectUrl");
-            window.location.href = redirectUrl;
+            navigate(redirectUrl, {replace: true});
             return;
         }
 
-        window.location.href = "/login";
-    }, [setAccessToken, setRefreshToken]);
+        navigate("/login", {replace: true});
+    }, [navigate, setAccessToken]);
 
     return (
         <div>

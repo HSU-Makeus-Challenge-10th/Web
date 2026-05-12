@@ -38,7 +38,7 @@ const MyPage = () => {
 
     return (
         <div>
-            <img src={data?.data?.avatar ?? ""} alt="" />
+            <img src={data?.data?.avatar ?? ""} alt={data?.data?.name ?? ""} />
             <p>{data?.data?.name ?? ""}</p>
             <p>{data?.data?.email ?? ""}</p>
 

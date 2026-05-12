@@ -6,6 +6,14 @@ import LpComments from "../components/LpComments";
 
 const LpDetailPage = () => {
   const { id } = useParams<{ id: string }>();
+  if (!id || isNaN(Number(id))) {
+    return (
+      <div className="flex justify-center items-center h-full text-white">
+        Invalid LP ID.
+      </div>
+    );
+  }
+
   const { data: response, isLoading, isError } = useGetLpDetail(Number(id));
 
   if (isLoading) {
