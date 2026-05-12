@@ -1,10 +1,9 @@
 import { Link } from "react-router-dom";
 import { HamburgerButton } from "./HamburgerButton";
 import { useAuth } from "../context/AuthContext";
-import { useEffect, useState } from "react";
-import { getMyInfo } from "../api/auth";
 import { Search } from "lucide-react";
 import usePostLogout from "../hooks/mutations/usePostLogout";
+import useGetMyInfo from "../hooks/queries/useGetMyInfo";
 
 interface NavbarProps {
   onToggle: () => void;
@@ -13,29 +12,14 @@ interface NavbarProps {
 const Navbar = ({ onToggle }: NavbarProps) => {
   const { accessToken } = useAuth();
   const logoutMutation = usePostLogout();
-  const [userName, setUserName] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchUserName = async () => {
-      if (accessToken) {
-        try {
-          const response = await getMyInfo();
-          if (response?.data?.name) {
-            setUserName(response.data.name);
-          }
-        } catch (error) {
-          console.error("유저 정보를 불러오는데 실패했습니다.", error);
-        }
-      } else {
-        setUserName(null);
-      }
-    };
-    fetchUserName();
-  }, [accessToken]);
+  
+  // React Query를 통해 내 정보를 가져옵니다. accessToken이 있을 때만 요청합니다.
+  const { data: myInfoResponse } = useGetMyInfo(!!accessToken);
+  const userName = myInfoResponse?.data?.name;
 
   const handleLogout = () => {
     logoutMutation.mutate();
-  }
+  };
 
   return (
     <>

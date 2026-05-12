@@ -1,7 +1,7 @@
 import { ChevronLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import googleIcon from "../images/google_logo.png";
-import default_avatar from "../images/default_avatar.png";
+import defaultavatar from "../images/defaultavatar.png";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { signupSchema, type SignupFormFields } from "../utils/validate";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -117,7 +117,7 @@ const SignupPage = () => {
             <div className="flex justify-center mb-4">
               <div className="w-40 h-40 rounded-full bg-gray-500 flex items-center justify-center overflow-hidden">
                 <img
-                  src={default_avatar}
+                  src={defaultavatar}
                   alt="Default Avatar"
                   className="w-full h-full object-cover"
                 />

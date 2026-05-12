@@ -1,18 +1,15 @@
-import { useEffect, useState } from 'react';
-import { getMyInfo } from '../api/auth';
-import type { ResponseMyInfo } from '../types/auth';
+import { useState, useEffect } from 'react';
 import { Settings, X } from 'lucide-react';
 import useGetInfiniteLikedLpList from '../hooks/queries/useGetInfiniteLikedLpList';
 import usePatchMyInfo from '../hooks/mutations/usePatchMyInfo';
+import useGetMyInfo from '../hooks/queries/useGetMyInfo';
 import { useInView } from 'react-intersection-observer';
 import { Link } from 'react-router-dom';
 import defaultAvatar from '../images/defaultavatar.png';
 
 const MyPage = () => {
-
-    const [data, setData] = useState<ResponseMyInfo | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const { data: myInfoResponse, isLoading, isError } = useGetMyInfo();
+    const data = myInfoResponse;
 
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [editName, setEditName] = useState("");
@@ -31,21 +28,6 @@ const MyPage = () => {
     const { ref, inView } = useInView({
         threshold: 0,
     });
-
-    const fetchMyInfo = async () => {
-        try {
-            const response = await getMyInfo();
-            setData(response);
-        } catch (err) {
-            setError("정보를 불러오는데 실패했습니다.")
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        fetchMyInfo();
-    }, []);
 
     useEffect(() => {
         if (inView && hasNextPage && !isLikedFetching) {
@@ -68,7 +50,6 @@ const MyPage = () => {
             {
                 onSuccess: () => {
                     setIsEditModalOpen(false);
-                    fetchMyInfo(); // Re-fetch info to update UI
                 }
             }
         );
@@ -78,7 +59,7 @@ const MyPage = () => {
         return <div className="text-white text-center mt-20">로딩 중...</div>;
     }
 
-    if (error || !data) {
+    if (isError || !data) {
         return <div className="text-white text-center mt-20">에러가 발생했습니다.</div>
     }
 
@@ -133,7 +114,6 @@ const MyPage = () => {
 
             <div ref={ref} className="h-4 w-full mt-4"></div>
 
-            {/* Edit Profile Modal */}
             {isEditModalOpen && (
                 <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
                     <div className="bg-[#242428] rounded-xl p-6 w-full max-w-md shadow-2xl relative">
