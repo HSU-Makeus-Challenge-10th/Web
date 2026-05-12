@@ -7,8 +7,19 @@ import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import LpDetailPage from './pages/LpDetailPage';
+import { QUERY_CACHE_TIME } from './constants/key';
 
-const queryClient = new QueryClient();
+// TanStack Query 목적: 서버 상태를 패칭/캐싱/동기화하고 로딩·에러 상태를 일관되게 관리한다.
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: QUERY_CACHE_TIME.default.staleTime,
+      gcTime: QUERY_CACHE_TIME.default.gcTime,
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -22,11 +33,14 @@ const router = createBrowserRouter(
 );
 
 function App() {
+  const isDev = import.meta.env.DEV;
+
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <RouterProvider router={router} />
-        <ReactQueryDevtools initialIsOpen={false} />
+        {/* Devtools: queryKey, stale/fresh, background refetch 트레이스를 개발 모드에서 확인 */}
+        {isDev && <ReactQueryDevtools initialIsOpen={false} />}
       </AuthProvider>
     </QueryClientProvider>
   );

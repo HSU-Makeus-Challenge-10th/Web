@@ -8,6 +8,9 @@ import type { SortOrder } from '../types/common';
 const HomePage = () => {
   const navigate = useNavigate();
   const [sort, setSort] = useState<SortOrder>('desc');
+  // [Mission1 - useQuery]
+  // useQuery는 "한 번의 조회"(목록/상세)에 적합하며, 서버 상태를 캐시에 저장한다.
+  // 여기서는 query 상태값(isLoading/isError/data)으로 UI를 표준 분기한다.
   const { data, isLoading, isError, error, refetch, isFetching } = useLpList(sort);
 
   const lps = data?.data?.data ?? [];
@@ -39,6 +42,7 @@ const HomePage = () => {
             {(error as Error)?.message ?? '데이터를 불러오지 못했습니다.'}
           </p>
           <button
+            // 필요 시 수동 최신화 트리거
             onClick={() => void refetch()}
             className="px-5 py-2 bg-pink-500 hover:bg-pink-600 text-white rounded transition-colors"
           >
@@ -47,7 +51,7 @@ const HomePage = () => {
         </div>
       )}
 
-      {/* LP 그리드 */}
+      {/* 성공 상태(data 존재): 캐시된 목록 렌더링 */}
       {!isLoading && !isError && (
         lps.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 text-gray-400">

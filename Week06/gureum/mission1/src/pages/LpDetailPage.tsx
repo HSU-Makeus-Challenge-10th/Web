@@ -75,6 +75,8 @@ const LpDetailPage = () => {
     }
   }, [accessToken]);
 
+  // [Mission1 - useQuery]
+  // 상세 조회도 useQuery로 관리: isLoading/isError/data 분기를 동일 패턴으로 유지한다.
   const { data, isLoading, isError, error, refetch } = useLpDetail(Number(lpId), !!accessToken);
   const lp = data?.data;
 
@@ -95,7 +97,7 @@ const LpDetailPage = () => {
         <LoginRequiredModal onConfirm={handleLoginRedirect} onCancel={handleCancel} />
       )}
 
-      {/* 로딩 */}
+      {/* useQuery 로딩 상태: 상세 레이아웃 기반 Skeleton */}
       {isLoading && <LpDetailSkeleton />}
 
       {/* 에러 */}
@@ -111,7 +113,7 @@ const LpDetailPage = () => {
         </div>
       )}
 
-      {/* LP 상세 */}
+      {/* useQuery 성공 상태 */}
       {!isLoading && !isError && lp && (
         <div className="max-w-4xl mx-auto px-4 py-8">
           <div className="flex flex-col md:flex-row gap-8">

@@ -5,6 +5,19 @@ interface NavbarProps {
   onToggleSidebar: () => void;
 }
 
+/**
+ * [헤더]
+ * 상단 sticky 헤더로 스크롤해도 항상 노출된다.
+ *
+ * [버거 버튼]
+ * - SVG 아이콘을 인라인으로 삽입(Vite 환경에서는 ?react import 없이 JSX 내 직접 사용 가능)
+ * - 클릭 시 Layout의 onToggleSidebar 콜백 호출 → 사이드바 열기/닫기
+ *
+ * [인증 상태 분기]
+ * - 비로그인: "로그인" → /login, "회원가입" → /signup 으로 NavLink 라우팅
+ * - 로그인: "(닉네임)님 반갑습니다." 문구를 실제 userInfo.name 상태값으로 표시
+ *           + 로그아웃 버튼 노출
+ */
 const Navbar = ({ onToggleSidebar }: NavbarProps) => {
   const navigate = useNavigate();
   const { accessToken, userInfo, logout } = useAuth();

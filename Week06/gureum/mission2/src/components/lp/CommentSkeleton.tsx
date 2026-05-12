@@ -1,3 +1,5 @@
+// [Skeleton UI]
+// 댓글 아바타/작성자/본문 구조를 그대로 모사해 체감 로딩 시간을 줄인다.
 const CommentSkeleton = ({ count = 5 }: { count?: number }) => (
   <div className="space-y-4 animate-pulse">
     {Array.from({ length: count }).map((_, i) => (

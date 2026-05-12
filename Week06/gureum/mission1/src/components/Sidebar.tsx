@@ -7,10 +7,24 @@ interface SidebarProps {
   onClose: () => void;
 }
 
+/**
+ * [반응형 사이드바]
+ * - 모바일(isDesktop=false): 기본 숨김(-translate-x-full), 버거 버튼 클릭 시 슬라이드 인
+ * - 데스크톱(isDesktop=true): 기본 노출(translate-x-0), 오버레이 없음
+ *
+ * [외부 영역 클릭 닫기]
+ * - 모바일에서 사이드바가 열리면 배경에 반투명 오버레이를 깔고,
+ *   오버레이 클릭 시 onClose를 호출해 사이드바를 닫는다.
+ *
+ * [인증 상태 분기]
+ * - 로그인: 닉네임 표시 + 마이페이지 / 로그아웃 메뉴
+ * - 비로그인: 로그인 / 회원가입 메뉴
+ */
 const Sidebar = ({ isOpen, isDesktop, onClose }: SidebarProps) => {
   const navigate = useNavigate();
   const { accessToken, userInfo, logout } = useAuth();
 
+  // 페이지 이동 후 모바일에서 사이드바 자동 닫기
   const handleNav = (path: string) => {
     navigate(path);
     onClose();

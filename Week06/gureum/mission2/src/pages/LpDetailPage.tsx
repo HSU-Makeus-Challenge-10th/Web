@@ -4,63 +4,14 @@ import { useLpDetail } from '../hooks/useLpDetail';
 import { useLpComments } from '../hooks/useLpComments';
 import { useAuth } from '../context/AuthContext';
 import CommentSkeleton from '../components/lp/CommentSkeleton';
+import LoginRequiredModal from '../components/lp/LoginRequiredModal';
+import LpDetailSkeleton from '../components/lp/LpDetailSkeleton';
 import type { SortOrder } from '../types/common';
 
 const formatDate = (dateStr: string) =>
   new Date(dateStr).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
 
 const getLikeCount = (likesCount?: number, likes?: Array<{ userId: number }>) => likesCount ?? likes?.length ?? 0;
-
-/* ─── 로그인 필요 모달 ─── */
-const LoginRequiredModal = ({ onConfirm, onCancel }: { onConfirm: () => void; onCancel: () => void }) => (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
-    <div className="bg-gray-900 border border-gray-700 rounded-lg p-8 max-w-sm w-full mx-4 text-center space-y-4">
-      <h3 className="text-white text-lg font-bold">로그인이 필요합니다</h3>
-      <p className="text-gray-400 text-sm">LP 상세 페이지를 보려면 로그인이 필요합니다.</p>
-      <div className="flex gap-3 justify-center">
-        <button
-          onClick={onCancel}
-          className="px-4 py-2 border border-gray-600 rounded text-gray-300 hover:bg-gray-800 transition-colors text-sm"
-        >
-          취소
-        </button>
-        <button
-          onClick={onConfirm}
-          className="px-4 py-2 bg-pink-500 hover:bg-pink-600 rounded text-white transition-colors text-sm"
-        >
-          확인
-        </button>
-      </div>
-    </div>
-  </div>
-);
-
-/* ─── LP 스켈레톤 ─── */
-const LpDetailSkeleton = () => (
-  <div className="max-w-4xl mx-auto px-4 py-8 animate-pulse">
-    <div className="flex flex-col md:flex-row gap-8">
-      <div className="w-full md:w-72 aspect-square bg-gray-700 rounded-lg flex-shrink-0" />
-      <div className="flex-1 space-y-4">
-        <div className="w-2/3 h-8 bg-gray-700 rounded" />
-        <div className="w-1/3 h-4 bg-gray-700 rounded" />
-        <div className="w-1/4 h-4 bg-gray-700 rounded" />
-        <div className="flex gap-3 pt-4">
-          <div className="w-20 h-10 bg-gray-700 rounded" />
-          <div className="w-16 h-10 bg-gray-700 rounded" />
-          <div className="w-16 h-10 bg-gray-700 rounded" />
-        </div>
-      </div>
-    </div>
-    <div className="mt-10 space-y-3">
-      <div className="w-32 h-5 bg-gray-700 rounded" />
-      <div className="bg-gray-800 rounded p-5 space-y-2">
-        <div className="w-full h-4 bg-gray-700 rounded" />
-        <div className="w-5/6 h-4 bg-gray-700 rounded" />
-        <div className="w-4/5 h-4 bg-gray-700 rounded" />
-      </div>
-    </div>
-  </div>
-);
 
 /* ─── 메인 ─── */
 const LpDetailPage = () => {
@@ -92,6 +43,7 @@ const LpDetailPage = () => {
     hasNextPage: hasNextComments,
   } = useLpComments(Number(lpId), commentOrder, !!accessToken);
 
+  // useInfiniteQuery의 data.pages를 평탄화해 단일 목록으로 렌더링
   const comments = commentData?.pages.flatMap((p) => p.data.data) ?? [];
 
   const commentSentinelRef = useRef<HTMLDivElement>(null);
@@ -110,6 +62,7 @@ const LpDetailPage = () => {
     );
 
     observer.observe(el);
+    // observer 정리: 재렌더링 시 중복 콜백 등록 방지
     return () => observer.disconnect();
   }, [fetchNextComments, hasNextComments, isCommentFetchingNext]);
 
@@ -279,7 +232,7 @@ const LpDetailPage = () => {
               </div>
             </div>
 
-            {/* 초기 댓글 로딩 스켈레톤 (상단) */}
+            {/* 초기 댓글 로딩: 콘텐츠 레이아웃과 유사한 Skeleton으로 체감 대기 완화 */}
             {isCommentLoading && <CommentSkeleton count={5} />}
 
             {/* 댓글 목록 */}
@@ -306,7 +259,7 @@ const LpDetailPage = () => {
                   </ul>
                 )}
 
-                {/* 추가 댓글 로딩 스켈레톤 (하단) */}
+                {/* 추가 댓글 로딩: 기존 댓글 유지 + 하단 Skeleton만 노출 */}
                 {isCommentFetchingNext && (
                   <div className="mt-4">
                     <CommentSkeleton count={3} />

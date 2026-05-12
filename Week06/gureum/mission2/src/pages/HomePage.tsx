@@ -8,6 +8,7 @@ import type { SortOrder } from '../types/common';
 const HomePage = () => {
   const navigate = useNavigate();
   const [sort, setSort] = useState<SortOrder>('desc');
+  // useInfiniteQuery 표준 UI 분기: 초기 로딩/에러/성공 + 추가 페이지 로딩
   const {
     data,
     isLoading,
@@ -31,6 +32,7 @@ const HomePage = () => {
 
     const observer = new IntersectionObserver(
       (entries) => {
+        // 바닥 감지 + 다음 페이지 존재 + 현재 추가 로딩 중 아님 => fetchNextPage
         if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
           void fetchNextPage();
         }
@@ -39,6 +41,7 @@ const HomePage = () => {
     );
 
     observer.observe(el);
+    // 관찰 해제(cleanup)로 중복 observe 및 메모리 누수 방지
     return () => observer.disconnect();
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
@@ -59,7 +62,7 @@ const HomePage = () => {
         </button>
       </div>
 
-      {/* 초기 로딩 스켈레톤 (상단에만) */}
+      {/* [Skeleton UI] 초기 로딩: 첫 진입 시 콘텐츠 자리 점유(레이아웃 점프/깜빡임 완화) */}
       {isLoading && <LpListSkeleton />}
 
       {/* 에러 상태 */}
@@ -92,14 +95,14 @@ const HomePage = () => {
         )
       )}
 
-      {/* 추가 로딩 스켈레톤 (하단에만) */}
+      {/* [Skeleton UI] 추가 로딩: 기존 리스트는 유지하고 하단만 Skeleton을 붙여 연속성 유지 */}
       {isFetchingNextPage && (
         <div className="mt-4">
           <LpListSkeleton />
         </div>
       )}
 
-      {/* 무한 스크롤 sentinel */}
+      {/* 무한 스크롤 sentinel(바닥 감지 기준점) */}
       <div ref={sentinelRef} className="h-4" />
 
       {/* 우측 하단 플로팅 버튼 (+) */}

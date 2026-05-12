@@ -10,11 +10,21 @@ const formatDate = (dateStr: string) =>
 
 const getLikeCount = (lp: Lp) => lp._count?.likes ?? lp.likes?.length ?? 0;
 
+/**
+ * [카드 인터랙션]
+ * - Hover 시 hover:scale-105 로 카드 확대
+ * - 썸네일에 group-hover:blur-sm + group-hover:brightness-50 으로 어두운 오버레이 효과
+ * - 오버레이 위에 제목 / 업로드일 / 좋아요 수 메타 정보 표시(opacity-0 → opacity-100)
+ *
+ * [카드 라우팅]
+ * - 카드 클릭 시 해당 LP의 id를 경로 파라미터로 /lp/:lpId 로 이동
+ */
 const LpCard = ({ lp }: LpCardProps) => {
   const navigate = useNavigate();
 
   return (
     <div
+      // 카드 클릭 → /lp/:lpId 상세 페이지로 라우팅
       onClick={() => navigate(`/lp/${lp.id}`)}
       className="relative group cursor-pointer rounded-lg overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105"
     >
