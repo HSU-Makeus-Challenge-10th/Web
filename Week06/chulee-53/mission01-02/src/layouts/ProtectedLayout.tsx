@@ -1,14 +1,15 @@
 import Navbar from "../components/Navbar";
 import { useAuth } from "../context/AuthContext";
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useSidebar } from "../hooks/useSidebar";
 import { SideBar } from "../components/Sidebar";
 
 const ProtectedLayout = () => {
   const { accessToken } = useAuth();
+  const location = useLocation();
 
   if (!accessToken) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/login" state={{ from: location.pathname }} replace />;
   }
   const { isOpen, toggle, close } = useSidebar();
 

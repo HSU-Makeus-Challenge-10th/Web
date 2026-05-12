@@ -2,21 +2,23 @@ import useForm from "../hooks/useForm";
 import { validateSignin } from "../utils/validate";
 import googleIcon from "../images/google_logo.png";
 import { ChevronLeft } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Input from "../components/Input";
 import { useAuth } from "../context/AuthContext";
 import { useEffect } from "react";
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const { login, accessToken } = useAuth();
+  const from = location.state?.from || "/mypage";
 
   useEffect(() => {
     if (accessToken) {
-      navigate("/");
+      navigate(from, { replace: true });
     }
-  }, [accessToken]);
+  }, [accessToken, navigate, from]);
 
   const { values, error, getInputProps } = useForm({
     initialValues: {
@@ -32,6 +34,9 @@ const LoginPage = () => {
   };
 
   const handleGoogleLogin = () => {
+    if (location.state?.from) {
+      localStorage.setItem("redirectUrl", location.state.from);
+    }
     window.location.href =
       import.meta.env.VITE_SERVER_API_URL + "/v1/auth/google/login";
   };

@@ -14,7 +14,9 @@ const GoogleLoginRedirectPage = () => {
         if (accessToken && refreshToken) {
             setAccessToken(accessToken);
             setRefreshToken(refreshToken);
-            window.location.href = "/mypage";
+            const redirectUrl = localStorage.getItem("redirectUrl") || "/mypage";
+            localStorage.removeItem("redirectUrl");
+            window.location.href = redirectUrl;
             return;
         }
 
