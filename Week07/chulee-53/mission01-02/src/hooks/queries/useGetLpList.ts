@@ -5,7 +5,7 @@ import { getLpList } from "../../api/lp";
 
 function useGetLpList({ cursor, search, order, limit }: PaginationDto) {
   return useQuery({
-    queryKey: [QUERY_KEY.lps, { search, order }],
+    queryKey: [QUERY_KEY.lps, { search, order, limit, cursor }],
     queryFn: () => getLpList({ cursor, search, order, limit }),
     staleTime: 5 * 60 * 1_000,
     gcTime: 10 * 60 * 1_000,

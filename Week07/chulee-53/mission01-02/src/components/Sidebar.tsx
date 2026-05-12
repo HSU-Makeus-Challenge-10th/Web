@@ -62,7 +62,7 @@ export const SideBar = ({ isOpen, onClose }: SideBarProps) => {
       </aside>
 
       {isConfirmOpen && (
-        <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/60 p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
           <div className="bg-[#242428] rounded-xl p-20 text-white text-center w-full max-w-sm">
             <h3 className="text-xl font-semibold mb-2">정말 탈퇴하시겠습니까?</h3>
             <div className="flex gap-4 justify-center">

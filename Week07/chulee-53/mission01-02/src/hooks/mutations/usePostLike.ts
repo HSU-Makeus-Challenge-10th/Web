@@ -9,6 +9,7 @@ export default function usePostLike() {
     mutationFn: (id: number) => postLike(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY.lps] });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.likedLps] });
     },
   });
 }

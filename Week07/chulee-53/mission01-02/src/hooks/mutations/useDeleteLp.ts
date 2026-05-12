@@ -9,6 +9,7 @@ export default function useDeleteLp() {
     mutationFn: (id: number) => deleteLp(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY.lps] });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.likedLps] });
     },
   });
 }

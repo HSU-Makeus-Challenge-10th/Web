@@ -39,7 +39,7 @@ axiosInstance.interceptors.response.use(
       error.response.status === 401 &&
       !originalRequest.retry
     ) {
-      if (originalRequest.url === "v1/auth/refresh") {
+      if (originalRequest.url === "/v1/auth/refresh") {
         const { removeItem: removeAccessToken } = useLocalStorage(
           LOCAL_STORAGE_KEY.accessToken,
         );
@@ -52,7 +52,7 @@ axiosInstance.interceptors.response.use(
       if (!refreshPromise) {
         refreshPromise = (async () => {
           try {
-            const { data } = await axiosInstance.post("v1/auth/refresh", {});
+            const { data } = await axiosInstance.post("/v1/auth/refresh", {});
 
             const { setItem: setAccessToken } = useLocalStorage(
               LOCAL_STORAGE_KEY.accessToken,

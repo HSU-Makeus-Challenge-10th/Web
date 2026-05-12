@@ -51,10 +51,13 @@ const HomePage = () => {
             </div>
 
             <button
+                type='button'
+                aria-label='LP 추가'
+                title="LP 추가"
                 onClick={() => setIsModalOpen(true)}
                 className="fixed bottom-8 right-8 w-14 h-14 bg-[#FF1E90] hover:scale-105 rounded-full flex justify-center items-center shadow-[0_0_15px_rgba(255,30,144,0.5)] transition-transform cursor-pointer z-40"
             >
-                <Plus className="w-7 h-7 text-white stroke-[3]" />
+                <Plus className="w-7 h-7 text-white stroke-3" />
             </button>
 
             {isModalOpen && <AddLpModal onClose={() => setIsModalOpen(false)} />}
