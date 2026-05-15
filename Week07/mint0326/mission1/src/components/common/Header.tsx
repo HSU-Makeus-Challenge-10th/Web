@@ -22,6 +22,7 @@ const Header = ({ onToggleSidebar }: HeaderProps) => {
     onSuccess: () => {
       queryClient.clear(); // 모든 쿼리 캐시 초기화
       logout();
+      navigate('/login');
     },
     onError: (e) => {
       console.error('Logout error:', e);

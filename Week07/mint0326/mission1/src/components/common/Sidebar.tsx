@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, User, LogOut, X } from 'lucide-react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import api from '../../api/axios';
+import { Search, User, LogOut } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
+import { useProfile } from '../../hooks/user/useProfile';
+import Modal from './Modal';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -11,28 +11,17 @@ interface SidebarProps {
   isDesktop: boolean;
 }
 
-const Sidebar = ({ isOpen, onClose, isDesktop }: SidebarProps) => {
+const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
-  const { logout, isLoggedIn } = useAuth();
+  const { isLoggedIn } = useAuth();
+  const { state, actions } = useProfile();
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
 
-  const withdrawMutation = useMutation({
-    mutationFn: async () => {
-      await api.delete('/v1/users');
-    },
-    onSuccess: () => {
-      alert('회원 탈퇴가 완료되었습니다.');
-      queryClient.clear();
-      logout();
-      navigate('/login');
-      setIsWithdrawModalOpen(false);
-    },
-    onError: (e) => {
-      console.error('탈퇴 에러:', e);
-      alert('회원 탈퇴에 실패했습니다.');
-    }
-  });
+  const handleWithdrawClick = () => {
+    actions.handleWithdraw();
+    setIsWithdrawModalOpen(false);
+    onClose(); // 사이드바도 닫기
+  };
 
   return (
     <>
@@ -86,34 +75,30 @@ const Sidebar = ({ isOpen, onClose, isDesktop }: SidebarProps) => {
       </aside>
 
       {/* 회원 탈퇴 확인 모달 */}
-      {isWithdrawModalOpen && (
-        <div className="fixed inset-0 z-[300] flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="bg-[#222222] rounded-xl p-8 w-[350px] relative shadow-2xl text-center">
+      <Modal 
+        isOpen={isWithdrawModalOpen} 
+        onClose={() => setIsWithdrawModalOpen(false)}
+        zIndex="z-[300]"
+      >
+        <div className="text-center py-4">
+          <h3 className="text-xl font-bold mb-8">정말 탈퇴하시겠습니까?</h3>
+          <div className="flex justify-center gap-4">
             <button 
-                onClick={() => setIsWithdrawModalOpen(false)}
-                className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors cursor-pointer"
+              onClick={handleWithdrawClick}
+              disabled={state.isWithdrawPending}
+              className="px-8 py-2.5 bg-[#d1d5db] text-black font-bold rounded-lg hover:bg-gray-300 transition-colors cursor-pointer min-w-[100px]"
             >
-                <X size={20} />
+              {state.isWithdrawPending ? '처리중...' : '예'}
             </button>
-            <h3 className="text-xl font-bold mb-6 mt-4">정말 탈퇴하시겠습니까?</h3>
-            <div className="flex justify-center gap-4">
-              <button 
-                onClick={() => withdrawMutation.mutate()}
-                disabled={withdrawMutation.isPending}
-                className="px-6 py-2 bg-[#d1d5db] text-black font-bold rounded-lg hover:bg-gray-300 transition-colors cursor-pointer"
-              >
-                예
-              </button>
-              <button 
-                onClick={() => setIsWithdrawModalOpen(false)}
-                className="px-6 py-2 bg-[#ff007f] text-white font-bold rounded-lg hover:bg-[#e60072] transition-colors cursor-pointer"
-              >
-                아니오
-              </button>
-            </div>
+            <button 
+              onClick={() => setIsWithdrawModalOpen(false)}
+              className="px-8 py-2.5 bg-[#ff007f] text-white font-bold rounded-lg hover:bg-[#e60072] transition-colors cursor-pointer min-w-[100px]"
+            >
+              아니오
+            </button>
           </div>
         </div>
-      )}
+      </Modal>
     </>
   );
 };

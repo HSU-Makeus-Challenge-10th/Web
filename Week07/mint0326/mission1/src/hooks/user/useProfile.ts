@@ -1,10 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '../../api/axios';
 import { useAuth } from '../../contexts/AuthContext';
 
 export const useProfile = () => {
-    const { logout } = useAuth();
+    const { logout, isLoggedIn } = useAuth();
+    const navigate = useNavigate();
     const queryClient = useQueryClient();
     
     const [isEditing, setIsEditing] = useState(false);
@@ -19,7 +21,8 @@ export const useProfile = () => {
         queryFn: async () => {
             const res = await api.get('/v1/users/me');
             return res.data.data;
-        }
+        },
+        enabled: isLoggedIn, // 로그인 상태일 때만 실행
     });
 
     useEffect(() => {
@@ -63,6 +66,36 @@ export const useProfile = () => {
         }
     });
 
+    const logoutMutation = useMutation({
+        mutationFn: async () => {
+            await api.post('/v1/auth/signout');
+        },
+        onSuccess: () => {
+            queryClient.clear();
+            logout();
+        },
+        onError: (e) => {
+            console.error('Logout error:', e);
+            logout();
+        }
+    });
+
+    const withdrawMutation = useMutation({
+        mutationFn: async () => {
+            await api.delete('/v1/users');
+        },
+        onSuccess: () => {
+            alert('회원 탈퇴가 완료되었습니다.');
+            queryClient.clear();
+            logout();
+            navigate('/login');
+        },
+        onError: (e) => {
+            console.error('Withdrawal error:', e);
+            alert('회원 탈퇴에 실패했습니다.');
+        }
+    });
+
     const handleEditStart = () => {
         setName(userProfile?.name || '');
         setBio(userProfile?.bio || '');
@@ -88,16 +121,6 @@ export const useProfile = () => {
         }
     };
 
-    const handleLogout = async () => {
-        try {
-            await api.post('/v1/auth/signout');
-            logout();
-        } catch (error) {
-            console.error('Logout error:', error);
-            logout();
-        }
-    };
-
     return {
         state: {
             userProfile,
@@ -107,6 +130,8 @@ export const useProfile = () => {
             bio,
             imagePreview,
             isPending: updateProfileMutation.isPending,
+            isLogoutPending: logoutMutation.isPending,
+            isWithdrawPending: withdrawMutation.isPending,
         },
         refs: {
             fileInputRef,
@@ -117,7 +142,8 @@ export const useProfile = () => {
             handleEditStart,
             handleEditCancel,
             handleFileChange,
-            handleLogout,
+            handleLogout: () => logoutMutation.mutate(),
+            handleWithdraw: () => withdrawMutation.mutate(),
             handleSave: () => updateProfileMutation.mutate(),
         }
     };
