@@ -1,19 +1,21 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { postLike } from "../../apis/lp";
-import { queryClient } from "../../App";
 import { QUERY_KEY } from "../../constants/key";
 import type { RequestLpDto, ResponseLpDto } from "../../types/lp";
 import { useAuth } from "../../context/AuthContext";
 
 function usePostLike() {
   const { user } = useAuth();
-
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: postLike,
 
     onMutate: async (lp: RequestLpDto) => {
+      //명확한 타입지정
+      const targetLpId = Number(lp.lpId);
+
       //쿼리 키를 이전에 만든 상수로 깔끔하게 지정
-      const queryKey = QUERY_KEY.lps.detail(lp.lpId);
+      const queryKey = QUERY_KEY.lps.detail(targetLpId);
 
       //진행 중인 쿼리 취소
       await queryClient.cancelQueries({ queryKey });
@@ -24,25 +26,36 @@ function usePostLike() {
       // 내 정보 가져오기;
       const userId = Number(user?.id);
 
-      // 불변성을 지키며 업데이트 (.filter 사용)
-      // 만약 캐시된 데이터가 있다면
-      if (previousLpPost) {
-        queryClient.setQueryData<ResponseLpDto>(queryKey, {
-          ...previousLpPost,
+      queryClient.setQueryData<ResponseLpDto>(queryKey, (oldData) => {
+        // 이전 데이터가 없으면 그대로 반환
+        if (!oldData) return oldData;
+
+        // 멱등성 가드: 이미 내가 좋아요를 누른 상태인지 검사
+        const isAlreadyLiked = oldData.data.likes.some(
+          (l) => l.userId === userId,
+        );
+
+        // 이미 눌렀다면 (더블클릭 방지) 배열을 수정하지 않고 원본 그대로 반환
+        if (isAlreadyLiked) {
+          return oldData;
+        }
+
+        // 누르지 않은 상태라면 안전하게 내 좋아요를 추가
+        return {
+          ...oldData,
           data: {
-            ...previousLpPost.data,
-            // 내 아이디와 일치하지 않는 좋아요들만 남긴다 (즉, 내 좋아요를 삭제하는 효과)
+            ...oldData.data,
             likes: [
-              ...previousLpPost.data.likes,
+              ...oldData.data.likes,
               {
-                id: Date.now(),
+                id: Date.now(), // 프론트단에서 쓸 임시 ID
                 userId: userId,
-                lpId: lp.lpId,
+                lpId: targetLpId,
               },
             ],
           },
-        });
-      }
+        };
+      });
 
       // 에러 발생 시 사용할 백업 데이터와 키 반환
       return { previousLpPost, queryKey };
