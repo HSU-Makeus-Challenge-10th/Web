@@ -11,8 +11,9 @@ export const useAuth = () => {
     return !!token;
   };
 
-  // 토큰이 있고 아직 로그인 상태가 아닐 때만 사용자 정보 조회
-  const shouldFetchUser = hasToken() && !isLoggedIn;
+  // 기존 'hasToken() && !isLoggedIn' 조건에서 '!isLoggedIn'을 제거하여
+  // invalidateQueries가 호출될 때 정상적으로 refetch가 발생하도록 수정
+  const shouldFetchUser = hasToken();
 
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ['user', 'me'],
@@ -38,7 +39,6 @@ export const useAuth = () => {
     return result;
   };
 
-  // 토큰이 없으면 즉시 로딩 완료로 처리 (API 호출하지 않음)
   const actualIsLoading = shouldFetchUser ? isLoading : false;
 
   return {

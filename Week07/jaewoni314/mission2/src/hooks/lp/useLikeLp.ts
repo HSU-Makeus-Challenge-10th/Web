@@ -22,9 +22,19 @@ export const useLikeLp = () => {
       const previousLp = queryClient.getQueryData<Lp>(['lp', lpId]);
 
       if (previousLp && user) {
-        const newLikes = isLiked
-          ? previousLp.likes.filter((like) => like.userId !== user.id)
-          : [...previousLp.likes, { id: -1, userId: user.id, lpId }];
+        let newLikes = [...previousLp.likes];
+
+        if (isLiked) {
+          // 좋아요 취소
+          newLikes = newLikes.filter((like) => like.userId !== user.id);
+        } else {
+          // 좋아요 추가 (멱등성 가드 적용)
+          const alreadyLiked = newLikes.some((like) => like.userId === user.id);
+          if (!alreadyLiked) {
+            // 고정값 -1 대신 Date.now()를 사용하여 key 충돌 방지
+            newLikes.push({ id: Date.now(), userId: user.id, lpId });
+          }
+        }
 
         const newLp = {
           ...previousLp,
