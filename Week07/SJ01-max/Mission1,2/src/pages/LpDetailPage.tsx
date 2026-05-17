@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { fetchLp, apiDeleteLp, apiLikeLp, apiUnlikeLp, apiUpdateLp, apiUploadFile } from '../api/client'
@@ -116,13 +116,6 @@ export default function LpDetailPage() {
     },
   })
 
-  useEffect(() => {
-    if (lp?.title) {
-      setEditTitle(lp.title)
-      window.scrollTo(0, 0)
-    }
-  }, [lp?.title])
-
   const requireAuth = (action: () => void) => {
     if (status === 'unauthenticated') { setShowModal(true); return }
     action()
@@ -228,7 +221,7 @@ export default function LpDetailPage() {
               <div className="flex shrink-0 items-center gap-2 pt-1 text-gray-300">
                 {/* 수정 */}
                 <button
-                  onClick={() => setIsEditing(true)}
+                  onClick={() => { setEditTitle(lp.title); setIsEditing(true) }}
                   className="grid h-8 w-8 place-items-center rounded-full hover:bg-white/10"
                   title="수정"
                 >

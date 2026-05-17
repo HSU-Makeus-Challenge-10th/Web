@@ -35,6 +35,21 @@ export default function MyPage() {
       payload.avatar = avatar
       return apiUpdateMe(payload)
     },
+    onMutate: async () => {
+      const prev = user
+      if (user) {
+        updateUser({
+          ...user,
+          name: name.trim() || user.name,
+          bio: bio.trim() || user.bio,
+          avatar: avatarPreview ?? user.avatar ?? null,
+        })
+      }
+      return { prev }
+    },
+    onError: (_err, _vars, context) => {
+      if (context?.prev) updateUser(context.prev)
+    },
     onSuccess: (updatedUser) => {
       updateUser(updatedUser)
       setIsEditing(false)
