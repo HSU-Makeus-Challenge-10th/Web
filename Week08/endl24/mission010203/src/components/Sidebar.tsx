@@ -19,18 +19,18 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 
   useEffect(() => {
     if (isOpen) {
-      // 1. 사이드바가 열리면 body의 스크롤을 없애버립니다 (잠금 🔒)
+      // 사이드바가 열리면 body의 스크롤을 없앰
       document.body.style.overflow = "hidden";
     } else {
-      // 2. 사이드바가 닫히면 스크롤을 다시 원래대로 돌려놓습니다 (해제 🔓)
+      // 사이드바가 닫히면 스크롤을 다시 원래대로
       document.body.style.overflow = "unset";
     }
 
-    // 3. 클린업 함수: 컴포넌트가 갑자기 사라질 때를 대비해 스크롤을 무조건 풀어줍니다.
+    // 클린업 함수
     return () => {
       document.body.style.overflow = "unset";
     };
-  }, [isOpen]); // isOpen 값이 바뀔 때마다 이 로직이 실행됩니다.
+  }, [isOpen]); // isOpen 값이 바뀔 때마다 로직이 실행
 
   useEffect(() => {
     // 키보드가 눌렸을 때 실행될 핸들러 함수
@@ -41,7 +41,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
       }
     };
 
-    // 사이드바가 실제로 열려있을 때만 전역 이벤트 리스너를 등록합니다.
+    // 사이드바가 실제로 열려있을 때만 전역 이벤트 리스너를 등록
     if (isOpen) {
       window.addEventListener("keydown", handleKeyDown);
     }
