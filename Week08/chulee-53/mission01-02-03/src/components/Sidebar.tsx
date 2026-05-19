@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Search, User } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useDeleteAccount from "../hooks/mutations/useDeleteAccount";
 
 interface SideBarProps {
@@ -11,6 +11,24 @@ interface SideBarProps {
 export const SideBar = ({ isOpen, onClose }: SideBarProps) => {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const deleteAccountMutation = useDeleteAccount();
+
+  useEffect(() => {
+    if (isOpen) {
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Escape") {
+          onClose();
+        }
+      };
+
+      window.addEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "hidden";
+
+      return () => {
+        window.removeEventListener("keydown", handleKeyDown);
+        document.body.style.overflow = "unset";
+      };
+    }
+  }, [isOpen, onClose]);
 
   const handleWithdrawClick = () => {
     setIsConfirmOpen(true);

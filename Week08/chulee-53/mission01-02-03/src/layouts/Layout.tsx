@@ -11,8 +11,7 @@ const Layout = () => {
       <Navbar onToggle={toggle} />
       <div className="relative flex-1">
         <main
-          className={`h-full min-h-[calc(100vh-80px)] flex flex-col items-center justify-center p-4 transition-all duration-300 ${isOpen ? "blur-xs" : ""
-            }`}
+          className="h-full min-h-[calc(100vh-80px)] flex flex-col items-center p-4"
         >
           <Outlet />
         </main>
