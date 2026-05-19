@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { patchMyInfo } from '../apis/auth';
 import { uploadImage } from '../apis/upload';
@@ -10,8 +10,7 @@ import ProfileImageEditor from '../components/mypage/ProfileImageEditor';
 
 const MyPage = () => {
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
-  const { accessToken, userInfo, fetchUserInfo, updateUserInfo } = useAuth();
+  const { accessToken, userInfo, updateUserInfo } = useAuth();
   const [showSaveConfirm, setShowSaveConfirm] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
   const [isEditingBio, setIsEditingBio] = useState(false);
@@ -40,8 +39,6 @@ const MyPage = () => {
   const updateMutation = useMutation({
     mutationFn: patchMyInfo,
     onMutate: async (nextProfile) => {
-      await queryClient.cancelQueries({ queryKey: ['myInfo'] });
-
       const previousUserInfo = userInfo;
 
       updateUserInfo({
@@ -57,8 +54,8 @@ const MyPage = () => {
         updateUserInfo(context.previousUserInfo);
       }
     },
-    onSuccess: async () => {
-      await fetchUserInfo();
+    onSuccess: (response) => {
+      updateUserInfo(response.data);
       setShowSaveConfirm(false);
       setIsEditingName(false);
       setIsEditingBio(false);

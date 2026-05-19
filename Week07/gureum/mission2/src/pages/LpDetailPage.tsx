@@ -158,10 +158,12 @@ const LpDetailPage = () => {
         if (!current?.data) return current;
 
         const currentLikes = current.data.likes ?? [];
-        const currentLikeCount = current.data._count?.likes ?? currentLikes.length;
+        const userId = userInfo?.id;
+        const hasMyLike = userId != null && currentLikes.some((like) => like.userId === userId);
+
         const nextLikes = liked
-          ? currentLikes.filter((like) => like.userId !== userInfo?.id)
-          : [...currentLikes, { userId: userInfo?.id ?? -1 }].filter((like) => like.userId !== -1);
+          ? (userId == null ? currentLikes : currentLikes.filter((like) => like.userId !== userId))
+          : (userId == null || hasMyLike ? currentLikes : [...currentLikes, { userId }]);
 
         return {
           ...current,
@@ -170,7 +172,7 @@ const LpDetailPage = () => {
             likes: nextLikes,
             _count: {
               ...current.data._count,
-              likes: liked ? Math.max(0, currentLikeCount - 1) : currentLikeCount + 1,
+              likes: nextLikes.length,
             },
           },
         };
