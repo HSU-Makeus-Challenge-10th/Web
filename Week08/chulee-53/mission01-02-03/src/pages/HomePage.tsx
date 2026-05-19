@@ -6,6 +6,7 @@ import LpCard from "../components/LpCard";
 import LpCardSkeleton from "../components/LpCardSkeleton";
 import AddLpModal from "../components/AddLpModal";
 import { useSearchParams } from "react-router-dom";
+import useThrottle from "../hooks/useThrottle";
 
 const HomePage = () => {
     const [searchParams] = useSearchParams();
@@ -14,17 +15,19 @@ const HomePage = () => {
     const [order, setOrder] = useState<"asc" | "desc">("desc");
     const [isModalOpen, setIsModalOpen] = useState(false);
     
-    const { data, isFetching, hasNextPage, fetchNextPage } = useGetInfiniteLpList(10, searchTerm, order);
+    const { data, isFetching, hasNextPage, fetchNextPage } = useGetInfiniteLpList(20, searchTerm, order);
 
     const { ref, inView } = useInView({
         threshold: 0,
     })
 
+    const throttledInView = useThrottle(inView);
+
     useEffect(() => {
-        if (inView && hasNextPage && !isFetching) {
+        if (throttledInView && hasNextPage && !isFetching) {
             fetchNextPage();
         }
-    }, [inView, hasNextPage, isFetching, fetchNextPage])
+    }, [throttledInView, hasNextPage, isFetching, fetchNextPage])
 
     return (
         <>
