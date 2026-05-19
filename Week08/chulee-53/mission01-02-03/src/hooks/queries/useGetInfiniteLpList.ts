@@ -10,7 +10,7 @@ function useGetInfiniteLpList(
   return useInfiniteQuery({
     queryFn: ({ pageParam }) =>
       getLpList({ cursor: pageParam, limit, search, order }),
-    queryKey: [QUERY_KEY.lps, search, order],
+    queryKey: [QUERY_KEY.lps, search, order, limit],
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
       return lastPage.data.hasNext ? lastPage.data.nextCursor : undefined;

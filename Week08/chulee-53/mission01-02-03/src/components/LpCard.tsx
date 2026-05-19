@@ -8,7 +8,8 @@ interface LpCardProps {
 const LpCard = ({ lp }: LpCardProps) => {
     const navigate = useNavigate();
     return (
-        <div
+        <button
+            type="button"
             className="relative group cursor-pointer rounded-lg overflow-hidden"
             onClick={() => navigate(`/lp/${lp.id}`)}
         >
@@ -18,7 +19,7 @@ const LpCard = ({ lp }: LpCardProps) => {
                 <p className="text-sm mt-1">{new Date(lp.createdAt).toLocaleDateString()}</p>
                 <p className="text-sm mt-1">❤️ {lp.likes?.length || 0}</p>
             </div>
-        </div>
+        </button>
     )
 }
 

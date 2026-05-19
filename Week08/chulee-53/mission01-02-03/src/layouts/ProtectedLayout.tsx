@@ -7,11 +7,11 @@ import { SideBar } from "../components/Sidebar";
 const ProtectedLayout = () => {
   const { accessToken } = useAuth();
   const location = useLocation();
+  const { isOpen, toggle, close } = useSidebar();
 
   if (!accessToken) {
     return <Navigate to="/login" state={{ from: location.pathname }} replace />;
   }
-  const { isOpen, toggle, close } = useSidebar();
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col font-sans">

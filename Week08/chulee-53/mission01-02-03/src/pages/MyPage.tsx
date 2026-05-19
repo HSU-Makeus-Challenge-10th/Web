@@ -21,6 +21,7 @@ const MyPage = () => {
     const {
         data: likedData,
         isFetching: isLikedFetching,
+        isFetchingNextPage,
         hasNextPage,
         fetchNextPage
     } = useGetInfiniteLikedLpList(12);
@@ -30,10 +31,10 @@ const MyPage = () => {
     });
 
     useEffect(() => {
-        if (inView && hasNextPage && !isLikedFetching) {
+        if (inView && hasNextPage && !isFetchingNextPage) {
             fetchNextPage();
         }
-    }, [inView, hasNextPage, isLikedFetching, fetchNextPage]);
+    }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
     const handleOpenEditModal = () => {
         if (data?.data) {
@@ -67,10 +68,10 @@ const MyPage = () => {
         <div className="w-255 mx-auto pb-10">
             <div className="flex items-center gap-8 py-8 px-4">
                 <div className="w-24 h-24 sm:w-36 sm:h-36 rounded-full overflow-hidden shrink-0 bg-[#658872] border-4 border-transparent shadow-[0_0_15px_rgba(0,0,0,0.5)]">
-                    <img 
-                        src={data.data?.avatar || defaultAvatar} 
-                        alt={data.data?.name || "User Avatar"} 
-                        className="w-full h-full object-cover bg-gray-600" 
+                    <img
+                        src={data.data?.avatar || defaultAvatar}
+                        alt={data.data?.name || "User Avatar"}
+                        className="w-full h-full object-cover bg-gray-600"
                         onError={(e) => { e.currentTarget.src = defaultAvatar; }}
                     />
                 </div>
@@ -78,8 +79,10 @@ const MyPage = () => {
                 <div className="flex-1 flex flex-col justify-center gap-2">
                     <div className="flex justify-between items-center w-full">
                         <h2 className="text-gray-200 text-2xl sm:text-3xl font-medium">{data.data?.name}</h2>
-                        <button 
+                        <button
                             onClick={handleOpenEditModal}
+                            aria-label="프로필 수정 열기"
+                            title="프로필 수정"
                             className="text-gray-400 hover:text-white transition-colors cursor-pointer"
                         >
                             <Settings className="w-5 h-5" />
@@ -116,20 +119,26 @@ const MyPage = () => {
 
             {isEditModalOpen && (
                 <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
-                    <div className="bg-[#242428] rounded-xl p-6 w-full max-w-md shadow-2xl relative">
-                        <button 
+                    <div
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="edit-profile-title"
+                        className="bg-[#242428] rounded-xl p-6 w-full max-w-md shadow-2xl relative"
+                    >
+                        <button
                             onClick={() => setIsEditModalOpen(false)}
+                            aria-label="프로필 수정 닫기"
                             className="absolute top-4 right-4 text-gray-400 hover:text-white cursor-pointer"
                         >
                             <X className="w-5 h-5" />
                         </button>
-                        
-                        <h3 className="text-white text-xl font-medium mb-6">프로필 수정</h3>
-                        
+
+                        <h3 id="edit-profile-title" className="text-white text-xl font-medium mb-6">프로필 수정</h3>
+
                         <div className="flex flex-col gap-4">
                             <div>
                                 <label className="block text-gray-400 text-sm mb-1">이름</label>
-                                <input 
+                                <input
                                     type="text"
                                     value={editName}
                                     onChange={(e) => setEditName(e.target.value)}
@@ -137,10 +146,10 @@ const MyPage = () => {
                                     placeholder="이름을 입력하세요"
                                 />
                             </div>
-                            
+
                             <div>
                                 <label className="block text-gray-400 text-sm mb-1">소개글 (선택)</label>
-                                <textarea 
+                                <textarea
                                     value={editBio}
                                     onChange={(e) => setEditBio(e.target.value)}
                                     className="w-full bg-transparent border border-gray-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-gray-400 resize-none h-20"
@@ -150,7 +159,7 @@ const MyPage = () => {
 
                             <div>
                                 <label className="block text-gray-400 text-sm mb-1">프로필 사진 URL (선택)</label>
-                                <input 
+                                <input
                                     type="text"
                                     value={editAvatar}
                                     onChange={(e) => setEditAvatar(e.target.value)}
@@ -159,7 +168,7 @@ const MyPage = () => {
                                 />
                             </div>
 
-                            <button 
+                            <button
                                 onClick={handleSaveProfile}
                                 disabled={patchMyInfoMutation.isPending || !editName.trim()}
                                 className="w-full bg-[#FF1E90] hover:bg-pink-600 text-white font-medium py-2 rounded-lg mt-4 disabled:opacity-50 transition-colors cursor-pointer"

@@ -17,7 +17,10 @@ export default function usePostLogin() {
         setAccessToken(token);
         alert("로그인에 성공했습니다.");
         navigate("/");
+        return;
       }
+      setAccessToken(null);
+      alert("로그인 응답이 올바르지 않습니다. 다시 시도해주세요.");
     },
     onError: (error) => {
       console.error(error);
