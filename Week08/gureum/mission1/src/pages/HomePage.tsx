@@ -4,9 +4,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useLpList } from '../hooks/useLpList';
 import { createLp } from '../apis/lp';
 import { useAuth } from '../context/AuthContext';
-import LpCard from '../components/lp/LpCard';
-import LpListSkeleton from '../components/lp/LpListSkeleton';
 import LpFormModal from '../components/lp/LpFormModal';
+import HomeContent from '../components/lp/HomeContent';
 import type { SortOrder } from '../types/common';
 import { useDebounce } from '../hooks/useDebounce';
 
@@ -100,54 +99,16 @@ const HomePage = () => {
         />
       </div>
 
-      {!isSearchReady && (
-        <div className="flex flex-col items-center justify-center py-20 text-gray-400">
-          <p>검색어를 입력하면 결과를 불러옵니다.</p>
-        </div>
-      )}
-
-      {/* [Skeleton UI] 초기 로딩: 첫 진입 시 콘텐츠 자리 점유(레이아웃 점프/깜빡임 완화) */}
-      {isSearchReady && isLoading && <LpListSkeleton />}
-
-      {/* 에러 상태 */}
-      {isSearchReady && isError && (
-        <div className="flex flex-col items-center justify-center py-20 gap-4">
-          <p className="text-red-400 text-lg">
-            {(error as Error)?.message ?? '데이터를 불러오지 못했습니다.'}
-          </p>
-          <button
-            onClick={() => void refetch()}
-            className="px-5 py-2 bg-pink-500 hover:bg-pink-600 text-white rounded transition-colors"
-          >
-            다시 시도
-          </button>
-        </div>
-      )}
-
-      {/* LP 그리드 */}
-      {isSearchReady && !isLoading && !isError && (
-        lps.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 text-gray-400">
-            <p>검색 결과가 없습니다.</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            {lps.map((lp) => (
-              <LpCard key={lp.id} lp={lp} />
-            ))}
-          </div>
-        )
-      )}
-
-      {/* [Skeleton UI] 추가 로딩: 기존 리스트는 유지하고 하단만 Skeleton을 붙여 연속성 유지 */}
-      {isSearchReady && isFetchingNextPage && (
-        <div className="mt-4">
-          <LpListSkeleton />
-        </div>
-      )}
-
-      {/* 무한 스크롤 sentinel(바닥 감지 기준점) */}
-      <div ref={sentinelRef} className="h-4" />
+      <HomeContent
+        isSearchReady={isSearchReady}
+        isLoading={isLoading}
+        isError={isError}
+        error={error}
+        lps={lps}
+        isFetchingNextPage={isFetchingNextPage}
+        sentinelRef={sentinelRef}
+        onRetry={() => void refetch()}
+      />
 
       {/* 우측 하단 플로팅 버튼 (+) */}
       <button

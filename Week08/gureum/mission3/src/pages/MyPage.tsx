@@ -1,94 +1,40 @@
-import { useEffect, useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { patchMyInfo } from '../apis/auth';
-import { uploadImage } from '../apis/upload';
 import { useAuth } from '../context/AuthContext';
 import ConfirmModal from '../components/common/ConfirmModal';
 import EditableField from '../components/mypage/EditableField';
 import ProfileImageEditor from '../components/mypage/ProfileImageEditor';
+import { useMyProfileEditor } from '../hooks/useMyProfileEditor';
 
 const MyPage = () => {
   const navigate = useNavigate();
   const { accessToken, userInfo, updateUserInfo } = useAuth();
-  const [showSaveConfirm, setShowSaveConfirm] = useState(false);
-  const [isEditingName, setIsEditingName] = useState(false);
-  const [isEditingBio, setIsEditingBio] = useState(false);
-  const [name, setName] = useState('');
-  const [bio, setBio] = useState('');
-  const [avatar, setAvatar] = useState<string | null>(null);
+  const {
+    showSaveConfirm,
+    isEditingName,
+    isEditingBio,
+    name,
+    bio,
+    avatar,
+    isUploading,
+    isSaving,
+    isSaveDisabled,
+    setShowSaveConfirm,
+    setIsEditingName,
+    setIsEditingBio,
+    setName,
+    setBio,
+    uploadAvatar,
+    resetNameEdit,
+    resetBioEdit,
+    saveProfile,
+  } = useMyProfileEditor({ userInfo, updateUserInfo });
 
   useEffect(() => {
     if (!accessToken) {
       navigate('/login', { state: { from: '/my' }, replace: true });
     }
   }, [accessToken, navigate]);
-
-  useEffect(() => {
-    if (!userInfo) return;
-    setName(userInfo.name);
-    setBio(userInfo.bio ?? '');
-    setAvatar(userInfo.avatar);
-  }, [userInfo]);
-
-  const uploadMutation = useMutation({
-    mutationFn: uploadImage,
-    onSuccess: (url) => setAvatar(url),
-  });
-
-  const updateMutation = useMutation({
-    mutationFn: patchMyInfo,
-    onMutate: async (nextProfile) => {
-      const previousUserInfo = userInfo;
-
-      updateUserInfo({
-        name: nextProfile.name,
-        bio: nextProfile.bio ?? null,
-        avatar: nextProfile.avatar ?? null,
-      });
-
-      return { previousUserInfo };
-    },
-    onError: (_error, _nextProfile, context) => {
-      if (context?.previousUserInfo) {
-        updateUserInfo(context.previousUserInfo);
-      }
-    },
-    onSuccess: (response) => {
-      updateUserInfo(response.data);
-      setShowSaveConfirm(false);
-      setIsEditingName(false);
-      setIsEditingBio(false);
-    },
-  });
-
-  const hasChanges = !!userInfo && (
-    name.trim() !== userInfo.name
-    || (bio.trim() ? bio.trim() : null) !== userInfo.bio
-    || avatar !== userInfo.avatar
-  );
-
-  const isSaveDisabled = !name.trim() || updateMutation.isPending || uploadMutation.isPending || !hasChanges;
-
-  const profilePayload = {
-    name: name.trim(),
-    bio: bio.trim() ? bio.trim() : null,
-    avatar,
-  };
-
-  const handleStopNameEdit = () => {
-    setName('');
-    setIsEditingName(false);
-  };
-
-  const handleStopBioEdit = () => {
-    setBio('');
-    setIsEditingBio(false);
-  };
-
-  const handleConfirmSave = () => {
-    updateMutation.mutate(profilePayload);
-  };
 
   if (!userInfo) {
     return <div className="min-h-[calc(100vh-65px)] flex items-center justify-center text-gray-400">로딩 중...</div>;
@@ -112,8 +58,8 @@ const MyPage = () => {
         <div className="space-y-5">
           <ProfileImageEditor
             avatar={avatar}
-            isUploading={uploadMutation.isPending}
-            onFileChange={(file) => uploadMutation.mutate(file)}
+            isUploading={isUploading}
+            onFileChange={uploadAvatar}
           />
 
           <div>
@@ -131,7 +77,7 @@ const MyPage = () => {
             isEditing={isEditingName}
             onChange={setName}
             onStartEdit={() => setIsEditingName(true)}
-            onStopEdit={handleStopNameEdit}
+            onStopEdit={resetNameEdit}
           />
 
           <EditableField
@@ -141,7 +87,7 @@ const MyPage = () => {
             isEditing={isEditingBio}
             onChange={setBio}
             onStartEdit={() => setIsEditingBio(true)}
-            onStopEdit={handleStopBioEdit}
+            onStopEdit={resetBioEdit}
           />
         </div>
       </div>
@@ -152,9 +98,9 @@ const MyPage = () => {
         description="수정한 닉네임/설명/프로필 사진이 반영됩니다."
         confirmText="저장"
         cancelText="취소"
-        loading={updateMutation.isPending}
+        loading={isSaving}
         onCancel={() => setShowSaveConfirm(false)}
-        onConfirm={handleConfirmSave}
+        onConfirm={saveProfile}
       />
     </div>
   );
