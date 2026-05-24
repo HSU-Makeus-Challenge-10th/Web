@@ -1,56 +1,66 @@
 import { useReducer, useState, type ChangeEvent } from "react";
 
-type TActionType = "CHANGE_DEPARTMENT" | "RESET";
+const INITIAL_DEPARTMENT = "Software Engineering";
+const ALLOWED_DEPARTMENT = "카드메이커";
+const ERROR_MESSAGE = "카드메이커 부서만 선택할 수 있습니다.";
 
 interface IState {
   department: string;
   error: string | null;
 }
 
-interface IAction {
-  type: TActionType;
-  payload?: string;
-}
+type IAction =
+  | { type: "CHANGE_DEPARTMENT"; payload: string }
+  | { type: "RESET" };
+
+const initialState: IState = {
+  department: INITIAL_DEPARTMENT,
+  error: null,
+};
 
 function reducer(state: IState, action: IAction): IState {
-  const { type, payload } = action;
-  switch (type) {
+  switch (action.type) {
     case "CHANGE_DEPARTMENT": {
-      const newDepartment = payload ?? state.department;
-      const hasError = newDepartment?.trim() !== "카드메이커";
+      const nextDepartment = action.payload.trim();
+
+      if (nextDepartment !== ALLOWED_DEPARTMENT) {
+        return {
+          ...state,
+          error: ERROR_MESSAGE,
+        };
+      }
+
       return {
-        ...state,
-        department: hasError ? state.department : newDepartment,
-        error: hasError ? "거부권 행사 가능" : null,
+        department: nextDepartment,
+        error: null,
       };
     }
+
     case "RESET":
-      return { ...state, department: "Software Engineering", error: null };
+      return initialState;
+
     default:
       return state;
   }
 }
 
 export default function UseReducerCompany() {
-  const [state, dispatch] = useReducer(reducer, {
-    department: "Software Engineering",
-    error: null,
-  });
-
+  const [state, dispatch] = useReducer(reducer, initialState);
   const [department, setDepartment] = useState("");
-  const [error, setError] = useState<string | null>(null);
 
-  const changeDepartment = () => {
-    if (department.trim() !== "카드메이커") {
-      setError("거부권 행사 가능");
-    } else {
-      setDepartment(department);
-      setError(null);
-    }
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setDepartment(event.target.value);
   };
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setDepartment(e.target.value);
+
+  const handleSubmit = () => {
+    dispatch({ type: "CHANGE_DEPARTMENT", payload: department });
   };
+
+  const handleReset = () => {
+    setDepartment("");
+    dispatch({ type: "RESET" });
+  };
+
   return (
     <div>
       <h1>{state.department}</h1>
@@ -61,14 +71,8 @@ export default function UseReducerCompany() {
         onChange={handleChange}
         className="border border-gray-300 rounded-md p-2"
       />
-      <button
-        onClick={() =>
-          dispatch({ type: "CHANGE_DEPARTMENT", payload: department })
-        }
-      >
-        Change Department
-      </button>
-      <button onClick={() => dispatch({ type: "RESET" })}>Reset</button>
+      <button onClick={handleSubmit}>Change Department</button>
+      <button onClick={handleReset}>Reset</button>
     </div>
   );
 }
