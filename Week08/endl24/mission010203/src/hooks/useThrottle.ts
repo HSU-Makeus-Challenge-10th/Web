@@ -7,11 +7,11 @@ export function useThrottle<T>(value: T, interval: number): T {
   // (렌더링을 유발하지 않고 값만 조용히 기억해야 하므로 useRef 사용)
   const lastExecuted = useRef<number>(Date.now());
 
-  useEffect(() => {
+  useEffect(() => { 
     const now = Date.now();
     const timeElapsed = now - lastExecuted.current; // 마지막 실행 후 흐른 시간
 
-    // 이미 우리가 설정한 주기(interval)보다 많은 시간이 흘렀다면? 즉시 값을 업데이트하고 기준 시간을 '지금'으로 갱신합니다.
+    // 이미 우리가 설정한 주기(interval)보다 많은 시간이 흘렀다면? 즉시 값을 업데이트하고 기준 시간을 '지금'으로 갱신
     if (timeElapsed >= interval) {
       setThrottledValue(value);
       lastExecuted.current = now;
