@@ -7,6 +7,7 @@ export default function Modal() {
 
   const handleConfirm = () => {
     clearCart();
+    close();
   };
 
   const handleCancel = () => {
