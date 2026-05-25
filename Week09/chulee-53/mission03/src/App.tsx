@@ -1,13 +1,11 @@
 import Navbar from "./components/Navbar";
 import CartList from "./components/CartList";
-import { Provider } from "react-redux";
-import store from "./store/store";
 import Modal from "./components/Modal";
-import { useSelector } from "./hooks/useCustomRedux";
+import { useModalInfo } from "./hooks/useModalStore";
 import Footer from "./components/Footer";
 
-function AppContent() {
-  const { isOpen } = useSelector((state) => state.modal);
+function App() {
+  const isOpen = useModalInfo();
 
   return (
     <>
@@ -16,14 +14,6 @@ function AppContent() {
       <Footer />
       {isOpen && <Modal />}
     </>
-  );
-}
-
-function App() {
-  return (
-    <Provider store={store}>
-      <AppContent />
-    </Provider>
   );
 }
 

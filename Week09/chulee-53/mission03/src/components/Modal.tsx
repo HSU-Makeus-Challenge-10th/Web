@@ -1,17 +1,16 @@
-import { useDispatch } from "../hooks/useCustomRedux";
-import { clearCart } from "../features/cart/cartSlice";
-import { closeModal } from "../features/modal/modalSlice";
+import { useCartActions } from "../hooks/useCartStore";
+import { useModalActions } from "../hooks/useModalStore";
 
 export default function Modal() {
-  const dispatch = useDispatch();
+  const { clearCart } = useCartActions();
+  const { close } = useModalActions();
 
   const handleConfirm = () => {
-    dispatch(clearCart());
-    dispatch(closeModal());
+    clearCart();
   };
 
   const handleCancel = () => {
-    dispatch(closeModal());
+    close();
   };
 
   return (
