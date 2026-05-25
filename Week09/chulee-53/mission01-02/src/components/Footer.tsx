@@ -1,19 +1,19 @@
 import { useDispatch, useSelector } from "../hooks/useCustomRedux"
-import { clearCart } from "../slices/cartSlice";
+import { openModal } from "../features/modal/modalSlice";
 
-const PriceBox = () => {
+const Footer = () => {
     const { total } = useSelector((state) => state.cart);
     const dispatch = useDispatch();
 
     const handleClearCart = () => {
-        dispatch(clearCart());
+        dispatch(openModal());
     };
 
     return (
-        <div className="flex items-center justify-center gap-4">
-            <div className="border p-2 rounded-lg border-neutral-700">
+        <div className="flex flex-col items-center justify-center gap-4 mt-6">
+            <div className="border px-2 py-4 rounded-lg border-neutral-700">
                 <button className="cursor-pointer" onClick={handleClearCart}>
-                    장바구니 비우기
+                    전체 삭제
                 </button>
             </div>
             <p>총 가격: {total}원</p>
@@ -21,4 +21,4 @@ const PriceBox = () => {
     )
 }
 
-export default PriceBox
+export default Footer;

@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import cartItems from "../constants/cartItems";
-import type { CartItems } from "../types/cart";
+import cartItems from "../../constants/cartItems";
+import type { CartItems } from "../../types/cart";
 
 export interface CartState {
   cartItems: CartItems;
@@ -58,14 +58,7 @@ const cartSlice = createSlice({
   },
 });
 
-export const {
-    increase,
-    decrease,
-    removeItem,
-    clearCart,
-    calculateTotal,
-} = cartSlice.actions;
+export const { increase, decrease, removeItem, clearCart, calculateTotal } = cartSlice.actions;
 
 const cartReducer = cartSlice.reducer;
-
 export default cartReducer;
