@@ -55,7 +55,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
   const handleWithdraw = () => {
     // 모달에서 '탈퇴하기'를 눌렀을 때만 뮤테이션 실행
     withdrawMutation.mutate(undefined, {
-      onSettled: () => closeModal, // 성공하든 실패하든 모달은 닫기
+      onSettled: closeModal, // 성공하든 실패하든 모달은 닫기
     });
   };
 
@@ -102,7 +102,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 
         <div className="mt-auto p-4 border-t border-gray-50">
           <button
-            onClick={() => openModal}
+            onClick={openModal}
             className="w-full p-3 flex items-center gap-2 text-sm text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all font-medium cursor-pointer"
           >
             <svg
@@ -154,7 +154,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 
               <div className="flex gap-3">
                 <button
-                  onClick={() => closeModal}
+                  onClick={closeModal}
                   disabled={withdrawMutation.isPending}
                   className="flex-1 py-2.5 rounded-lg bg-gray-100 text-gray-700 font-medium hover:bg-gray-200 transition-colors disabled:opacity-50"
                 >
