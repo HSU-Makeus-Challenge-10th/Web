@@ -82,6 +82,7 @@ export const useProfile = () => {
             // 에러 발생 시 롤백
             if (context?.previousProfile) {
                 queryClient.setQueryData(['userProfile'], context.previousProfile);
+                updateUser({ name: context.previousProfile.name });
             }
             alert('프로필 수정에 실패했습니다.');
         },

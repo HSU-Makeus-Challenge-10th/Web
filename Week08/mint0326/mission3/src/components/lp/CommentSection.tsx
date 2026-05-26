@@ -124,14 +124,15 @@ export const CommentSection = ({ lpId, isLoggedIn }: CommentSectionProps) => {
                             value={content}
                             onChange={(e) => setContent(e.target.value)}
                             onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
-                            placeholder="댓글을 입력해주세요"
-                            className="w-full bg-[#121214] border border-[#2a2a2e] rounded-xl py-3.5 px-5 pr-20 focus:outline-none focus:border-[#ff007f] transition-all text-sm"
+                            placeholder={isLoggedIn ? "댓글을 입력해주세요" : "로그인 후 댓글을 작성할 수 있습니다"}
+                            disabled={!isLoggedIn}
+                            className={`w-full bg-[#121214] border border-[#2a2a2e] rounded-xl py-3.5 px-5 pr-20 focus:outline-none focus:border-[#ff007f] transition-all text-sm ${!isLoggedIn ? 'cursor-not-allowed opacity-50' : ''}`}
                         />
                         <button
                             onClick={handleSubmit}
-                            disabled={isSubmitting || !content.trim()}
+                            disabled={!isLoggedIn || isSubmitting || !content.trim()}
                             className={`absolute right-2 top-1.5 px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                                isSubmitting || !content.trim()
+                                !isLoggedIn || isSubmitting || !content.trim()
                                 ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
                                 : 'bg-[#ff007f] text-white hover:bg-[#e60072]'
                             }`}

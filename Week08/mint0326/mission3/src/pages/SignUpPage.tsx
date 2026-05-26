@@ -10,7 +10,11 @@ const SignUpPage = () => {
         return (
           <>
             {/* 구글 로그인 버튼 */}
-            <button className="w-full flex items-center justify-center gap-3 py-3 bg-black border border-[#3a3a3a] rounded hover:bg-[#1a1a1a] transition-colors cursor-pointer">
+            <button
+              type="button"
+              onClick={() => alert('구글 로그인은 준비 중입니다.')}
+              className="w-full flex items-center justify-center gap-3 py-3 bg-black border border-[#3a3a3a] rounded hover:bg-[#1a1a1a] transition-colors cursor-pointer"
+            >
               <span className="text-sm font-medium">구글 로그인</span>
             </button>
 

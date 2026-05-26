@@ -4,7 +4,7 @@
 
 import React from 'react';
 
-declare global {
+declare module 'react/jsx-runtime' {
   namespace JSX {
     type Element = React.ReactNode;
   }
