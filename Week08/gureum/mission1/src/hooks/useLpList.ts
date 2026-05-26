@@ -6,6 +6,7 @@ import { QUERY_CACHE_TIME } from '../constants/key';
 const LIMIT = 20;
 
 export const useLpList = (sort: SortOrder, debouncedQuery: string) => {
+  // HomePage의 useDebounce를 통과한 값만 사용한다.
   const trimmedQuery = debouncedQuery.trim();
 
   return useInfiniteQuery({
@@ -18,7 +19,7 @@ export const useLpList = (sort: SortOrder, debouncedQuery: string) => {
         cursor: pageParam as number | undefined,
         order: sort,
         limit: LIMIT,
-        search: trimmedQuery,
+        ...(trimmedQuery ? { search: trimmedQuery } : {}),
       }),
     // 커서 기반 페이지네이션: 첫 요청은 cursor 없음
     initialPageParam: undefined as number | undefined,
@@ -28,7 +29,7 @@ export const useLpList = (sort: SortOrder, debouncedQuery: string) => {
     // staleTime/gcTime으로 fresh 유지와 캐시 보관 기간을 분리 설계
     staleTime: QUERY_CACHE_TIME.lp.staleTime,
     gcTime: QUERY_CACHE_TIME.lp.gcTime,
-    // 빈 문자열/공백만 있을 때는 검색 요청 자체를 실행하지 않음
-    enabled: trimmedQuery.length > 0,
+    // 검색어가 없어도 기본 목록을 로드한다.
+    enabled: true,
   });
 };

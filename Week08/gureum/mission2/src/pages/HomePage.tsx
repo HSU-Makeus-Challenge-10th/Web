@@ -18,7 +18,7 @@ const HomePage = () => {
   const [query, setQuery] = useState('');
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const debouncedQuery = useDebounce(query, 300);
-  const isSearchReady = debouncedQuery.trim().length > 0;
+  const hasQuery = debouncedQuery.trim().length > 0;
   // useInfiniteQuery 표준 UI 분기: 초기 로딩/에러/성공 + 추가 페이지 로딩
   const {
     data,
@@ -35,11 +35,11 @@ const HomePage = () => {
   const lps = data?.pages.flatMap((page) => page.data.data) ?? [];
 
   const throttledFetchNextPage = useThrottle((isIntersecting: boolean) => {
-    if (isIntersecting && isSearchReady && hasNextPage && !isFetchingNextPage) {
+    if (isIntersecting && hasNextPage && !isFetchingNextPage) {
       console.log('[throttle] 다음 페이지 요청');
       void fetchNextPage();
     }
-  }, 1000);
+  }, 1000, { trailing: true });
 
   // 무한 스크롤 트리거: 하단 sentinel 요소를 IntersectionObserver로 감시
   const sentinelRef = useRef<HTMLDivElement>(null);
@@ -106,7 +106,7 @@ const HomePage = () => {
       </div>
 
       <HomeContent
-        isSearchReady={isSearchReady}
+        hasQuery={hasQuery}
         isLoading={isLoading}
         isError={isError}
         error={error}

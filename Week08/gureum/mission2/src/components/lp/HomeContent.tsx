@@ -4,7 +4,7 @@ import LpListSkeleton from './LpListSkeleton';
 import type { Lp } from '../../types/lp';
 
 interface HomeContentProps {
-  isSearchReady: boolean;
+  hasQuery: boolean;
   isLoading: boolean;
   isError: boolean;
   error: unknown;
@@ -15,7 +15,7 @@ interface HomeContentProps {
 }
 
 const HomeContent = ({
-  isSearchReady,
+  hasQuery,
   isLoading,
   isError,
   error,
@@ -24,14 +24,6 @@ const HomeContent = ({
   sentinelRef,
   onRetry,
 }: HomeContentProps) => {
-  if (!isSearchReady) {
-    return (
-      <div className="flex flex-col items-center justify-center py-20 text-gray-400">
-        <p>검색어를 입력하면 결과를 불러옵니다.</p>
-      </div>
-    );
-  }
-
   if (isLoading) return <LpListSkeleton />;
 
   if (isError) {
@@ -49,7 +41,7 @@ const HomeContent = ({
     <>
       {lps.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 text-gray-400">
-          <p>검색 결과가 없습니다.</p>
+          <p>{hasQuery ? '검색 결과가 없습니다.' : '등록된 LP가 없습니다.'}</p>
         </div>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">

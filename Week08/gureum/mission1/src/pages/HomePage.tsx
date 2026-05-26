@@ -17,7 +17,7 @@ const HomePage = () => {
   const [query, setQuery] = useState('');
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const debouncedQuery = useDebounce(query, 300);
-  const isSearchReady = debouncedQuery.trim().length > 0;
+  const hasQuery = debouncedQuery.trim().length > 0;
   // useInfiniteQuery 표준 UI 분기: 초기 로딩/에러/성공 + 추가 페이지 로딩
   const {
     data,
@@ -43,7 +43,7 @@ const HomePage = () => {
     const observer = new IntersectionObserver(
       (entries) => {
         // 바닥 감지 + 다음 페이지 존재 + 현재 추가 로딩 중 아님 => fetchNextPage
-        if (entries[0].isIntersecting && isSearchReady && hasNextPage && !isFetchingNextPage) {
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
           void fetchNextPage();
         }
       },
@@ -53,7 +53,7 @@ const HomePage = () => {
     observer.observe(el);
     // 관찰 해제(cleanup)로 중복 observe 및 메모리 누수 방지
     return () => observer.disconnect();
-  }, [fetchNextPage, hasNextPage, isFetchingNextPage, isSearchReady]);
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   const createLpMutation = useMutation({
     mutationFn: createLp,
@@ -100,7 +100,7 @@ const HomePage = () => {
       </div>
 
       <HomeContent
-        isSearchReady={isSearchReady}
+        hasQuery={hasQuery}
         isLoading={isLoading}
         isError={isError}
         error={error}
