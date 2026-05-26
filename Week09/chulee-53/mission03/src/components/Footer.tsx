@@ -1,8 +1,8 @@
-import { useCartInfo } from "../hooks/useCartStore";
+import { useCartTotal } from "../hooks/useCartStore";
 import { useModalActions } from "../hooks/useModalStore";
 
 const Footer = () => {
-    const { total } = useCartInfo();
+    const total = useCartTotal();
     const { open } = useModalActions();
 
     const handleClearCart = () => {

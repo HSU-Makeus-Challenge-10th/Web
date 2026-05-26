@@ -1,8 +1,8 @@
 import CartItem from "./CartItem";
-import { useCartInfo } from "../hooks/useCartStore";
+import { useCartItems } from "../hooks/useCartStore";
 
 export default function CartList() {
-    const { cartItems } = useCartInfo();
+    const cartItems = useCartItems();
 
     return (
         <div className="flex flex-col items-center justify-center w-full px-4 mt-6">

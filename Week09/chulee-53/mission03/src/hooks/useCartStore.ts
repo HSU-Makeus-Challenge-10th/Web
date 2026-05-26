@@ -2,7 +2,6 @@ import { create } from "zustand";
 import type { CartItems } from "../types/cart";
 import { immer } from "zustand/middleware/immer";
 import cartItems from "../constants/cartItems";
-import { useShallow } from "zustand/shallow";
 
 import { useModalStore } from "./useModalStore";
 
@@ -75,13 +74,8 @@ export const useCartStore = create<CartState>()(
   })),
 );
 
-export const useCartInfo = () =>
-  useCartStore(
-    useShallow((state) => ({
-      cartItems: state.cartItems,
-      amount: state.amount,
-      total: state.total,
-    })),
-  );
+export const useCartItems = () => useCartStore((state) => state.cartItems);
+export const useCartAmount = () => useCartStore((state) => state.amount);
+export const useCartTotal = () => useCartStore((state) => state.total);
 
 export const useCartActions = () => useCartStore((state) => state.actions);

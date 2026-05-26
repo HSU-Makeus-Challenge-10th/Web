@@ -1,9 +1,10 @@
 import { FaShoppingCart } from "react-icons/fa";
 import { useEffect } from "react";
-import { useCartActions, useCartInfo } from "../hooks/useCartStore";
+import { useCartActions, useCartAmount, useCartItems } from "../hooks/useCartStore";
 
 export default function Navbar() {
-    const { amount, cartItems } = useCartInfo();
+    const amount = useCartAmount();
+    const cartItems = useCartItems();
     const { calculateTotals } = useCartActions();
 
     useEffect(() => {
