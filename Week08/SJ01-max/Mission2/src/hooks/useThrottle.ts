@@ -18,10 +18,8 @@ export function useThrottle<T extends (...args: any[]) => any>(fn: T, interval: 
 
   return useCallback((...args: Parameters<T>) => {
     if (shouldWait.current) {
-      console.log('쓰로틀: 요청 무시됨')
       return
     }
-    console.log('✅ 쓰로틀 실행됨: 다음 페이지 요청')
     fnRef.current(...args)
     shouldWait.current = true
     timerRef.current = setTimeout(() => {

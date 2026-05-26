@@ -95,7 +95,7 @@ export default function LpListPage() {
     if (!el) return
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && hasNextPage) {
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
           throttledFetchNextPage()
         }
       },
@@ -103,7 +103,7 @@ export default function LpListPage() {
     )
     observer.observe(el)
     return () => observer.disconnect()
-  }, [hasNextPage, throttledFetchNextPage])
+  }, [hasNextPage, isFetchingNextPage, throttledFetchNextPage])
 
   return (
     <>

@@ -91,12 +91,12 @@ export default function LpListPage() {
     const el = bottomRef.current
     if (!el) return
     const observer = new IntersectionObserver(
-      (entries) => { if (entries[0].isIntersecting && hasNextPage) fetchNextPage() },
+      (entries) => { if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) fetchNextPage() },
       { threshold: 0.1 },
     )
     observer.observe(el)
     return () => observer.disconnect()
-  }, [hasNextPage, fetchNextPage])
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage])
 
   return (
     <>
