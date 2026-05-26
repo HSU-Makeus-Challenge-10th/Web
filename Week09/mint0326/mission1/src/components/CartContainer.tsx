@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from '../store/store';
 import CartListItem from './CartListItem';
-import { openModal } from '../store/reducer/modalSlice';
+import { clearCart } from '../store/reducer/cartSlice';
 
 const CartContainer = () => {
   const dispatch = useDispatch();
@@ -40,7 +40,7 @@ const CartContainer = () => {
         <div className="flex justify-center">
           <button
             className="px-6 py-2 bg-red-100 text-red-600 rounded uppercase font-semibold tracking-widest hover:bg-red-200 transition-colors border border-red-300"
-            onClick={() => dispatch(openModal())}
+            onClick={() => dispatch(clearCart())}
           >
             장바구니 전체 삭제
           </button>
