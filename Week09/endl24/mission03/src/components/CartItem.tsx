@@ -7,15 +7,11 @@ interface CartItemProps {
 }
 
 const CartItem = ({ lp }: CartItemProps) => {
-  const { increase, decrease, removeItem } = useCartActions();
+  const { increase, decrease } = useCartActions();
   const handleIncreaseCount = () => {
     increase(lp.id);
   };
   const handleDecreaseCount = () => {
-    if (lp.amount === 1) {
-      removeItem(lp.id);
-      return;
-    }
     decrease(lp.id);
   };
   return (

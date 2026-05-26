@@ -12,6 +12,13 @@ interface CartActions {
   calculateTotals: () => void;
 }
 
+let initialAmount = 0;
+let initialTotal = 0;
+
+cartItems.forEach((item) => {
+  initialAmount += item.amount;
+  initialTotal += item.amount * item.price;
+});
 interface CartState {
   cartItems: CartItems;
   amount: number;
@@ -21,10 +28,10 @@ interface CartState {
 }
 
 export const useCartStore = create<CartState>()(
-  immer((set, _) => ({
+  immer((set, get) => ({
     cartItems: cartItems,
-    amount: 0,
-    total: 0,
+    amount: initialAmount,
+    total: initialTotal,
     actions: {
       increase: (id: string) => {
         set((state) => {
@@ -34,6 +41,7 @@ export const useCartStore = create<CartState>()(
             cartItem.amount += 1;
           }
         });
+        get().actions.calculateTotals();
       },
       decrease: (id: string) => {
         set((state) => {
@@ -41,17 +49,26 @@ export const useCartStore = create<CartState>()(
 
           if (cartItem && cartItem.amount > 0) {
             cartItem.amount -= 1;
+            if (cartItem.amount === 0) {
+              state.cartItems = state.cartItems.filter(
+                (item) => item.id !== id,
+              );
+            }
           }
         });
+        get().actions.calculateTotals();
       },
       removeItem: (id: string) => {
         set((state) => {
           state.cartItems = state.cartItems.filter((item) => item.id !== id);
         });
+        get().actions.calculateTotals();
       },
       clearCart: () => {
         set((state) => {
           state.cartItems = [];
+          state.amount = 0;
+          state.total = 0;
         });
       },
       calculateTotals: () => {

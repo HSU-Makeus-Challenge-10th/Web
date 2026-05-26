@@ -12,7 +12,7 @@ const PriceBox = () => {
       >
         장바구니 비우기
       </button>
-      <div>총 가격 :{total} ₩</div>
+      <div>총 가격 :{total.toLocaleString()} ₩</div>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import type { Lp } from "../types/cart";
 import { useAppDispatch } from "../hooks/useCustomRedux";
-import { increase, decrease, removeItem } from "../slices/cartSlice";
+import { increase, decrease } from "../slices/cartSlice";
 
 interface CartItemProps {
   lp: Lp;
@@ -13,10 +13,6 @@ const CartItem = ({ lp }: CartItemProps) => {
     dispatch(increase({ id: lp.id }));
   };
   const handleDecreaseCount = () => {
-    if (lp.amount === 1) {
-      dispatch(removeItem({ id: lp.id }));
-      return;
-    }
     dispatch(decrease({ id: lp.id }));
   };
   return (
