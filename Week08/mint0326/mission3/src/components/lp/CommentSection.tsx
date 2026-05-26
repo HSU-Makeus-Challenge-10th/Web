@@ -1,0 +1,260 @@
+import { useEffect, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
+import { RefreshCw, MoreVertical, Pencil, Trash2 } from 'lucide-react';
+import { useLpComments } from '../../hooks/lp/useLpComments';
+import { useAuth } from '../../contexts/AuthContext';
+
+interface CommentSectionProps {
+    lpId: string | undefined;
+    isLoggedIn: boolean;
+}
+
+const CommentSkeleton = () => (
+    <div className="flex gap-4 mb-6 animate-pulse">
+        <div className="w-10 h-10 bg-[#2a2a2e] rounded-full shrink-0" />
+        <div className="flex-1 space-y-2">
+            <div className="h-4 bg-[#2a2a2e] w-24 rounded" />
+            <div className="h-3 bg-[#2a2a2e] w-full rounded" />
+            <div className="h-3 bg-[#2a2a2e] w-3/4 rounded" />
+        </div>
+    </div>
+);
+
+export const CommentSection = ({ lpId, isLoggedIn }: CommentSectionProps) => {
+    const { user } = useAuth();
+    const [commentSort, setCommentSort] = useState<'desc' | 'asc'>('desc');
+    const [content, setContent] = useState('');
+    const [editingId, setEditingId] = useState<number | null>(null);
+    const [editContent, setEditContent] = useState('');
+    const [openMenuId, setOpenMenuId] = useState<number | null>(null);
+
+    const { ref: commentRef, inView: commentInView } = useInView({
+        threshold: 0,
+        rootMargin: '100px',
+    });
+
+    const {
+        data: commentData,
+        fetchNextPage: fetchNextComments,
+        hasNextPage: hasNextComments,
+        isFetchingNextPage: isFetchingNextComments,
+        isLoading: isCommentsLoading,
+        addComment,
+        isSubmitting,
+        editComment,
+        isEditing,
+        deleteComment,
+        isDeleting
+    } = useLpComments(lpId, commentSort, isLoggedIn);
+
+    useEffect(() => {
+        if (commentInView && hasNextComments && !isFetchingNextComments) {
+            fetchNextComments();
+        }
+    }, [commentInView, hasNextComments, isFetchingNextComments, fetchNextComments]);
+
+    const handleSubmit = async () => {
+        if (!content.trim()) return;
+        try {
+            await addComment(content);
+            setContent('');
+        } catch (e) {
+            // Error handling is inside the hook
+        }
+    };
+
+    const handleEditStart = (comment: any) => {
+        setEditingId(comment.id);
+        setEditContent(comment.content);
+        setOpenMenuId(null);
+    };
+
+    const handleEditSave = async (commentId: number) => {
+        if (!editContent.trim()) return;
+        try {
+            await editComment({ commentId, content: editContent });
+            setEditingId(null);
+            setEditContent('');
+        } catch (e) {
+            // Error handling inside hook
+        }
+    };
+
+    const handleDelete = async (commentId: number) => {
+        if (window.confirm('정말 이 댓글을 삭제하시겠습니까?')) {
+            try {
+                await deleteComment(commentId);
+            } catch (e) {
+                // Error handling inside hook
+            }
+        }
+        setOpenMenuId(null);
+    };
+
+    const allComments = commentData?.pages.flatMap(page => page.data) || [];
+
+    return (
+        <div className="bg-[#1e1e22] rounded-[32px] p-8 md:p-12 shadow-2xl">
+            <div className="flex items-center justify-between mb-8">
+                <h2 className="text-2xl font-bold flex items-center gap-2">
+                    댓글 <span className="text-[#ff007f] text-lg">{allComments.length}</span>
+                </h2>
+                <div className="flex bg-[#121214] rounded-lg p-1 border border-[#2a2a2e]">
+                    <button
+                        onClick={() => setCommentSort('asc')}
+                        className={`px-4 py-1.5 text-xs font-bold rounded-md transition-all cursor-pointer ${commentSort === 'asc' ? 'bg-[#2a2a2e] text-white' : 'text-gray-500 hover:text-gray-300'}`}
+                    >
+                        오래된순
+                    </button>
+                    <button
+                        onClick={() => setCommentSort('desc')}
+                        className={`px-4 py-1.5 text-xs font-bold rounded-md transition-all cursor-pointer ${commentSort === 'desc' ? 'bg-[#2a2a2e] text-white' : 'text-gray-500 hover:text-gray-300'}`}
+                    >
+                        최신순
+                    </button>
+                </div>
+            </div>
+
+            {/* 댓글 입력란 */}
+            <div className="relative mb-10">
+                <div className="flex gap-3">
+                    <div className="flex-1 relative">
+                        <input
+                            type="text"
+                            value={content}
+                            onChange={(e) => setContent(e.target.value)}
+                            onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+                            placeholder={isLoggedIn ? "댓글을 입력해주세요" : "로그인 후 댓글을 작성할 수 있습니다"}
+                            disabled={!isLoggedIn}
+                            className={`w-full bg-[#121214] border border-[#2a2a2e] rounded-xl py-3.5 px-5 pr-20 focus:outline-none focus:border-[#ff007f] transition-all text-sm ${!isLoggedIn ? 'cursor-not-allowed opacity-50' : ''}`}
+                        />
+                        <button
+                            onClick={handleSubmit}
+                            disabled={!isLoggedIn || isSubmitting || !content.trim()}
+                            className={`absolute right-2 top-1.5 px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                                !isLoggedIn || isSubmitting || !content.trim()
+                                ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
+                                : 'bg-[#ff007f] text-white hover:bg-[#e60072]'
+                            }`}
+                        >
+                            {isSubmitting ? '작성중' : '작성'}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            {/* 댓글 목록 */}
+            <div className="space-y-8">
+                {isCommentsLoading ? (
+                    Array.from({ length: 5 }).map((_, i) => <CommentSkeleton key={i} />)
+                ) : (
+                    allComments.map((comment: any) => (
+                        <div key={comment.id} className="flex gap-4 group">
+                            <div className="w-10 h-10 rounded-full bg-[#ff007f] flex items-center justify-center font-bold text-xs shrink-0 overflow-hidden">
+                                <img
+                                    src={comment.author?.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(comment.author?.name || '익명')}`}
+                                    alt={comment.author?.name}
+                                    className="w-full h-full object-cover"
+                                    onError={(e) => {
+                                        (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(comment.author?.name || '익명')}`;
+                                    }}
+                                />
+                            </div>
+                            <div className="flex-1">
+                                <div className="flex items-center justify-between mb-1 relative">
+                                    <h4 className="font-bold text-sm">{comment.author?.name || '익명'}</h4>
+
+                                    {user?.id === comment.author?.id && (
+                                        <div className="relative">
+                                            <button
+                                                onClick={() => setOpenMenuId(openMenuId === comment.id ? null : comment.id)}
+                                                className="text-gray-500"
+                                            >
+                                                <MoreVertical size={16} />
+                                            </button>
+
+                                            {openMenuId === comment.id && (
+                                                <div className="absolute right-0 top-6 bg-[#1a1a1a] border border-[#333] rounded-md shadow-lg z-10 w-28 overflow-hidden">
+                                                    <button
+                                                        onClick={() => handleEditStart(comment)}
+                                                        className="w-full text-left px-4 py-2 text-xs hover:bg-[#333] flex items-center gap-2 text-gray-300"
+                                                    >
+                                                        <Pencil size={14} /> 수정
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleDelete(comment.id)}
+                                                        disabled={isDeleting}
+                                                        className="w-full text-left px-4 py-2 text-xs hover:bg-[#333] flex items-center gap-2 text-red-400"
+                                                    >
+                                                        <Trash2 size={14} /> 삭제
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+
+                                {editingId === comment.id ? (
+                                    <div className="flex gap-2 mt-2">
+                                        <input
+                                            type="text"
+                                            value={editContent}
+                                            onChange={(e) => setEditContent(e.target.value)}
+                                            className="flex-1 bg-[#121214] border border-[#ff007f] rounded px-3 py-1 text-sm focus:outline-none"
+                                            autoFocus
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter') handleEditSave(comment.id);
+                                                if (e.key === 'Escape') setEditingId(null);
+                                            }}
+                                        />
+                                        <button
+                                            onClick={() => handleEditSave(comment.id)}
+                                            disabled={isEditing}
+                                            className="bg-[#ff007f] hover:bg-[#e60072] text-white px-3 rounded text-xs"
+                                        >
+                                            저장
+                                        </button>
+                                        <button
+                                            onClick={() => setEditingId(null)}
+                                            className="bg-gray-600 hover:bg-gray-500 text-white px-3 rounded text-xs"
+                                        >
+                                            취소
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <p className="text-gray-300 text-sm leading-relaxed">{comment.content}</p>
+                                )}
+                            </div>
+                        </div>
+                    ))
+                )}
+
+                {isFetchingNextComments && (
+                    Array.from({ length: 3 }).map((_, i) => <CommentSkeleton key={`next-${i}`} />)
+                )}
+            </div>
+
+            <div ref={commentRef} className="h-20 flex items-center justify-center">
+                {isFetchingNextComments && (
+                    <div className="flex items-center gap-2 text-[#ff007f] animate-pulse">
+                        <RefreshCw className="w-4 h-4 animate-spin" />
+                        <span className="text-xs font-bold">댓글 더 불러오는 중...</span>
+                    </div>
+                )}
+            </div>
+
+            {!isCommentsLoading && allComments.length === 0 && (
+                <div className="text-center py-10">
+                    <p className="text-gray-500 text-sm">아직 댓글이 없습니다. 첫 댓글을 남겨보세요!</p>
+                </div>
+            )}
+
+            {openMenuId && (
+                <div
+                    className="fixed inset-0 z-0 cursor-pointer"
+                    onClick={() => setOpenMenuId(null)}
+                />
+            )}
+        </div>
+    );
+};
