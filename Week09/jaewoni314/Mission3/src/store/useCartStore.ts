@@ -20,34 +20,44 @@ interface CartState {
   clearCart: () => void;
   totalAmounts: () => void;
 }
+const recalculate = (items: CartItem[]) => {
+  let amount = 0;
+  let total = 0;
+  items.forEach((item) => {
+    amount += item.amount;
+    total += item.amount * parseInt(item.price, 10);
+  });
+  return { amount, total };
+};
+
 
 export const useCartStore = create<CartState>((set) => ({
-  cartItems: cartItems,
-  amount: 0,
-  total: 0, // 총 금액 초기값 추가
-
+    cartItems: cartItems,
+  ...recalculate(cartItems),
   increase: (id: string) =>
-    set((state) => ({
-      cartItems: state.cartItems.map((item) =>
+        set((state) => {
+      const nextItems = state.cartItems.map((item) =>
         item.id === id ? { ...item, amount: item.amount + 1 } : item
-      ),
-    })),
+        );
+      return { cartItems: nextItems, ...recalculate(nextItems) };
+    }),
 
   decrease: (id: string) =>
-    set((state) => ({
-      cartItems: state.cartItems
+     set((state) => {
+      const nextItems = state.cartItems
         .map((item) =>
           item.id === id ? { ...item, amount: item.amount - 1 } : item
         )
-        .filter((item) => item.amount >= 1),
-    })),
+         .filter((item) => item.amount >= 1);
+      return { cartItems: nextItems, ...recalculate(nextItems) };
+    }),
 
   removeItem: (id: string) =>
-    set((state) => ({
-      cartItems: state.cartItems.filter((item) => item.id !== id),
-    })),
-
-  clearCart: () =>
+    set((state) => {
+      const nextItems = state.cartItems.filter((item) => item.id !== id);
+      return { cartItems: nextItems, ...recalculate(nextItems) };
+    }),
+    clearCart: () =>
     set({
       cartItems: [],
       amount: 0,

@@ -28,6 +28,7 @@ const MusicCard = ({ id, title, singer, price, img, amount }: MusicCardProps) =>
       </div>
       <div className="flex items-center gap-3">
         <button
+          aria-label={`${title} 수량 감소`}
           onClick={() => decrease(id)}
           className="w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded flex items-center justify-center transition-colors cursor-pointer"
 
@@ -36,13 +37,14 @@ const MusicCard = ({ id, title, singer, price, img, amount }: MusicCardProps) =>
         </button>
         <span className="text-lg font-semibold w-12 text-center">{amount}</span>
         <button
+          aria-label={`${title} 수량 증가`}
           onClick={() => increase(id)}
           className="w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded flex items-center justify-center transition-colors cursor-pointer"
 
         >
           <Plus className="w-5 h-5" />
         </button>
-      </div>
+         </div>
     </article>
   );
 };

@@ -31,7 +31,7 @@ const MusicCard = ({ id, title, singer, price, img, amount }: MusicCardProps) =>
         <button
           onClick={() => dispatch(decrease(id))}
           className="w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded flex items-center justify-center transition-colors cursor-pointer"
-          
+          aria-label="수량 감소"
         >
           <Minus className="w-5 h-5" />
         </button>
@@ -39,11 +39,11 @@ const MusicCard = ({ id, title, singer, price, img, amount }: MusicCardProps) =>
         <button
           onClick={() => dispatch(increase(id))}
           className="w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded flex items-center justify-center transition-colors cursor-pointer"
-          
+          aria-label="수량 증가"
         >
           <Plus className="w-5 h-5" />
         </button>
-      </div>
+        </div>
     </article>
   );
 };
