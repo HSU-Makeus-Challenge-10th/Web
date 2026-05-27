@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
-import { calculateTotals, clearCart } from '../features/cart/cartSlice';
+import { calculateTotals } from '../features/cart/cartSlice';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { openModal } from '../features/modal/modalSlice';
 import CartItem from './CartItem';
 
 const CartList = () => {
@@ -10,6 +11,10 @@ const CartList = () => {
   useEffect(() => {
     dispatch(calculateTotals());
   }, [cartItems, dispatch]);
+
+  const handleDeleteClick = () => {
+    dispatch(openModal());
+  };
 
   if (cartItems.length === 0) {
     return (
@@ -34,7 +39,7 @@ const CartList = () => {
         </div>
         <button
           type="button"
-          onClick={() => dispatch(clearCart())}
+          onClick={handleDeleteClick}
           className="w-full rounded-lg bg-red-500 py-2.5 text-sm font-semibold text-white hover:bg-red-600"
         >
           전체 삭제
