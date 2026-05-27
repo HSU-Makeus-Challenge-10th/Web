@@ -7,7 +7,9 @@ interface CartItemProps {
 }
 
 const CartItem = ({ item }: CartItemProps) => {
-  const { decrease, increase, removeItem } = useStore();
+  const decrease = useStore((state) => state.decrease);
+  const increase = useStore((state) => state.increase);
+  const removeItem = useStore((state) => state.removeItem);
 
   return (
     <article className="grid grid-cols-[80px_1fr_auto] items-center gap-4 rounded-xl border border-gray-200 bg-white p-4 shadow-sm">

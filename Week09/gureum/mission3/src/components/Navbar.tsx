@@ -2,7 +2,7 @@ import { FaShoppingCart } from 'react-icons/fa';
 import { useStore } from '../store/useStore';
 
 const Navbar = () => {
-  const { amount } = useStore();
+  const amount = useStore((state) => state.amount);
 
   return (
     <header className="sticky top-0 z-10 border-b border-gray-200 bg-white/90 backdrop-blur">

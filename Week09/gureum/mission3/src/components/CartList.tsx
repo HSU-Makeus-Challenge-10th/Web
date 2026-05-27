@@ -1,13 +1,11 @@
-import { useEffect } from 'react';
 import { useStore } from '../store/useStore';
 import CartItem from './CartItem';
 
 const CartList = () => {
-  const { cartItems, amount, total, calculateTotals, openModal } = useStore();
-
-  useEffect(() => {
-    calculateTotals();
-  }, [cartItems, calculateTotals]);
+  const cartItems = useStore((state) => state.cartItems);
+  const amount = useStore((state) => state.amount);
+  const total = useStore((state) => state.total);
+  const openModal = useStore((state) => state.openModal);
 
   const handleDeleteClick = () => {
     openModal();

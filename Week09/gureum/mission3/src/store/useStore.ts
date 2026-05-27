@@ -16,7 +16,6 @@ interface StoreState {
   decrease: (id: string) => void;
   removeItem: (id: string) => void;
   clearCart: () => void;
-  calculateTotals: () => void;
 
   // Modal actions
   openModal: () => void;
@@ -34,6 +33,15 @@ const getInitialTotals = (items: CartItem[]) => {
   );
 };
 
+const buildCartState = (items: CartItem[]) => {
+  const totals = getInitialTotals(items);
+  return {
+    cartItems: items,
+    amount: totals.amount,
+    total: totals.total,
+  };
+};
+
 const initialTotals = getInitialTotals(cartItemsData);
 
 export const useStore = create<StoreState>((set) => ({
@@ -48,52 +56,36 @@ export const useStore = create<StoreState>((set) => ({
   // Cart actions
   increase: (id: string) =>
     set((state) => {
-      const item = state.cartItems.find((cartItem) => cartItem.id === id);
-      if (item) {
-        item.amount += 1;
-      }
-      return { cartItems: [...state.cartItems] };
+      const nextItems = state.cartItems.map((cartItem) =>
+        cartItem.id === id
+          ? { ...cartItem, amount: cartItem.amount + 1 }
+          : cartItem
+      );
+
+      return buildCartState(nextItems);
     }),
 
   decrease: (id: string) =>
     set((state) => {
-      const item = state.cartItems.find((cartItem) => cartItem.id === id);
-      if (item) {
-        item.amount -= 1;
-      }
-      const filteredItems = state.cartItems.filter((cartItem) => cartItem.amount > 0);
-      return { cartItems: filteredItems };
+      const nextItems = state.cartItems
+        .map((cartItem) =>
+          cartItem.id === id
+            ? { ...cartItem, amount: cartItem.amount - 1 }
+            : cartItem
+        )
+        .filter((cartItem) => cartItem.amount > 0);
+
+      return buildCartState(nextItems);
     }),
 
   removeItem: (id: string) =>
     set((state) => {
-      const filteredItems = state.cartItems.filter((cartItem) => cartItem.id !== id);
-      return { cartItems: filteredItems };
+      const nextItems = state.cartItems.filter((cartItem) => cartItem.id !== id);
+      return buildCartState(nextItems);
     }),
 
   clearCart: () =>
-    set(() => ({
-      cartItems: [],
-      amount: 0,
-      total: 0,
-    })),
-
-  calculateTotals: () =>
-    set((state) => {
-      const totals = state.cartItems.reduce(
-        (acc, item) => {
-          acc.amount += item.amount;
-          acc.total += item.amount * Number(item.price);
-          return acc;
-        },
-        { amount: 0, total: 0 }
-      );
-
-      return {
-        amount: totals.amount,
-        total: totals.total,
-      };
-    }),
+    set(() => buildCartState([])),
 
   // Modal actions
   openModal: () => set(() => ({ isOpen: true })),

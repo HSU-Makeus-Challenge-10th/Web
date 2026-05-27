@@ -1,7 +1,9 @@
 import { useStore } from '../store/useStore';
 
 export default function Modal() {
-  const { isOpen, clearCart, closeModal } = useStore();
+  const isOpen = useStore((state) => state.isOpen);
+  const clearCart = useStore((state) => state.clearCart);
+  const closeModal = useStore((state) => state.closeModal);
 
   if (!isOpen) return null;
 
