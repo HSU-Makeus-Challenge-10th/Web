@@ -1,9 +1,9 @@
 import { ShoppingCart } from 'lucide-react';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../store/hooks';
 import type { RootState } from '../store/store';
 
 const Navbar = () => {
-  const { amount } = useSelector((state: RootState) => state.cart);
+  const { amount } = useAppSelector((state: RootState) => state.cart);
 
   return (
     <nav className="bg-[#1f2937] px-8 py-4 w-full flex justify-between items-center text-white">

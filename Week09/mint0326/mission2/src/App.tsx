@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from './store/hooks';
 import { calculateTotals } from './features/cart/cartSlice';
 import type { RootState } from './store/store';
 import Navbar from './components/Navbar';
@@ -7,9 +7,9 @@ import CartContainer from './components/CartContainer';
 import Modal from './components/Modal';
 
 function App() {
-  const dispatch = useDispatch();
-  const { cartItems } = useSelector((state: RootState) => state.cart);
-  const { isOpen } = useSelector((state: RootState) => state.modal);
+  const dispatch = useAppDispatch();
+  const { cartItems } = useAppSelector((state: RootState) => state.cart);
+  const { isOpen } = useAppSelector((state: RootState) => state.modal);
 
   useEffect(() => {
     dispatch(calculateTotals());

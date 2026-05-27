@@ -34,6 +34,9 @@ const cartSlice = createSlice({
       const cartItem = state.cartItems.find((item) => item.id === action.payload);
       if (cartItem) {
         cartItem.amount -= 1;
+        if (cartItem.amount < 1) {
+          state.cartItems = state.cartItems.filter((item) => item.id !== action.payload);
+        }
       }
     },
     calculateTotals: (state) => {

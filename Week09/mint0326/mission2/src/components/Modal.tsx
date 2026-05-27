@@ -1,9 +1,9 @@
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../store/hooks';
 import { closeModal } from '../features/modal/modalSlice';
 import { clearCart } from '../features/cart/cartSlice';
 
 const Modal = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   return (
     <aside className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">

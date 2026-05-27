@@ -1,9 +1,9 @@
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../store/hooks';
 import { removeItem, increase, decrease } from '../features/cart/cartSlice';
 import type { CartItemType } from '../constants/cartItems';
 
 const CartListItem = ({ id, img, title, singer, price, amount }: CartItemType) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   return (
     <article className="flex justify-between items-center mb-6 py-4 border-b border-gray-200">
