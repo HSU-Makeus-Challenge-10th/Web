@@ -24,45 +24,45 @@ const MovieFilter = ({ onChange }: MovieFilterProps) => {
   };
 
   return (
-    <div className="transform rounded-2xl border border-gray-300 bg-white p-6 shadow-xl transition-all hover:shadow-2xl">
-      <div className="flex flex-col gap-6">
+    <div className="rounded-3xl border-2 border-zinc-200 bg-white p-6 shadow-sm sm:p-8">
+      <div className="flex flex-col gap-8">
         <div className="w-full">
-          <label className="mb-2 block text-sm font-medium text-gray-700">
-            영화 제목
+          <label className="mb-3 block text-sm font-extrabold tracking-tight text-zinc-800">
+            🎬 영화 제목
           </label>
-          <Input value={query} onChange={setQuery} />
+          <Input value={query} onChange={setQuery} onSubmit={handleSubmit} />
         </div>
 
         <div className="flex flex-col gap-6 sm:flex-row">
           <div className="flex-1">
-            <label className="mb-2 block text-sm font-medium text-gray-700">
-              ⚙️옵션
+            <label className="mb-3 block text-sm font-extrabold tracking-tight text-zinc-800">
+              ⚙️ 옵션
             </label>
             <SelectBox
               checked={includeAdult}
               onChange={setIncludeAdult}
               label="성인 콘텐츠 표시"
               id="include_adult"
-              className="w-full rounded-lg border border-gray-300 px-4 py-2 shadow-sm focus:outline-none focus:ring focus:ring-blue-500"
+              className="w-full cursor-pointer rounded-2xl border-2 border-zinc-200 bg-zinc-50 px-5 py-3 transition-all duration-300 hover:border-zinc-300 hover:bg-zinc-100"
             />
           </div>
           <div className="flex-1">
-            <label className="mb-2 block text-sm font-medium text-gray-700">
-              🌏언어
+            <label className="mb-3 block text-sm font-extrabold tracking-tight text-zinc-800">
+              🌏 언어
             </label>
             <LanguageSelector
               value={language}
               onChange={setLanguage}
               options={LANGUAGE_OPTIONS}
-              className="w-full rounded-lg border border-gray-300 px-4 py-2 shadow-sm focus:outline-none focus:ring-blue-500"
+              className="w-full"
             />
           </div>
         </div>
 
-        <div className="flex justify-end pt-2">
+        <div className="mt-2 flex justify-end">
           <button
             onClick={handleSubmit}
-            className="rounded-lg bg-blue-500 px-6 py-2 font-semibold text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="rounded-2xl bg-violet-600 px-8 py-3.5 text-sm font-extrabold text-white transition-all duration-300 hover:bg-violet-700 hover:shadow-[0_10px_20px_-10px_rgba(139,92,246,0.6)] focus:outline-none focus:ring-4 focus:ring-violet-500/30 active:scale-[0.98]"
           >
             영화 검색
           </button>
